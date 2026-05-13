@@ -985,7 +985,7 @@ const slice = allDraws.slice(start, end);
     const missing = [];
     for (let i = 1; i <= 25; i++) if (!seen.has(i)) missing.push(i);
     groups.push({
-      incomplete: slice.length < size
+      incomplete: slice.length < size,
       idx: g+1,
       from: slice[0]?.concurso,
       to: slice[slice.length-1]?.concurso,
@@ -997,7 +997,7 @@ const slice = allDraws.slice(start, end);
   const el = document.getElementById('cycleGroups');
   el.innerHTML = '';
   [...groups].reverse().forEach(g => {
-    const completePct = (g.seen.size / 25 * 100).toFixed(0);
+    const completePct = (g.seen.length / 25 * 100).toFixed(0);
     const div = document.createElement('div');
     div.className = 'cycle-group';
     const seenBalls = g.seen.map(n =>
