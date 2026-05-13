@@ -41,15 +41,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'DM Sans', sans-serif;
+font-family: 'DM Sans', sans-serif;
+
   background:
-    radial-gradient(circle at top left, rgba(0,229,160,0.08), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(0,144,255,0.08), transparent 30%),
-    linear-gradient(180deg, #090b10 0%, #0d1017 100%);
+    radial-gradient(circle at top left, rgba(0,229,160,0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(0,144,255,0.08), transparent 25%),
+    radial-gradient(circle at bottom center, rgba(255,107,53,0.05), transparent 30%),
+    linear-gradient(180deg, #07090d 0%, #0b0f16 100%);
+
+  background-attachment: fixed;
+
   color: var(--text);
+
   min-height: 100vh;
+
   line-height: 1.5;
-  transition: background 0.3s, color 0.3s;
+
+  transition:
+    background 0.4s ease,
+    color 0.3s ease;
 }
 /* HEADER */
 .header {
@@ -151,10 +161,53 @@ body {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;
 }
 .summary-card {
-  box-shadow: var(--shadow);
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 20px 24px;
-  display: flex; flex-direction: column; gap: 4px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.02),
+      rgba(255,255,255,0.01)
+    ),
+    var(--card-bg);
+
+  border: 1px solid rgba(255,255,255,0.05);
+
+  border-radius: var(--radius);
+
+  padding: 20px 24px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+  .summary-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(0,229,160,0.15);
+
+  box-shadow:
+    0 14px 40px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(0,229,160,0.05);
+}
+  .summary-card:first-child {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,229,160,0.10),
+      rgba(0,229,160,0.02)
+    ),
+    var(--card-bg);
 }
 .summary-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
 .summary-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
