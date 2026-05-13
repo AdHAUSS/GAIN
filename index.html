@@ -684,7 +684,8 @@ async function initDashboard() {
 
     setStatus('loading', 'Processando concursos...');
     setBar(60);
-
+    
+console.log(rows[0]);
     allDraws = rows
       .map(row => {
 
@@ -715,7 +716,10 @@ async function initDashboard() {
           dezenas
         };
       })
-      .filter(item => item.dezenas.length === 15)
+      .filter(item => {
+  console.log(item);
+  return true;
+})
       .sort((a, b) => a.concurso - b.concurso);
 
     if (allDraws.length === 0) {
