@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LotoAnalítica V2</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<style>
+body {
+  margin:0;
+  background:#0f1117;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  padding:30px;
+}
+
+h1 {
+  color:#00e5a0;
+}
+
+button {
+  background:#00e5a0;
+  color:#000;
+  border:none;
+  padding:12px 20px;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+
+.card {
+  background:#181c24;
+  border-radius:14px;
+  padding:20px;
+}
+
+.ball {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#00e5a0;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.balls {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.game {
+  background:#111318;
+  border-radius:12px;
+  padding:15px;
+  margin-top:15px;
+}
+
+.score {
+  color:#00e5a0;
+  font-weight:bold;
+}
+
+.table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+.table td,
+.table th {
+  border-bottom:1px solid #333;
+  padding:10px;
+  text-align:left;
+}
+
+.small {
+  color:#999;
+  font-size:12px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>LotoAnalítica V2</h1>
+<p class="small">
+Sistema analítico avançado para Lotofácil utilizando base histórica local.
+</p>
+
+<button onclick="generateGames()">Gerar Jogos Inteligentes</button> <button onclick="runBacktest()">Executar Backtest</button>
+
+<div class="grid">
+
+  <div class="card">
+    <h3>Resumo</h3>
+    <div id="summary"></div>
+  </div>
+
+  <div class="card">
+    <h3>Top Frequências</h3>
+    <div id="topFreq"></div>
+  </div>
+
+  <div class="card">
+    <h3>Top Atrasos</h3>
+    <div id="topDelay"></div>
+  </div>
+
+</div>
+
+<div class="card" style="margin-top:20px;">
+  <h3>Jogos Gerados</h3>
+  <div id="games"></div>
+</div>
+
+<div class="card" style="margin-top:20px;">
+  <h3>Backtest</h3>
+  <div id="backtest"></div>
+</div>
+
+<script>
+
+let allDraws = [];
+let freq = {};
+let delay = {};
+let correlationMatrix = {};
+let repetitionStats = {};
+
+async function loadExcelData() {
+
+  const response = await fetch('./Lotofácil.xlsx');
+
+  const data = await response.arrayBuffer();
+
+  const workbook = XLSX.read(data, {
+    type:'array'
+  });
+
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+  const json = XLSX.utils.sheet_to_json(sheet);
+
+  allDraws = json.map(row => {
+
+    const dezenas = [];
+
+    for (let i = 1; i <= 15; i++) {
+      dezenas.push(Number(row[`Bola${i}`]));
+    }
+
+    return {
+      concurso:Number(row['Concurso']),
+      data:row['Data Sorteio'],
+      dezenas:dezenas.sort((a,b)=>a-b)
+    };
+  });
+
+  processData();
+
+  renderSummary();
+  renderTopFreq();
+  renderTopDelay();
+
+  console.log('Base carregada:', allDraws.length);
+}
+
+function processData() {
+
+  for (let i = 1; i <= 25; i++) {
+    freq[i] = 0;
+    delay[i] = 0;
+  }
+
+  allDraws.forEach(draw => {
+    draw.dezenas.forEach(n => {
+      freq[n]++;
+    });
+  });
+
+  const reversed = [...allDraws].reverse();
+
+  for (let i = 1; i <= 25; i++) {
+
+    const idx = reversed.findIndex(d => d.dezenas.includes(i));
+
+    delay[i] = idx;
+  }
+
+  buildCorrelationMatrix();
+  buildRepetitionStats();
+}
+
+function buildCorrelationMatrix() {
+
+  for (let i = 1; i <= 25; i++) {
+
+    correlationMatrix[i] = {};
+
+    for (let j = 1; j <= 25; j++) {
+      correlationMatrix[i][j] = 0;
+    }
+  }
+
+  allDraws.forEach(draw => {
+
+    draw.dezenas.forEach(a => {
+
+      draw.dezenas.forEach(b => {
+
+        if (a !== b) {
+          correlationMatrix[a][b]++;
+        }
+      });
+    });
+  });
+}
+
+function buildRepetitionStats() {
+
+  for (let i = 0; i <= 15; i++) {
+    repetitionStats[i] = 0;
+  }
+
+  for (let i = 1; i < allDraws.length; i++) {
+
+    const prev = allDraws[i-1].dezenas;
+    const curr = allDraws[i].dezenas;
+
+    const repeated = curr.filter(n => prev.includes(n)).length;
+
+    repetitionStats[repeated]++;
+  }
+}
+
+function renderSummary() {
+
+  const sorted = Object.entries(freq)
+    .sort((a,b)=>b[1]-a[1]);
+
+  const hot = sorted[0];
+  const cold = sorted[sorted.length-1];
+
+  document.getElementById('summary').innerHTML = `
+    <p>Total concursos: <strong>${allDraws.length}</strong></p>
+    <p>Mais frequente: <strong>${hot[0]}</strong> (${hot[1]}x)</p>
+    <p>Menos frequente: <strong>${cold[0]}</strong> (${cold[1]}x)</p>
+  `;
+}
+
+function renderTopFreq() {
+
+  const sorted = Object.entries(freq)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,10);
+
+  document.getElementById('topFreq').innerHTML = sorted
+    .map(x => `<p>${x[0]} → ${x[1]}x</p>`)
+    .join('');
+}
+
+function renderTopDelay() {
+
+  const sorted = Object.entries(delay)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,10);
+
+  document.getElementById('topDelay').innerHTML = sorted
+    .map(x => `<p>${x[0]} → ${x[1]} concursos</p>`)
+    .join('');
+}
+
+function shuffle(arr) {
+
+  for (let i = arr.length - 1; i > 0; i--) {
+
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+}
+
+function randomBetween(min,max) {
+  return Math.floor(Math.random() * (max-min+1)) + min;
+}
+
+function generateRepeatedBase() {
+
+  const last = allDraws[allDraws.length - 1].dezenas;
+
+  const repeatedQty = randomBetween(8,10);
+
+  const repeated = shuffle([...last])
+    .slice(0,repeatedQty);
+
+  const remaining = Array.from({length:25}, (_,i)=>i+1)
+    .filter(n => !repeated.includes(n));
+
+  const needed = 15 - repeated.length;
+
+  const extra = shuffle(remaining)
+    .slice(0,needed);
+
+  return [...repeated, ...extra]
+    .sort((a,b)=>a-b);
+}
+
+function calculateGameScore(game) {
+
+  let score = 0;
+
+  const evens = game.filter(n => n % 2 === 0).length;
+
+  if (evens === 7 || evens === 8) {
+    score += 20;
+  }
+
+  const sum = game.reduce((a,b)=>a+b,0);
+
+  if (sum >= 180 && sum <= 220) {
+    score += 20;
+  }
+
+  let consec = 0;
+
+  for (let i = 0; i < game.length - 1; i++) {
+
+    if (game[i+1] - game[i] === 1) {
+      consec++;
+    }
+  }
+
+  if (consec >= 2 && consec <= 5) {
+    score += 15;
+  }
+
+  const avgFreq = game.reduce((s,n)=>s+freq[n],0) / game.length;
+
+  score += avgFreq / 100;
+
+  const avgDelay = game.reduce((s,n)=>s+delay[n],0) / game.length;
+
+  score += avgDelay;
+
+  return Number(score.toFixed(2));
+}
+
+function correlationScore(game) {
+
+  let score = 0;
+
+  for (let i = 0; i < game.length; i++) {
+
+    for (let j = i + 1; j < game.length; j++) {
+
+      score += correlationMatrix[game[i]][game[j]];
+    }
+  }
+
+  return score / 100;
+}
+
+function generateGames() {
+
+  const container = document.getElementById('games');
+
+  container.innerHTML = '';
+
+  for (let i = 0; i < 5; i++) {
+
+    let bestGame = null;
+    let bestScore = -Infinity;
+
+    for (let t = 0; t < 1000; t++) {
+
+      const game = generateRepeatedBase();
+
+      const structural = calculateGameScore(game);
+
+      const corr = correlationScore(game);
+
+      const finalScore = structural + corr;
+
+      if (finalScore > bestScore) {
+
+        bestScore = finalScore;
+        bestGame = game;
+      }
+    }
+
+    const div = document.createElement('div');
+
+    div.className = 'game';
+
+    div.innerHTML = `
+      <div class="score">Score: ${bestScore.toFixed(2)}</div>
+
+      <div class="balls">
+        ${bestGame.map(n => `
+          <div class="ball">
+            ${String(n).padStart(2,'0')}
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    container.appendChild(div);
+  }
+}
+
+function compareGames(game, draw) {
+
+  return game.filter(n => draw.includes(n)).length;
+}
+
+function runBacktest() {
+
+  let hits11 = 0;
+  let hits12 = 0;
+  let hits13 = 0;
+  let hits14 = 0;
+  let hits15 = 0;
+
+  for (let i = 50; i < allDraws.length; i++) {
+
+    const target = allDraws[i].dezenas;
+
+    let bestGame = null;
+    let bestScore = -Infinity;
+
+    for (let t = 0; t < 300; t++) {
+
+      const game = generateRepeatedBase();
+
+      const score = calculateGameScore(game) + correlationScore(game);
+
+      if (score > bestScore) {
+
+        bestScore = score;
+        bestGame = game;
+      }
+    }
+
+    const hits = compareGames(bestGame, target);
+
+    if (hits >= 11) hits11++;
+    if (hits >= 12) hits12++;
+    if (hits >= 13) hits13++;
+    if (hits >= 14) hits14++;
+    if (hits >= 15) hits15++;
+  }
+
+  document.getElementById('backtest').innerHTML = `
+
+    <p>11 pontos+: <strong>${hits11}</strong></p>
+    <p>12 pontos+: <strong>${hits12}</strong></p>
+    <p>13 pontos+: <strong>${hits13}</strong></p>
+    <p>14 pontos+: <strong>${hits14}</strong></p>
+    <p>15 pontos: <strong>${hits15}</strong></p>
+
+  `;
+}
+
+loadExcelData();
+
+</script>
+
+</body>
+</html>
