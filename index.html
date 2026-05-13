@@ -657,75 +657,60 @@ async function initDashboard() {
 
   try {
 
-    setStatus('loading', 'Carregando planilha local...');
+    setStatus('loading', 'Carregando planilha...');
     setBar(20);
 
-    // caminho da planilha
-    const response = await fetch('./lotofacil.xlsx');
+    const response = await fetch('./lotofacil.csv');
 
     if (!response.ok) {
-      throw new Error('Planilha não encontrada');
+      throw new Error('CSV não encontrado');
     }
 
-    const arrayBuffer = await response.arrayBuffer();
+    const text = await response.text();
 
-    setBar(40);
+    setBar(50);
 
-    const workbook = XLSX.read(arrayBuffer, {
-      type: 'array'
-    });
-console.log(workbook.SheetNames);
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
- 
-    const rows = XLSX.utils.sheet_to_json(worksheet, {
-  header: 1,
-  defval: ''
-});
+    const rows = text.trim().split('\n');
 
-console.log(rows);
- 
-    setStatus('loading', 'Processando concursos...');
-    setBar(60);
-    
-console.log(rows[0]);
-   allDraws = rows
-  .slice(1)
-  .map(row => {
+    allDraws = rows
+      .slice(1)
+      .map(line => {
 
-       const dezenas = [
-      row[2],
-      row[3],
-      row[4],
-      row[5],
-      row[6],
-      row[7],
-      row[8],
-      row[9],
-      row[10],
-      row[11],
-      row[12],
-      row[13],
-      row[14],
-      row[15],
-      row[16]
-    ]
-    .map(n => Number(n))
-    .filter(n => !isNaN(n))
-    .sort((a, b) => a - b);
+        const cols = line.split(',');
 
-    return {
-      concurso: Number(row[0]),
-      data: row[1],
-      dezenas
-    };
-  })
-  .filter(item => item.dezenas.length === 15)
-  .sort((a, b) => a.concurso - b.concurso);
-     
+        const dezenas = [
+          cols[2],
+          cols[3],
+          cols[4],
+          cols[5],
+          cols[6],
+          cols[7],
+          cols[8],
+          cols[9],
+          cols[10],
+          cols[11],
+          cols[12],
+          cols[13],
+          cols[14],
+          cols[15],
+          cols[16]
+        ]
+        .map(n => Number(n))
+        .filter(n => !isNaN(n))
+        .sort((a,b) => a-b);
+
+        return {
+          concurso: Number(cols[0]),
+          data: cols[1],
+          dezenas
+        };
+
+      })
+      .filter(item => item.dezenas.length === 15)
+      .sort((a,b) => a.concurso - b.concurso);
 
     if (allDraws.length === 0) {
-      throw new Error('Nenhum concurso válido encontrado');
+      throw new Error('Nenhum concurso encontrado');
     }
 
     setBar(100);
@@ -738,15 +723,16 @@ console.log(rows[0]);
 
     setStatus('ok', `${allDraws.length} concursos carregados`);
 
-  } catch (e) {
+  } catch(e) {
 
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('errorScreen').classList.add('show');
 
-    document.getElementById('errorMsg').textContent =
-      `Erro ao carregar a planilha: ${e.message}`;
+    document.getElementById('errorMsg').textContent = e.message;
 
     setStatus('error', 'Erro ao carregar');
+
+    console.error(e);
   }
 }
 
