@@ -589,6 +589,7 @@ body {
               <option value="cold">Frias (bottom 12)</option>
               <option value="delayed">Com atraso alto</option>
               <option value="mixed">Mix quente+fria</option>
+              <option value="cycle_missing">Faltantes do ciclo atual</option>
             </select>
           </div>
           <div class="gen-control">
@@ -1045,6 +1046,30 @@ function generateGames() {
   const hot = sorted.slice(0,12).map(x=>x.n);
   const cold = sorted.slice(13).map(x=>x.n);
   const delayedNums = Object.entries(delay).sort((a,b)=>+b[1]-+a[1]).slice(0,12).map(([n])=>+n);
+  // dezenas faltantes do ciclo atual
+const cycleSize = parseInt(document.getElementById('cycleSize').value) || 4;
+
+const remainder = allDraws.length % cycleSize;
+
+let currentCycleDraws;
+
+if (remainder === 0) {
+  currentCycleDraws = allDraws.slice(-cycleSize);
+} else {
+  currentCycleDraws = allDraws.slice(-remainder);
+}
+
+const seenInCurrentCycle = new Set(
+  currentCycleDraws.flatMap(d => d.dezenas)
+);
+
+const missingCycleNums = [];
+
+for (let i = 1; i <= 25; i++) {
+  if (!seenInCurrentCycle.has(i)) {
+    missingCycleNums.push(i);
+  }
+}
 
   const games = [];
   let attempts = 0;
@@ -1060,9 +1085,19 @@ function generateGames() {
       weighted = [...cold, ...cold, ...pool];
     } else if (freqFilter === 'delayed') {
       weighted = [...delayedNums, ...delayedNums, ...pool];
-    } else if (freqFilter === 'mixed') {
-      weighted = [...hot.slice(0,6), ...cold.slice(0,6), ...pool];
-    } else {
+   } else if (freqFilter === 'mixed') {
+  weighted = [...hot.slice(0,6), ...cold.slice(0,6), ...pool];
+
+} else if (freqFilter === 'cycle_missing') {
+
+  weighted = [
+    ...missingCycleNums,
+    ...missingCycleNums,
+    ...missingCycleNums,
+    ...pool
+  ];
+
+} else {
       weighted = [...pool];
     }
 
