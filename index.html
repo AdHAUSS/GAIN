@@ -679,9 +679,12 @@ console.log(workbook.SheetNames);
     const worksheet = workbook.Sheets[sheetName];
  
     const rows = XLSX.utils.sheet_to_json(worksheet, {
-      defval: ''
-    });
+  header: 1,
+  defval: ''
+});
 
+console.log(rows);
+ 
     setStatus('loading', 'Processando concursos...');
     setBar(60);
     
