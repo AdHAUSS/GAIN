@@ -797,9 +797,7 @@ box-shadow: var(--shadow);
       </div>
     </div>
 
-    <!-- RANKING + PARITY -->
-    <div class="two-col section">
-     <!-- SCORE ANALÍTICO -->
+<!-- SCORE ANALÍTICO -->
 <div class="section">
   <div class="section-header">
     <div class="section-title">
@@ -831,6 +829,7 @@ box-shadow: var(--shadow);
 
   </div>
 </div>
+
 
     <!-- PARITY + DELAY -->
     <div class="two-col section">
@@ -1029,6 +1028,9 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
+const el = document.getElementById('sumAnalysis');
+if (!el) return;
+  
   let selectedSimulation = [];
   let analyticalGame = [];
   function renderSimulator() {
