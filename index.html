@@ -42,7 +42,10 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at top left, rgba(0,229,160,0.08), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(0,144,255,0.08), transparent 30%),
+    linear-gradient(180deg, #090b10 0%, #0d1017 100%);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.5;
@@ -50,13 +53,23 @@ body {
 }
 /* HEADER */
 .header {
-  position: sticky; top: 0; z-index: 100;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+ position: sticky;
+  top: 0;
+  z-index: 100;
+
+  background: rgba(10,12,16,0.7);
+
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+
   padding: 0 32px;
-  height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
-  backdrop-filter: blur(20px);
+
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-icon {
@@ -138,6 +151,7 @@ body {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;
 }
 .summary-card {
+  box-shadow: var(--shadow);
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 20px 24px;
   display: flex; flex-direction: column; gap: 4px;
@@ -160,6 +174,7 @@ body {
 }
 /* HEATMAP GRID */
 .heatmap-card {
+  box-shadow: var(--shadow);
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 24px;
 }
@@ -191,6 +206,7 @@ body {
 .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 /* PARITY CARD */
 .parity-card {
+  box-shadow: var(--shadow);
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 24px;
 }
@@ -205,6 +221,7 @@ body {
 .parity-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
 /* RANKING TABLE */
 .rank-card {
+box-shadow: var(--shadow);
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 24px; overflow: hidden;
 }
@@ -241,6 +258,7 @@ body {
 .delay-ago { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text2); }
 /* CYCLE SECTION */
 .cycle-card {
+  box-shadow: var(--shadow);
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 24px;
 }
@@ -284,6 +302,7 @@ body {
 .cycle-miss-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
 /* GENERATOR */
 .gen-card {
+  box-shadow: var(--shadow);
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: var(--radius); padding: 24px;
 }
