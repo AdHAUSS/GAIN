@@ -973,11 +973,14 @@ function renderCycle() {
   const count = parseInt(document.getElementById('cycleCount').value) || 10;
 
   const groups = [];
-  const totalGroups = Math.floor(allDraws.length / size);
+  const totalGroups = Math.ceil(allDraws.length / size);
   const startIdx = Math.max(0, totalGroups - count);
 
   for (let g = startIdx; g < totalGroups; g++) {
-    const slice = allDraws.slice(g * size, (g+1) * size);
+   const start = g * size;
+const end = Math.min((g + 1) * size, allDraws.length);
+
+const slice = allDraws.slice(start, end);
     const seen = new Set(slice.flatMap(d => d.dezenas));
     const missing = [];
     for (let i = 1; i <= 25; i++) if (!seen.has(i)) missing.push(i);
