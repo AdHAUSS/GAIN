@@ -670,11 +670,11 @@ async function initDashboard() {
     const arrayBuffer = await response.arrayBuffer();
 
     setBar(40);
-console.log(workbook.SheetNames);
+
     const workbook = XLSX.read(arrayBuffer, {
       type: 'array'
     });
-
+console.log(workbook.SheetNames);
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
  
