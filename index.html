@@ -397,6 +397,7 @@ body {
   .heatmap-grid { grid-template-columns: repeat(5,1fr); }
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -652,89 +653,85 @@ themeBtn.addEventListener('click', () => {
   themeBtn.textContent = isDark ? '🌙' : '☀️';
 });
 
-// ============================================================
-// API FETCH — Caixa Econômica Federal (via allorigins proxy)
-// Endpoint oficial: https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/{concurso}
-// We'll use a CORS proxy since the browser can't hit the Caixa API directly
-// ============================================================
-async function fetchDraw(num) {
-  const url = `https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/${num}`;
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-  const r = await fetch(proxy);
-  const j = await r.json();
-  return JSON.parse(j.contents);
-}
-
-async function fetchLatestDraw() {
-  // fetch concurso 0 = latest
-  return fetchDraw(0);
-}
-
 async function initDashboard() {
-  setStatus('loading', 'Buscando último concurso...');
-  document.getElementById('loadingScreen').style.display = 'flex';
-  document.getElementById('errorScreen').classList.remove('show');
-  document.getElementById('dashboard').classList.remove('show');
-  setBar(5);
+  setStatus('loading', 'Carregando planilha local...');
+    const workbook = XLSX.read(arrayBuffer, {
+      type: 'array'
+    });
 
-  try {
-    // 1. Get latest concurso number
-    const latest = await fetchLatestDraw();
-    const latestNum = latest.numero;
-    setStatus('loading', `Concurso atual: ${latestNum}. Carregando histórico...`);
-    setBar(10);
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
 
-    // 2. Fetch all draws in batches (we'll fetch from 1 to latestNum)
-    // To avoid too many requests, we fetch in parallel batches of 50
-    const TOTAL = latestNum;
-    const allNums = Array.from({length: TOTAL}, (_, i) => i + 1);
-    const BATCH = 40;
-    let results = new Array(TOTAL);
-    let done = 0;
+    const rows = XLSX.utils.sheet_to_json(worksheet, {
+      defval: ''
+    });
 
-    // Process in batches
-    for (let i = 0; i < allNums.length; i += BATCH) {
-      const batch = allNums.slice(i, i + BATCH);
-      const promises = batch.map(async (n) => {
-        try {
-          const d = await fetchDraw(n);
-          return d;
-        } catch(e) { return null; }
-      });
-      const batchResults = await Promise.all(promises);
-      for (let j = 0; j < batchResults.length; j++) {
-        if (batchResults[j]) results[i + j] = batchResults[j];
-      }
-      done += batch.length;
-      const pct = 10 + Math.round((done / TOTAL) * 88);
-      setBar(pct);
-      setStatus('loading', `Carregando... ${done}/${TOTAL} concursos`);
-      document.getElementById('loadingMsg').textContent = `Carregando... ${done} de ${TOTAL} concursos`;
+    setStatus('loading', 'Processando concursos...');
+    setBar(60);
+
+    // ========================================================
+    // CONVERSÃO DOS DADOS DA PLANILHA
+    // ========================================================
+
+    allDraws = rows
+      .map(row => {
+
+        const dezenas = [
+          row.Bola1,
+          row.Bola2,
+          row.Bola3,
+          row.Bola4,
+          row.Bola5,
+          row.Bola6,
+          row.Bola7,
+          row.Bola8,
+          row.Bola9,
+          row.Bola10,
+          row.Bola11,
+          row.Bola12,
+          row.Bola13,
+          row.Bola14,
+          row.Bola15
+        ]
+        .map(n => Number(n))
+        .filter(n => !isNaN(n))
+        .sort((a, b) => a - b);
+
+        return {
+          concurso: Number(row.Concurso),
+          data: row['Data Sorteio'],
+          dezenas
+        };
+      })
+      .filter(item => item.dezenas.length === 15)
+      .sort((a, b) => a.concurso - b.concurso);
+
+
+    if (allDraws.length === 0) {
+      throw new Error('Nenhum concurso válido encontrado na planilha');
     }
 
-    // 3. Parse
-    allDraws = results.filter(Boolean).map(d => ({
-      concurso: d.numero,
-      data: d.dataApuracao,
-      dezenas: (d.listaDezenas || d.dezenas || []).map(Number).sort((a,b) => a-b)
-    })).filter(d => d.dezenas.length > 0);
-
     setBar(100);
+
     processData();
     renderAll();
+
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('dashboard').classList.add('show');
+
     setStatus('ok', `${allDraws.length} concursos carregados`);
 
   } catch(e) {
+
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('errorScreen').classList.add('show');
-    document.getElementById('errorMsg').textContent = 
-      `Erro ao acessar a API da Caixa: ${e.message}. Isso pode ser um bloqueio de CORS do navegador ou instabilidade na API. Tente usar o botão abaixo ou acesse pelo computador.`;
+
+    document.getElementById('errorMsg').textContent =
+      `Erro ao carregar a planilha local: ${e.message}`;
+
     setStatus('error', 'Erro ao carregar');
   }
 }
-
 function setStatus(state, text) {
   const dot = document.getElementById('statusDot');
   const txt = document.getElementById('statusText');
