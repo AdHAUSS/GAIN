@@ -583,8 +583,7 @@ body {
           </div>
           <div class="gen-control">
             <label>Priorizar dezenas</label>
-            <select class="gen-select" id="genFreq">
-              <option value="any">Sem filtro</option>
+            <select class="gen-select" id="genFreq" multiple size="5">
               <option value="hot">Quentes (top 12)</option>
               <option value="cold">Frias (bottom 12)</option>
               <option value="delayed">Com atraso alto</option>
@@ -1038,7 +1037,9 @@ function generateGames() {
   const qty = Math.min(50, Math.max(1, parseInt(document.getElementById('genQty').value) || 5));
   const nums = Math.min(20, Math.max(15, parseInt(document.getElementById('genNums').value) || 15));
   const parity = document.getElementById('genParity').value;
-  const freqFilter = document.getElementById('genFreq').value;
+  const freqFilter = Array.from(
+  document.getElementById('genFreq').selectedOptions
+).map(o => o.value);
   const consecFilter = document.getElementById('genConsec').value;
 
   // Build pool based on frequency filter
@@ -1078,15 +1079,46 @@ for (let i = 1; i <= 25; i++) {
     let pool = Array.from({length:25}, (_,i) => i+1);
 
     // Frequency bias: weighted shuffle
-    let weighted = [];
-    if (freqFilter === 'hot') {
-      weighted = [...hot, ...hot, ...pool]; // hot numbers appear more
-    } else if (freqFilter === 'cold') {
-      weighted = [...cold, ...cold, ...pool];
-    } else if (freqFilter === 'delayed') {
-      weighted = [...delayedNums, ...delayedNums, ...pool];
-   } else if (freqFilter === 'mixed') {
-  weighted = [...hot.slice(0,6), ...cold.slice(0,6), ...pool];
+   let weighted = [...pool];
+
+// ciclo atual incompleto
+const cycleSize = parseInt(document.getElementById('cycleSize').value) || 4;
+
+const currentSlice = allDraws.slice(-cycleSize);
+
+const currentSeen = new Set(
+  currentSlice.flatMap(d => d.dezenas)
+);
+
+const cycleMissing = [];
+
+for (let i = 1; i <= 25; i++) {
+  if (!currentSeen.has(i)) {
+    cycleMissing.push(i);
+  }
+}
+
+// aplicar pesos acumulativos
+if (freqFilter.includes('hot')) {
+  weighted.push(...hot, ...hot);
+}
+
+if (freqFilter.includes('cold')) {
+  weighted.push(...cold, ...cold);
+}
+
+if (freqFilter.includes('delayed')) {
+  weighted.push(...delayedNums, ...delayedNums);
+}
+
+if (freqFilter.includes('mixed')) {
+  weighted.push(...hot.slice(0,6));
+  weighted.push(...cold.slice(0,6));
+}
+
+if (freqFilter.includes('cycle')) {
+  weighted.push(...cycleMissing, ...cycleMissing, ...cycleMissing);
+}
 
 } else if (freqFilter === 'cycle_missing') {
 
