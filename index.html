@@ -654,6 +654,16 @@ themeBtn.addEventListener('click', () => {
 });
 
 async function initDashboard() {
+  function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+
+  dot.className = 'status-dot ' + state;
+  txt.textContent = text;
+}
+
+function setBar(pct) {
+  document.getElementById('loadingBar').style.width = pct + '%';
 
   try {
 
