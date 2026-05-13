@@ -1,186 +1,1161 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LotoAnalítica V2</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
+<title>LotoAnalítica — Dashboard Lotofácil</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #0a0c10;
+  --bg2: #111318;
+  --bg3: #181c24;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8eaf0;
+  --text2: #8a8fa8;
+  --text3: #4a4f66;
+  --accent: #00e5a0;
+  --accent2: #0090ff;
+  --accent3: #ff6b35;
+  --accent4: #ffd60a;
+  --hot: #ff4d4d;
+  --cold: #4da6ff;
+  --card-bg: #13161e;
+  --card-border: rgba(255,255,255,0.06);
+  --shadow: 0 4px 32px rgba(0,0,0,0.5);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+[data-theme="light"] {
+  --bg: #f0f2f7;
+  --bg2: #ffffff;
+  --bg3: #e8ebf2;
+  --border: rgba(0,0,0,0.08);
+  --text: #1a1d2e;
+  --text2: #5a5f78;
+  --text3: #aaaabf;
+  --card-bg: #ffffff;
+  --card-border: rgba(0,0,0,0.07);
+  --shadow: 0 4px 32px rgba(0,0,0,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-  margin:0;
-  background:#0f1117;
-  color:#fff;
-  font-family:Arial, sans-serif;
-  padding:30px;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+  transition: background 0.3s, color 0.3s;
 }
-
-h1 {
-  color:#00e5a0;
+/* HEADER */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(20px);
 }
-
-button {
-  background:#00e5a0;
-  color:#000;
-  border:none;
-  padding:12px 20px;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+  color: #000;
 }
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  margin-top:20px;
+.logo-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; }
+.logo-text span { color: var(--accent); }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.status-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-family: 'DM Mono', monospace;
+  color: var(--text2); padding: 6px 12px;
+  border: 1px solid var(--border); border-radius: 20px;
 }
-
-.card {
-  background:#181c24;
-  border-radius:14px;
-  padding:20px;
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--text3);
+  transition: background 0.3s;
 }
-
-.ball {
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#00e5a0;
-  color:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
+.status-dot.loading { background: var(--accent4); animation: pulse 1s infinite; }
+.status-dot.ok { background: var(--accent); }
+.status-dot.error { background: var(--hot); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.theme-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg2);
+  color: var(--text2); cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
 }
-
-.balls {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:12px;
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+/* MAIN LAYOUT */
+.main { max-width: 1400px; margin: 0 auto; padding: 32px; }
+/* LOADING STATE */
+.loading-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 60vh; gap: 24px;
 }
-
-.game {
-  background:#111318;
-  border-radius:12px;
-  padding:15px;
-  margin-top:15px;
+.spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
-
-.score {
-  color:#00e5a0;
-  font-weight:bold;
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
+.loading-progress {
+  width: 300px; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden;
 }
-
-.table {
-  width:100%;
-  border-collapse:collapse;
+.loading-bar {
+  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px; width: 0%; transition: width 0.5s ease;
 }
-
-.table td,
-.table th {
-  border-bottom:1px solid #333;
-  padding:10px;
-  text-align:left;
+/* ERROR STATE */
+.error-screen {
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 60vh; gap: 16px; text-align: center;
 }
+.error-screen.show { display: flex; }
+.error-icon { font-size: 48px; }
+.error-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+.error-msg { color: var(--text2); font-size: 14px; max-width: 500px; line-height: 1.7; }
+.retry-btn {
+  padding: 10px 24px; background: var(--accent); color: #000;
+  border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
+  font-size: 14px; transition: opacity 0.2s;
+}
+.retry-btn:hover { opacity: 0.85; }
+/* DASHBOARD */
+.dashboard { display: none; }
+.dashboard.show { display: block; }
+/* SUMMARY ROW */
+.summary-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;
+}
+.summary-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 20px 24px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.summary-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+.summary-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+.summary-sub { font-size: 12px; color: var(--text2); }
+/* SECTION TITLES */
+.section { margin-bottom: 32px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+/* HEATMAP GRID */
+.heatmap-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 24px;
+}
+.heatmap-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+  max-width: 500px;
+}
+.heat-cell {
+  aspect-ratio: 1; border-radius: 12px; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  cursor: default; position: relative; transition: transform 0.15s;
+  border: 1px solid transparent;
+}
+.heat-cell:hover { transform: scale(1.08); z-index: 2; }
+.heat-num {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; line-height: 1;
+}
+.heat-count { font-size: 10px; font-family: 'DM Mono', monospace; opacity: 0.8; margin-top: 2px; }
+.heat-legend {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 20px; font-size: 12px; color: var(--text2);
+}
+.heat-legend-bar {
+  width: 160px; height: 8px; border-radius: 4px;
+  background: linear-gradient(90deg, var(--cold), var(--bg3), var(--hot));
+}
+/* TWO COL */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+/* PARITY CARD */
+.parity-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 24px;
+}
+.parity-bars { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.parity-row { display: flex; flex-direction: column; gap: 6px; }
+.parity-label {
+  display: flex; justify-content: space-between;
+  font-size: 13px; color: var(--text2);
+}
+.parity-label strong { color: var(--text); font-weight: 500; }
+.parity-track { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.parity-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+/* RANKING TABLE */
+.rank-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 24px; overflow: hidden;
+}
+.rank-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.rank-item {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+  border-radius: 8px; transition: background 0.15s;
+}
+.rank-item:hover { background: var(--bg3); }
+.rank-pos { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); width: 20px; }
+.rank-ball {
+  width: 32px; height: 32px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  flex-shrink: 0;
+}
+.rank-bar-wrap { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.rank-bar { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.rank-val { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2); width: 50px; text-align: right; }
+/* DELAY TABLE */
+.delay-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px;
+}
+.delay-cell {
+  background: var(--bg3); border-radius: 10px; padding: 10px 8px;
+  text-align: center; border: 1px solid var(--card-border); transition: border-color 0.2s;
+}
+.delay-cell.overdue { border-color: var(--hot); }
+.delay-cell.warning { border-color: var(--accent4); }
+.delay-num {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+  display: block;
+}
+.delay-ago { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text2); }
+/* CYCLE SECTION */
+.cycle-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 24px;
+}
+.cycle-controls {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.cycle-input {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text2);
+}
+.cycle-input input[type=number] {
+  width: 80px; padding: 7px 12px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 13px;
+  font-family: 'DM Mono', monospace; outline: none;
+  transition: border-color 0.2s;
+}
+.cycle-input input:focus { border-color: var(--accent2); }
+.cycle-groups { display: flex; flex-direction: column; gap: 16px; }
+.cycle-group {
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.cycle-group-header {
+  background: var(--bg3); padding: 10px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px;
+}
+.cycle-group-title { font-family: 'Syne', sans-serif; font-weight: 600; }
+.cycle-group-body { padding: 12px 16px; }
+.cycle-nums-row {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;
+}
+.cycle-ball {
+  width: 36px; height: 36px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  flex-shrink: 0;
+}
+.cycle-ball.seen { background: rgba(0,229,160,0.15); color: var(--accent); border: 1px solid rgba(0,229,160,0.3); }
+.cycle-ball.missing { background: rgba(255,77,77,0.15); color: var(--hot); border: 1px solid rgba(255,77,77,0.3); }
+.cycle-miss-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+/* GENERATOR */
+.gen-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 24px;
+}
+.gen-controls {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+  margin-bottom: 24px;
+}
+.gen-control { display: flex; flex-direction: column; gap: 6px; }
+.gen-control label { font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+.gen-select, .gen-input {
+  padding: 9px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 13px;
+  font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.gen-select:focus, .gen-input:focus { border-color: var(--accent2); }
+.gen-btn {
+  padding: 11px 28px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none; border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+  color: #000; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+  align-self: flex-end;
+}
+.gen-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.gen-btn:active { transform: translateY(0); }
+.gen-results { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.gen-game {
+  background: var(--bg3); border-radius: 12px; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  border: 1px solid var(--card-border); animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+.gen-game-header {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; font-family: 'DM Mono', monospace; color: var(--text2);
+}
+.gen-balls { display: flex; flex-wrap: wrap; gap: 6px; }
+.gen-ball {
+  width: 34px; height: 34px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #000;
+}
+.copy-btn {
+  padding: 5px 12px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 11px; color: var(--text2); cursor: pointer;
+  font-family: 'DM Mono', monospace; transition: all 0.2s;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+/* DISCLAIMER */
+.disclaimer {
+  background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2);
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 12px; color: var(--text2); line-height: 1.6;
+  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 32px;
+}
+.disclaimer-icon { flex-shrink: 0; margin-top: 1px; }
+/* LAST DRAWS */
+.draws-scroll { overflow-x: auto; padding-bottom: 8px; margin-top: 16px; }
+.draws-table {
+  border-collapse: collapse; width: 100%; min-width: 700px;
+  font-size: 13px;
+}
+.draws-table th {
+  text-align: left; padding: 8px 12px;
+  font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text3); border-bottom: 1px solid var(--border);
+}
+.draws-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.draws-table tr:last-child td { border-bottom: none; }
+.draws-table tr:hover td { background: var(--bg3); }
+.draw-balls-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.draw-ball-sm {
+  width: 24px; height: 24px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
+  background: var(--bg3); color: var(--text);
+  border: 1px solid var(--card-border);
+}
+/* FILTER TAGS */
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-tag {
+  padding: 5px 12px; border-radius: 20px; font-size: 12px;
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--text2); cursor: pointer; transition: all 0.2s;
+  font-family: 'DM Mono', monospace;
+}
+.filter-tag.active {
+  background: rgba(0,229,160,0.12); border-color: var(--accent);
+  color: var(--accent);
+}
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
 
-.small {
-  color:#999;
-  font-size:12px;
+/* Responsive */
+@media(max-width: 900px) {
+  .summary-row { grid-template-columns: repeat(2,1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  .main { padding: 16px; }
+}
+@media(max-width: 500px) {
+  .summary-row { grid-template-columns: 1fr 1fr; }
+  .heatmap-grid { grid-template-columns: repeat(5,1fr); }
 }
 </style>
-
 </head>
 <body>
 
-<h1>LotoAnalítica V2</h1>
-<p class="small">
-Sistema analítico avançado para Lotofácil utilizando base histórica local.
-</p>
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">LF</div>
+    <div class="logo-text">Loto<span>Analítica</span></div>
+  </div>
+  <div class="header-right">
+    <div class="status-badge">
+      <span class="status-dot loading" id="statusDot"></span>
+      <span id="statusText">Carregando dados...</span>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Alternar tema">🌙</button>
+  </div>
+</header>
 
-<button onclick="generateGames()">Gerar Jogos Inteligentes</button> <button onclick="runBacktest()">Executar Backtest</button>
+<main class="main">
 
-<div class="grid">
-
-  <div class="card">
-    <h3>Resumo</h3>
-    <div id="summary"></div>
+  <!-- LOADING -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingMsg">Buscando concursos da API da Caixa...</div>
+    <div class="loading-progress"><div class="loading-bar" id="loadingBar"></div></div>
   </div>
 
-  <div class="card">
-    <h3>Top Frequências</h3>
-    <div id="topFreq"></div>
+  <!-- ERROR -->
+  <div class="error-screen" id="errorScreen">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">Não foi possível carregar os dados</div>
+    <div class="error-msg" id="errorMsg"></div>
+    <button class="retry-btn" onclick="initDashboard()">Tentar novamente</button>
   </div>
 
-  <div class="card">
-    <h3>Top Atrasos</h3>
-    <div id="topDelay"></div>
-  </div>
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
 
-</div>
+    <div class="disclaimer">
+      <span class="disclaimer-icon">⚠️</span>
+      <span><strong>Aviso importante:</strong> Este dashboard é uma ferramenta de análise estatística histórica. Cada sorteio é um evento independente — padrões passados <strong>não aumentam matematicamente suas chances</strong>. A probabilidade base é fixa. Use com consciência.</span>
+    </div>
 
-<div class="card" style="margin-top:20px;">
-  <h3>Jogos Gerados</h3>
-  <div id="games"></div>
-</div>
+    <!-- SUMMARY -->
+    <div class="summary-row">
+      <div class="summary-card">
+        <span class="summary-label">Total de Concursos</span>
+        <span class="summary-value" id="sumTotal" style="color:var(--accent)">—</span>
+        <span class="summary-sub" id="sumRange">—</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Dezena Mais Sorteada</span>
+        <span class="summary-value" id="sumHot" style="color:var(--hot)">—</span>
+        <span class="summary-sub" id="sumHotCount">—</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Dezena Menos Sorteada</span>
+        <span class="summary-value" id="sumCold" style="color:var(--cold)">—</span>
+        <span class="summary-sub" id="sumColdCount">—</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Último Concurso</span>
+        <span class="summary-value" id="sumLast" style="color:var(--accent4)">—</span>
+        <span class="summary-sub" id="sumLastDate">—</span>
+      </div>
+    </div>
 
-<div class="card" style="margin-top:20px;">
-  <h3>Backtest</h3>
-  <div id="backtest"></div>
-</div>
+    <!-- HEATMAP -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="dot" style="background:var(--accent)"></span>
+          Mapa de Calor — Frequência das Dezenas
+        </div>
+        <div class="filter-row" style="margin-bottom:0">
+          <span class="filter-tag active" data-sort="freq" onclick="sortHeatmap(this,'freq')">Por Frequência</span>
+          <span class="filter-tag" data-sort="num" onclick="sortHeatmap(this,'num')">Por Número</span>
+          <span class="filter-tag" data-sort="delay" onclick="sortHeatmap(this,'delay')">Por Atraso</span>
+        </div>
+      </div>
+      <div class="heatmap-card">
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+        <div class="heat-legend">
+          <span>Frio</span>
+          <div class="heat-legend-bar"></div>
+          <span>Quente</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RANKING + PARITY -->
+    <div class="two-col section">
+      <!-- TOP/BOTTOM RANKING -->
+      <div>
+        <div class="section-header">
+          <div class="section-title"><span class="dot" style="background:var(--hot)"></span>Top 10 — Mais Sorteadas</div>
+        </div>
+        <div class="rank-card">
+          <div class="rank-list" id="rankTop"></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-header">
+          <div class="section-title"><span class="dot" style="background:var(--cold)"></span>Top 10 — Menos Sorteadas</div>
+        </div>
+        <div class="rank-card">
+          <div class="rank-list" id="rankBottom"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARITY + DELAY -->
+    <div class="two-col section">
+      <!-- PARITY -->
+      <div>
+        <div class="section-header">
+          <div class="section-title"><span class="dot" style="background:var(--accent2)"></span>Distribuição Par / Ímpar</div>
+        </div>
+        <div class="parity-card">
+          <div id="parityStats" style="font-size:13px;color:var(--text2);margin-bottom:12px"></div>
+          <div class="parity-bars" id="parityBars"></div>
+        </div>
+      </div>
+      <!-- DELAY -->
+      <div>
+        <div class="section-header">
+          <div class="section-title"><span class="dot" style="background:var(--accent4)"></span>Atraso — Dezenas Frias</div>
+        </div>
+        <div class="parity-card">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde o último sorteio da dezena. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div>
+          <div class="delay-grid" id="delayGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CYCLE ANALYSIS -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title"><span class="dot" style="background:var(--accent3)"></span>Análise de Ciclo das Dezenas</div>
+      </div>
+      <div class="cycle-card">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7">
+          A teoria do ciclo afirma que a cada <strong>N concursos</strong>, todas as 25 dezenas aparecem ao menos uma vez. Abaixo, veja os grupos de concursos e quais dezenas <span style="color:var(--hot)">não apareceram</span> em cada janela.
+        </div>
+        <div class="cycle-controls">
+          <div class="cycle-input">
+            <label style="font-size:12px;color:var(--text2)">Tamanho do ciclo:</label>
+            <input type="number" id="cycleSize" value="4" min="2" max="20" onchange="renderCycle()">
+            <span style="font-size:12px;color:var(--text2)">concursos</span>
+          </div>
+          <div class="cycle-input">
+            <label style="font-size:12px;color:var(--text2)">Exibir últimos:</label>
+            <input type="number" id="cycleCount" value="10" min="2" max="50" onchange="renderCycle()">
+            <span style="font-size:12px;color:var(--text2)">ciclos</span>
+          </div>
+        </div>
+        <div class="cycle-groups" id="cycleGroups"></div>
+      </div>
+    </div>
+
+    <!-- GENERATOR -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title"><span class="dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div>
+      </div>
+      <div class="gen-card">
+        <div class="gen-controls">
+          <div class="gen-control">
+            <label>Qtd de jogos</label>
+            <input class="gen-input" type="number" id="genQty" value="5" min="1" max="50">
+          </div>
+          <div class="gen-control">
+            <label>Núm. por jogo</label>
+            <input class="gen-input" type="number" id="genNums" value="15" min="15" max="20">
+          </div>
+          <div class="gen-control">
+            <label>Filtro de paridade</label>
+            <select class="gen-select" id="genParity">
+              <option value="any">Qualquer</option>
+              <option value="more_odd">Mais ímpares (8+)</option>
+              <option value="more_even">Mais pares (8+)</option>
+              <option value="balanced">Equilibrado (7/8 cada)</option>
+            </select>
+          </div>
+          <div class="gen-control">
+            <label>Priorizar dezenas</label>
+            <select class="gen-select" id="genFreq">
+              <option value="any">Sem filtro</option>
+              <option value="hot">Quentes (top 12)</option>
+              <option value="cold">Frias (bottom 12)</option>
+              <option value="delayed">Com atraso alto</option>
+              <option value="mixed">Mix quente+fria</option>
+            </select>
+          </div>
+          <div class="gen-control">
+            <label>Mín. consecutivos</label>
+            <select class="gen-select" id="genConsec">
+              <option value="any">Qualquer</option>
+              <option value="0">Nenhum par</option>
+              <option value="1">Ao menos 1 par</option>
+              <option value="2">Ao menos 2 pares</option>
+            </select>
+          </div>
+          <div class="gen-control" style="align-self:flex-end">
+            <button class="gen-btn" onclick="generateGames()">⚡ Gerar Jogos</button>
+          </div>
+        </div>
+        <div class="gen-results" id="genResults"></div>
+      </div>
+    </div>
+
+    <!-- LAST DRAWS -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title"><span class="dot" style="background:var(--accent2)"></span>Últimos 20 Concursos</div>
+      </div>
+      <div class="rank-card">
+        <div class="draws-scroll">
+          <table class="draws-table">
+            <thead>
+              <tr>
+                <th>Concurso</th>
+                <th>Data</th>
+                <th>Dezenas Sorteadas</th>
+                <th>Pares</th>
+                <th>Ímpares</th>
+              </tr>
+            </thead>
+            <tbody id="drawsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dashboard -->
+</main>
 
 <script>
+// ============================================================
+// STATE
+// ============================================================
+let allDraws = [];      // [{concurso, data, dezenas:[...sorted]}, ...]
+let freq = {};          // {num: count}
+let delay = {};         // {num: contests_since_last}
 
-let allDraws = [];
-let freq = {};
-let delay = {};
-let correlationMatrix = {};
-let repetitionStats = {};
+// ============================================================
+// THEME
+// ============================================================
+const themeBtn = document.getElementById('themeBtn');
+themeBtn.addEventListener('click', () => {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  themeBtn.textContent = isDark ? '🌙' : '☀️';
+});
 
-async function loadExcelData() {
-  setStatus('loading', 'Carregando base histórica local...');
+// ============================================================
+// API FETCH — Caixa Econômica Federal (via allorigins proxy)
+// Endpoint oficial: https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/{concurso}
+// We'll use a CORS proxy since the browser can't hit the Caixa API directly
+// ============================================================
+async function fetchDraw(num) {
+  const url = `https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/${num}`;
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+  const r = await fetch(proxy);
+  const j = await r.json();
+  return JSON.parse(j.contents);
+}
+
+async function fetchLatestDraw() {
+  // fetch concurso 0 = latest
+  return fetchDraw(0);
+}
+
+async function initDashboard() {
+  setStatus('loading', 'Buscando último concurso...');
   document.getElementById('loadingScreen').style.display = 'flex';
   document.getElementById('errorScreen').classList.remove('show');
   document.getElementById('dashboard').classList.remove('show');
+  setBar(5);
 
   try {
+    // 1. Get latest concurso number
+    const latest = await fetchLatestDraw();
+    const latestNum = latest.numero;
+    setStatus('loading', `Concurso atual: ${latestNum}. Carregando histórico...`);
+    setBar(10);
 
-    const response = await fetch('./Lotofácil.xlsx');
+    // 2. Fetch all draws in batches (we'll fetch from 1 to latestNum)
+    // To avoid too many requests, we fetch in parallel batches of 50
+    const TOTAL = latestNum;
+    const allNums = Array.from({length: TOTAL}, (_, i) => i + 1);
+    const BATCH = 40;
+    let results = new Array(TOTAL);
+    let done = 0;
 
-    if (!response.ok) {
-      throw new Error('Arquivo Lotofácil.xlsx não encontrado na raiz do projeto');
+    // Process in batches
+    for (let i = 0; i < allNums.length; i += BATCH) {
+      const batch = allNums.slice(i, i + BATCH);
+      const promises = batch.map(async (n) => {
+        try {
+          const d = await fetchDraw(n);
+          return d;
+        } catch(e) { return null; }
+      });
+      const batchResults = await Promise.all(promises);
+      for (let j = 0; j < batchResults.length; j++) {
+        if (batchResults[j]) results[i + j] = batchResults[j];
+      }
+      done += batch.length;
+      const pct = 10 + Math.round((done / TOTAL) * 88);
+      setBar(pct);
+      setStatus('loading', `Carregando... ${done}/${TOTAL} concursos`);
+      document.getElementById('loadingMsg').textContent = `Carregando... ${done} de ${TOTAL} concursos`;
     }
 
-    const arrayBuffer = await response.arrayBuffer();
+    // 3. Parse
+    allDraws = results.filter(Boolean).map(d => ({
+      concurso: d.numero,
+      data: d.dataApuracao,
+      dezenas: (d.listaDezenas || d.dezenas || []).map(Number).sort((a,b) => a-b)
+    })).filter(d => d.dezenas.length > 0);
 
-    const workbook = XLSX.read(arrayBuffer, {
-      type: 'array'
+    setBar(100);
+    processData();
+    renderAll();
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('dashboard').classList.add('show');
+    setStatus('ok', `${allDraws.length} concursos carregados`);
+
+  } catch(e) {
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('errorScreen').classList.add('show');
+    document.getElementById('errorMsg').textContent = 
+      `Erro ao acessar a API da Caixa: ${e.message}. Isso pode ser um bloqueio de CORS do navegador ou instabilidade na API. Tente usar o botão abaixo ou acesse pelo computador.`;
+    setStatus('error', 'Erro ao carregar');
+  }
+}
+
+function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  dot.className = 'status-dot ' + state;
+  txt.textContent = text;
+}
+function setBar(pct) {
+  document.getElementById('loadingBar').style.width = pct + '%';
+}
+
+// ============================================================
+// PROCESS
+// ============================================================
+function processData() {
+  freq = {};
+  for (let i = 1; i <= 25; i++) freq[i] = 0;
+  for (const d of allDraws) {
+    for (const n of d.dezenas) freq[n] = (freq[n] || 0) + 1;
+  }
+
+  // delay: how many contests since last appearance
+  delay = {};
+  for (let i = 1; i <= 25; i++) delay[i] = allDraws.length; // default = never seen
+  const last = [...allDraws].reverse();
+  for (let i = 1; i <= 25; i++) {
+    const idx = last.findIndex(d => d.dezenas.includes(i));
+    delay[i] = idx === -1 ? allDraws.length : idx;
+  }
+}
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function renderAll() {
+  renderSummary();
+  renderHeatmap('freq');
+  renderRanking();
+  renderParity();
+  renderDelay();
+  renderCycle();
+  renderLastDraws();
+}
+
+// ============================================================
+// SUMMARY
+// ============================================================
+function renderSummary() {
+  const sorted = Object.entries(freq).sort((a,b) => b[1]-a[1]);
+  const hotNum = sorted[0][0]; const hotCnt = sorted[0][1];
+  const coldNum = sorted[sorted.length-1][0]; const coldCnt = sorted[sorted.length-1][1];
+  const first = allDraws[0]; const last = allDraws[allDraws.length-1];
+
+  document.getElementById('sumTotal').textContent = allDraws.length.toLocaleString('pt-BR');
+  document.getElementById('sumRange').textContent = `Concurso ${first.concurso} → ${last.concurso}`;
+  document.getElementById('sumHot').textContent = String(hotNum).padStart(2,'0');
+  document.getElementById('sumHotCount').textContent = `Saiu ${hotCnt}x (${(hotCnt/allDraws.length*100).toFixed(1)}%)`;
+  document.getElementById('sumCold').textContent = String(coldNum).padStart(2,'0');
+  document.getElementById('sumColdCount').textContent = `Saiu ${coldCnt}x (${(coldCnt/allDraws.length*100).toFixed(1)}%)`;
+  document.getElementById('sumLast').textContent = `#${last.concurso}`;
+  document.getElementById('sumLastDate').textContent = formatDate(last.data);
+}
+
+// ============================================================
+// HEATMAP
+// ============================================================
+function getHeatColor(val, min, max) {
+  const t = (val - min) / (max - min);
+  // cold (blue) -> neutral -> hot (red)
+  if (t < 0.5) {
+    const u = t * 2;
+    const r = Math.round(77 + (200-77)*u);
+    const g = Math.round(166 + (200-166)*u);
+    const b = Math.round(255 + (200-255)*u);
+    return `rgb(${r},${g},${b})`;
+  } else {
+    const u = (t - 0.5) * 2;
+    const r = Math.round(200 + (255-200)*u);
+    const g = Math.round(200 - 200*u);
+    const b = Math.round(200 - 200*u);
+    return `rgb(${r},${g},${b})`;
+  }
+}
+
+function sortHeatmap(el, mode) {
+  document.querySelectorAll('[data-sort]').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  renderHeatmap(mode);
+}
+
+function renderHeatmap(mode) {
+  const nums = Array.from({length:25}, (_,i) => i+1);
+  let sorted;
+  if (mode === 'freq') sorted = nums.sort((a,b) => freq[b]-freq[a]);
+  else if (mode === 'delay') sorted = nums.sort((a,b) => delay[b]-delay[a]);
+  else sorted = nums.sort((a,b) => a-b);
+
+  const freqVals = Object.values(freq);
+  const minF = Math.min(...freqVals), maxF = Math.max(...freqVals);
+  const delayVals = Object.values(delay);
+  const maxD = Math.max(...delayVals);
+
+  const grid = document.getElementById('heatmapGrid');
+  grid.innerHTML = '';
+  for (const n of sorted) {
+    const f = freq[n] || 0;
+    const d = delay[n] || 0;
+    const color = mode === 'delay'
+      ? `rgb(${Math.round(77 + (255-77)*(d/maxD))},${Math.round(166*(1-d/maxD))},${Math.round(255*(1-d/maxD))})`
+      : getHeatColor(f, minF, maxF);
+    const cell = document.createElement('div');
+    cell.className = 'heat-cell';
+    cell.style.background = color + '22';
+    cell.style.borderColor = color + '55';
+    cell.title = `Dezena ${n} | ${f}x sorteada | Atraso: ${d} concursos`;
+    cell.innerHTML = `
+      <span class="heat-num" style="color:${color}">${String(n).padStart(2,'0')}</span>
+      <span class="heat-count" style="color:${color}">${mode === 'delay' ? d+'c' : f+'x'}</span>
+    `;
+    grid.appendChild(cell);
+  }
+}
+
+// ============================================================
+// RANKING
+// ============================================================
+function renderRanking() {
+  const sorted = Object.entries(freq).map(([n,c]) => ({n:+n,c})).sort((a,b) => b.c-a.c);
+  const maxC = sorted[0].c;
+
+  function makeList(items, containerId, colorFn) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    items.slice(0,10).forEach((item, i) => {
+      const color = colorFn(i);
+      const pct = (item.c / maxC * 100).toFixed(0);
+      const row = document.createElement('div');
+      row.className = 'rank-item';
+      row.innerHTML = `
+        <span class="rank-pos">${i+1}</span>
+        <div class="rank-ball" style="background:${color}22;color:${color};border:1px solid ${color}44">${String(item.n).padStart(2,'0')}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%;background:${color}"></div></div>
+        <span class="rank-val">${item.c}x</span>
+      `;
+      el.appendChild(row);
     });
+  }
 
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[Lotofácil.xlsx];
+  makeList(sorted, 'rankTop', i => {
+    const colors = ['#ff4d4d','#ff6b35','#ffd60a','#00e5a0','#0090ff'];
+    return colors[Math.min(i, colors.length-1)];
+  });
+  makeList([...sorted].reverse(), 'rankBottom', i => '#4da6ff');
+}
 
-    const rows = XLSX.utils.sheet_to_json(sheet, {
-      defval: null
+// ============================================================
+// PARITY
+// ============================================================
+function renderParity() {
+  const pairs = [
+    {label:'7 pares / 8 ímpares', even:7, odd:8},
+    {label:'8 pares / 7 ímpares', even:8, odd:7},
+    {label:'6 pares / 9 ímpares', even:6, odd:9},
+    {label:'9 pares / 6 ímpares', even:9, odd:6},
+    {label:'5 pares / 10 ímpares', even:5, odd:10},
+    {label:'10 pares / 5 ímpares', even:10, odd:5},
+    {label:'Outros', even:-1, odd:-1},
+  ];
+
+  const counts = {};
+  pairs.forEach(p => counts[p.label] = 0);
+
+  for (const d of allDraws) {
+    const evens = d.dezenas.filter(n => n%2===0).length;
+    const odds = 15 - evens;
+    const found = pairs.find(p => p.even === evens && p.odd === odds);
+    if (found) counts[found.label]++;
+    else counts['Outros']++;
+  }
+
+  const statsEl = document.getElementById('parityStats');
+  const totalAvgEven = allDraws.reduce((s,d) => s + d.dezenas.filter(n=>n%2===0).length, 0) / allDraws.length;
+  statsEl.innerHTML = `Média histórica: <strong>${totalAvgEven.toFixed(1)} pares</strong> e <strong>${(15-totalAvgEven).toFixed(1)} ímpares</strong> por concurso.`;
+
+  const barsEl = document.getElementById('parityBars');
+  barsEl.innerHTML = '';
+  const sortedPairs = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5);
+  const maxCnt = sortedPairs[0][1];
+  const colors = ['var(--accent2)','var(--accent)','var(--accent4)','var(--accent3)','var(--text3)'];
+
+  sortedPairs.forEach(([label, cnt], i) => {
+    const pct = (cnt / maxCnt * 100).toFixed(0);
+    const pctOfAll = (cnt / allDraws.length * 100).toFixed(1);
+    const row = document.createElement('div');
+    row.className = 'parity-row';
+    row.innerHTML = `
+      <div class="parity-label">
+        <strong>${label}</strong>
+        <span>${cnt}x (${pctOfAll}%)</span>
+      </div>
+      <div class="parity-track">
+        <div class="parity-fill" style="width:${pct}%;background:${colors[i]}"></div>
+      </div>
+    `;
+    barsEl.appendChild(row);
+  });
+}
+
+// ============================================================
+// DELAY
+// ============================================================
+function renderDelay() {
+  const avgDelay = Object.values(delay).reduce((a,b)=>a+b,0) / 25;
+  const sorted = Object.entries(delay).map(([n,d]) => ({n:+n,d})).sort((a,b) => b.d-a.d);
+
+  const grid = document.getElementById('delayGrid');
+  grid.innerHTML = '';
+  sorted.forEach(({n, d}) => {
+    const cell = document.createElement('div');
+    cell.className = 'delay-cell' + (d > avgDelay * 1.5 ? ' overdue' : d > avgDelay ? ' warning' : '');
+    cell.innerHTML = `
+      <span class="delay-num" style="color:${d > avgDelay*1.5 ? 'var(--hot)' : d > avgDelay ? 'var(--accent4)' : 'var(--text)'}">${String(n).padStart(2,'0')}</span>
+      <span class="delay-ago">${d === 0 ? 'último' : d+'c atrás'}</span>
+    `;
+    grid.appendChild(cell);
+  });
+}
+
+// ============================================================
+// CYCLE ANALYSIS
+// ============================================================
+function renderCycle() {
+  const size = parseInt(document.getElementById('cycleSize').value) || 4;
+  const count = parseInt(document.getElementById('cycleCount').value) || 10;
+
+  const groups = [];
+  const totalGroups = Math.floor(allDraws.length / size);
+  const startIdx = Math.max(0, totalGroups - count);
+
+  for (let g = startIdx; g < totalGroups; g++) {
+    const slice = allDraws.slice(g * size, (g+1) * size);
+    const seen = new Set(slice.flatMap(d => d.dezenas));
+    const missing = [];
+    for (let i = 1; i <= 25; i++) if (!seen.has(i)) missing.push(i);
+    groups.push({
+      idx: g+1,
+      from: slice[0]?.concurso,
+      to: slice[slice.length-1]?.concurso,
+      seen: [...seen].sort((a,b)=>a-b),
+      missing
     });
+  }
 
-    allDraws = rows.map((row) => {
+  const el = document.getElementById('cycleGroups');
+  el.innerHTML = '';
+  [...groups].reverse().forEach(g => {
+    const completePct = (g.seen.size / 25 * 100).toFixed(0);
+    const div = document.createElement('div');
+    div.className = 'cycle-group';
+    const seenBalls = g.seen.map(n =>
+      `<div class="cycle-ball seen">${String(n).padStart(2,'0')}</div>`
+    ).join('');
+    const missBalls = g.missing.map(n =>
+      `<div class="cycle-ball missing">${String(n).padStart(2,'0')}</div>`
+    ).join('');
+    div.innerHTML = `
+      <div class="cycle-group-header">
+        <span class="cycle-group-title">Ciclo #${g.idx} &nbsp;·&nbsp; Concursos ${g.from}–${g.to}</span>
+        <span style="font-size:12px;font-family:'DM Mono',monospace;color:${g.missing.length===0?'var(--accent)':'var(--hot)'}">
+          ${g.seen.length}/25 dezenas (${(g.seen.length/25*100).toFixed(0)}%)
+        </span>
+      </div>
+      <div class="cycle-group-body">
+        <div class="cycle-nums-row">${seenBalls}</div>
+        ${g.missing.length > 0 ? `
+          <div class="cycle-miss-label">❌ Não apareceram neste ciclo:</div>
+          <div class="cycle-nums-row" style="margin-top:8px">${missBalls}</div>
+        ` : `<div class="cycle-miss-label" style="color:var(--accent)">✅ Ciclo completo — todas as 25 dezenas apareceram!</div>`}
+      </div>
+    `;
+    el.appendChild(div);
+  });
+}
 
-      const dezenas = [];
+// ============================================================
+// GENERATOR
+// ============================================================
+function generateGames() {
+  const qty = Math.min(50, Math.max(1, parseInt(document.getElementById('genQty').value) || 5));
+  const nums = Math.min(20, Math.max(15, parseInt(document.getElementById('genNums').value) || 15));
+  const parity = document.getElementById('genParity').value;
+  const freqFilter = document.getElementById('genFreq').value;
+  const consecFilter = document.getElementById('genConsec').value;
 
-      // procura automaticamente colunas de dezenas
-      const possibleColumns = Object.keys(row).filter(k => {
-        const lower = String(k).toLowerCase();
+  // Build pool based on frequency filter
+  const sorted = Object.entries(freq).map(([n,c]) => ({n:+n,c})).sort((a,b) => b.c-a.c);
+  const hot = sorted.slice(0,12).map(x=>x.n);
+  const cold = sorted.slice(13).map(x=>x.n);
+  const delayedNums = Object.entries(delay).sort((a,b)=>+b[1]-+a[1]).slice(0,12).map(([n])=>+n);
 
-        return (
-          lower.includes('bola') ||
-          lower.includes('dezena') ||
-          lower.in
+  const games = [];
+  let attempts = 0;
+  while (games.length < qty && attempts < 5000) {
+    attempts++;
+    let pool = Array.from({length:25}, (_,i) => i+1);
 
+    // Frequency bias: weighted shuffle
+    let weighted = [];
+    if (freqFilter === 'hot') {
+      weighted = [...hot, ...hot, ...pool]; // hot numbers appear more
+    } else if (freqFilter === 'cold') {
+      weighted = [...cold, ...cold, ...pool];
+    } else if (freqFilter === 'delayed') {
+      weighted = [...delayedNums, ...delayedNums, ...pool];
+    } else if (freqFilter === 'mixed') {
+      weighted = [...hot.slice(0,6), ...cold.slice(0,6), ...pool];
+    } else {
+      weighted = [...pool];
+    }
+
+    // Shuffle
+    for (let i = weighted.length-1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
+      [weighted[i], weighted[j]] = [weighted[j], weighted[i]];
+    }
+    // Deduplicate and pick nums
+    const seen = new Set();
+    const game = [];
+    for (const n of weighted) {
+      if (!seen.has(n)) { seen.add(n); game.push(n); }
+      if (game.length === nums) break;
+    }
+    if (game.length < nums) continue;
+    game.sort((a,b)=>a-b);
+
+    // Parity filter
+    const evens = game.filter(n=>n%2===0).length;
+    const odds = nums - evens;
+    if (parity === 'more_odd' && odds < 8) continue;
+    if (parity === 'more_even' && evens < 8) continue;
+    if (parity === 'balanced' && (evens < 7 || evens > 8)) continue;
+
+    // Consecutive filter
+    if (consecFilter !== 'any') {
+      let consecPairs = 0;
+      for (let i=0;i<game.length-1;i++) if(game[i+1]-game[i]===1) consecPairs++;
+      if (consecFilter === '0' && consecPairs > 0) continue;
+      if (consecFilter === '1' && consecPairs < 1) continue;
+      if (consecFilter === '2' && consecPairs < 2) continue;
+    }
+
+    games.push(game);
+  }
+
+  const el = document.getElementById('genResults');
+  el.innerHTML = '';
+  if (games.length === 0) {
+    el.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou todos os filtros combinados. Tente relaxar os critérios.</div>';
+    return;
+  }
+
+  games.forEach((game, i) => {
+    const evens = game.filter(n=>n%2===0).length;
+    const div = document.createElement('div');
+    div.className = 'gen-game';
+    div.innerHTML = `
+      <div class="gen-game-header">
+        <span>Jogo ${i+1} &nbsp;·&nbsp; ${game.length} dezenas &nbsp;·&nbsp; ${evens}P / ${game.length-evens}I</span>
+        <button class="copy-btn" onclick="copyGame(this,'${game.join(',')}')">Copiar</button>
+      </div>
+      <div class="gen-balls">
+        ${game.map(n => `<div class="gen-ball">${String(n).padStart(2,'0')}</div>`).join('')}
+      </div>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function copyGame(btn, nums) {
+  navigator.clipboard.writeText(nums.split(',').map(n => n.padStart(2,'0')).join(' - '));
+  btn.textContent = '✓ Copiado';
+  setTimeout(() => btn.textContent = 'Copiar', 1500);
+}
+
+// ============================================================
+// LAST DRAWS TABLE
+// ============================================================
+function renderLastDraws() {
+  const tbody = document.getElementById('drawsBody');
+  tbody.innerHTML = '';
+  const last20 = allDraws.slice(-20).reverse();
+  for (const d of last20) {
+    const evens = d.dezenas.filter(n=>n%2===0).length;
+    const balls = d.dezenas.map(n =>
+      `<div class="draw-ball-sm">${String(n).padStart(2,'0')}</div>`
+    ).join('');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-family:'DM Mono',monospace;font-size:12px">#${d.concurso}</td>
+      <td style="font-size:12px;color:var(--text2)">${formatDate(d.data)}</td>
+      <td><div class="draw-balls-row">${balls}</div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent2)">${evens}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent3)">${15-evens}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function formatDate(str) {
+  if (!str) return '—';
+  // format: dd/mm/yyyy
+  try {
+    const parts = str.split('/');
+    if (parts.length === 3) return str;
+    return new Date(str).toLocaleDateString('pt-BR');
+  } catch { return str; }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+initDashboard();
 </script>
-
 </body>
 </html>
