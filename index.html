@@ -564,136 +564,6 @@ box-shadow: var(--shadow);
   font-family:'Syne',sans-serif;
   font-weight:800;
 }
-  .score-ball {
-  aspect-ratio: 1;
-  border-radius: 12px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Syne',sans-serif;
-  font-weight:700;
-  cursor:pointer;
-  transition:all .2s;
-  user-select:none;
-}
-
-.score-ball:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.score-ball.active {
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#000;
-  border-color: transparent;
-}
-
-.score-summary {
-  background: linear-gradient(
-    135deg,
-    rgba(0,229,160,.12),
-    rgba(0,144,255,.12)
-  );
-
-  border:1px solid var(--border);
-
-  border-radius:16px;
-
-  padding:24px;
-
-  margin-bottom:20px;
-}
-
-.score-main {
-  display:flex;
-  align-items:center;
-  gap:24px;
-  flex-wrap:wrap;
-}
-
-.score-circle {
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  background:conic-gradient(
-    var(--accent) calc(var(--score)*1%),
-    var(--bg3) 0
-  );
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  position:relative;
-}
-
-.score-circle::before {
-  content:'';
-  position:absolute;
-  inset:10px;
-  border-radius:50%;
-  background:var(--card-bg);
-}
-
-.score-number {
-  position:relative;
-  z-index:2;
-  font-family:'Syne',sans-serif;
-  font-size:34px;
-  font-weight:800;
-}
-
-.score-label {
-  font-size:13px;
-  color:var(--text2);
-  margin-top:4px;
-}
-
-.score-list {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  margin-top:20px;
-}
-
-.score-item {
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px 16px;
-}
-
-.score-item-top {
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
-  gap:12px;
-}
-
-.score-item-title {
-  font-size:13px;
-  font-weight:600;
-}
-
-.score-item-value {
-  font-family:'DM Mono',monospace;
-  font-size:12px;
-  color:var(--text2);
-}
-
-.score-bar {
-  height:8px;
-  border-radius:999px;
-  background:var(--bg2);
-  overflow:hidden;
-}
-
-.score-bar-fill {
-  height:100%;
-  border-radius:999px;
-}
 
 /* Responsive */
 @media(max-width: 900px) {
@@ -797,39 +667,58 @@ box-shadow: var(--shadow);
       </div>
     </div>
 
-<!-- SCORE ANALÍTICO -->
+    <!-- RANKING + PARITY -->
+    <div class="two-col section">
+      <!-- SIMULADOR -->
 <div class="section">
   <div class="section-header">
     <div class="section-title">
       <span class="dot" style="background:var(--accent3)"></span>
-      Score Analítico
+      Simulador Histórico de Jogos
     </div>
   </div>
 
   <div class="gen-card">
 
     <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7">
-      Monte um jogo e veja como ele se posiciona estatisticamente
-      dentro dos padrões históricos da Lotofácil.
+      Escolha suas dezenas e veja como esse jogo teria performado
+      historicamente nos concursos da Lotofácil.
     </div>
 
-    <div id="scoreGrid" class="heatmap-grid" style="max-width:520px;margin-bottom:24px"></div>
+    <div id="simulatorGrid" class="heatmap-grid" style="max-width:520px;margin-bottom:24px"></div>
 
     <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <button class="gen-btn" onclick="runAnalyticalScore()">
-        Analisar Jogo
+      <button class="gen-btn" onclick="runSimulation()">
+        Simular Jogo
       </button>
 
-      <button class="copy-btn" onclick="clearScoreGame()">
+      <button class="copy-btn" onclick="clearSimulation()">
         Limpar
       </button>
     </div>
 
-    <div id="scoreResults" style="margin-top:24px"></div>
+    <div id="simResults" style="margin-top:24px"></div>
 
   </div>
 </div>
-
+      <!-- TOP/BOTTOM RANKING -->
+      <div>
+        <div class="section-header">
+          <div class="section-title"><span class="dot" style="background:var(--hot)"></span>Top 10 — Mais Sorteadas</div>
+        </div>
+        <div class="rank-card">
+          <div class="rank-list" id="rankTop"></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-header">
+          <div class="section-title"><span class="dot" style="background:var(--cold)"></span>Top 10 — Menos Sorteadas</div>
+        </div>
+        <div class="rank-card">
+          <div class="rank-list" id="rankBottom"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- PARITY + DELAY -->
     <div class="two-col section">
@@ -1028,11 +917,7 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
-const el = document.getElementById('sumAnalysis');
-if (!el) return;
-  
   let selectedSimulation = [];
-  let analyticalGame = [];
   function renderSimulator() {
 
   const grid = document.getElementById('simulatorGrid');
@@ -1160,349 +1045,11 @@ if (!el) return;
   function clearSimulation() {
 
   selectedSimulation = [];
-   
 
   document.querySelectorAll('.sim-ball')
     .forEach(el => el.classList.remove('active'));
 
   document.getElementById('simResults').innerHTML = '';
-}
-  function renderScoreGrid() {
-
-  const grid = document.getElementById('scoreGrid');
-
-  if (!grid) return;
-
-  grid.innerHTML = '';
-
-  for (let i = 1; i <= 25; i++) {
-
-    const div = document.createElement('div');
-
-    div.className = 'score-ball';
-
-    div.textContent = String(i).padStart(2,'0');
-
-    div.onclick = () => toggleScoreNumber(i, div);
-
-    grid.appendChild(div);
-  }
-
-}
-  function toggleScoreNumber(num, el) {
-
-  const idx = analyticalGame.indexOf(num);
-
-  if (idx >= 0) {
-
-    analyticalGame.splice(idx, 1);
-
-    el.classList.remove('active');
-
-  } else {
-
-    if (analyticalGame.length >= 20) return;
-
-    analyticalGame.push(num);
-
-    el.classList.add('active');
-  }
-
-}
-  function clearScoreGame() {
-
-  analyticalGame = [];
-
-  document
-    .querySelectorAll('.score-ball')
-    .forEach(el => el.classList.remove('active'));
-
-  document.getElementById('scoreResults').innerHTML = '';
-
-}
-  function runAnalyticalScore() {
-
-  if (analyticalGame.length < 15) {
-
-    alert('Selecione ao menos 15 dezenas.');
-
-    return;
-  }
-
-  const game = [...analyticalGame].sort((a,b)=>a-b);
-
-  // =========================
-  // PARIDADE
-  // =========================
-
-  const evens = game.filter(n => n % 2 === 0).length;
-  const odds = game.length - evens;
-
-  let parityScore = 100;
-
-  if (
-    (evens === 7 && odds === 8) ||
-    (evens === 8 && odds === 7)
-  ) {
-    parityScore = 100;
-  } else if (
-    (evens === 6 && odds === 9) ||
-    (evens === 9 && odds === 6)
-  ) {
-    parityScore = 75;
-  } else {
-    parityScore = 40;
-  }
-
-  // =========================
-  // SOMA
-  // =========================
-
-  const sum = game.reduce((a,b)=>a+b,0);
-
-  let sumScore = 100;
-
-  if (sum >= 180 && sum <= 220) {
-    sumScore = 100;
-  } else if (sum >= 160 && sum <= 240) {
-    sumScore = 70;
-  } else {
-    sumScore = 35;
-  }
-
-  // =========================
-  // CONSECUTIVOS
-  // =========================
-
-  let consecutivePairs = 0;
-
-  for (let i = 0; i < game.length - 1; i++) {
-
-    if (game[i+1] - game[i] === 1) {
-      consecutivePairs++;
-    }
-  }
-
-  let consecScore = 100;
-
-  if (consecutivePairs >= 2 && consecutivePairs <= 4) {
-    consecScore = 100;
-  } else if (consecutivePairs <= 5) {
-    consecScore = 70;
-  } else {
-    consecScore = 40;
-  }
-
-  // =========================
-  // REPETIDAS
-  // =========================
-
-  const lastDraw = allDraws[allDraws.length - 1];
-
-  const repeated = game.filter(n =>
-    lastDraw.dezenas.includes(n)
-  ).length;
-
-  let repeatScore = 100;
-
-  if (repeated >= 8 && repeated <= 10) {
-    repeatScore = 100;
-  } else if (repeated >= 6 && repeated <= 12) {
-    repeatScore = 70;
-  } else {
-    repeatScore = 40;
-  }
-
-  // =========================
-  // QUENTES
-  // =========================
-
-  const sortedFreq = Object
-    .entries(freq)
-    .sort((a,b)=>b[1]-a[1]);
-
-  const hot = sortedFreq
-    .slice(0,12)
-    .map(([n]) => +n);
-
-  const hotCount = game.filter(n => hot.includes(n)).length;
-
-  let hotScore = 100;
-
-  if (hotCount >= 5 && hotCount <= 9) {
-    hotScore = 100;
-  } else if (hotCount >= 3) {
-    hotScore = 70;
-  } else {
-    hotScore = 40;
-  }
-
-  // =========================
-  // SCORE FINAL
-  // =========================
-
-  const finalScore = Math.round(
-    (
-      parityScore +
-      sumScore +
-      consecScore +
-      repeatScore +
-      hotScore
-    ) / 5
-  );
-
-  let level = 'Fraco';
-
-  if (finalScore >= 85) level = 'Excelente';
-  else if (finalScore >= 70) level = 'Forte';
-  else if (finalScore >= 55) level = 'Médio';
-
-  // =========================
-  // RENDER
-  // =========================
-
-  const results = document.getElementById('scoreResults');
-
-  results.innerHTML = `
-
-    <div class="score-summary">
-
-      <div class="score-main">
-
-        <div
-          class="score-circle"
-          style="--score:${finalScore}"
-        >
-          <div class="score-number">
-            ${finalScore}
-          </div>
-        </div>
-
-        <div>
-
-          <div
-            style="
-              font-size:30px;
-              font-family:'Syne',sans-serif;
-              font-weight:800;
-              line-height:1;
-            "
-          >
-            ${level}
-          </div>
-
-          <div class="score-label">
-            Score Estatístico do Jogo
-          </div>
-
-          <div
-            style="
-              margin-top:16px;
-              font-size:13px;
-              color:var(--text2);
-              line-height:1.7;
-            "
-          >
-            ${game.map(n =>
-              String(n).padStart(2,'0')
-            ).join(' • ')}
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="score-list">
-
-      ${makeScoreItem(
-        'Paridade',
-        `${evens}P / ${odds}I`,
-        parityScore,
-        'Equilíbrio entre pares e ímpares'
-      )}
-
-      ${makeScoreItem(
-        'Soma Total',
-        sum,
-        sumScore,
-        'Faixa histórica média'
-      )}
-
-      ${makeScoreItem(
-        'Sequências',
-        `${consecutivePairs} consecutivos`,
-        consecScore,
-        'Padrão de dezenas sequenciais'
-      )}
-
-      ${makeScoreItem(
-        'Repetidas',
-        `${repeated} repetidas`,
-        repeatScore,
-        'Comparação com último concurso'
-      )}
-
-      ${makeScoreItem(
-        'Dezenas Quentes',
-        `${hotCount} quentes`,
-        hotScore,
-        'Frequência histórica'
-      )}
-
-    </div>
-
-  `;
-}
-  function makeScoreItem(title, value, score, desc) {
-
-  let color = 'var(--hot)';
-
-  if (score >= 85) color = 'var(--accent)';
-  else if (score >= 70) color = 'var(--accent4)';
-
-  return `
-
-    <div class="score-item">
-
-      <div class="score-item-top">
-
-        <div>
-          <div class="score-item-title">
-            ${title}
-          </div>
-
-          <div
-            style="
-              font-size:12px;
-              color:var(--text2);
-              margin-top:2px;
-            "
-          >
-            ${desc}
-          </div>
-        </div>
-
-        <div class="score-item-value">
-          ${value}
-        </div>
-
-      </div>
-
-      <div class="score-bar">
-        <div
-          class="score-bar-fill"
-          style="
-            width:${score}%;
-            background:${color};
-          "
-        ></div>
-      </div>
-
-    </div>
-
-  `;
 }
   // ============================================================
 // SOMA DAS DEZENAS
@@ -1841,7 +1388,7 @@ function renderAll() {
   renderDelay();
   renderRepeatStats();
   renderSumAnalysis();
-  renderScoreGrid();
+  renderSimulator();
   renderCycle();
   renderLastDraws();
 }
