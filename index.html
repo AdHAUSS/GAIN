@@ -654,34 +654,21 @@ themeBtn.addEventListener('click', () => {
 });
 
 async function initDashboard() {
-  function setStatus(state, text) {
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
-
-  dot.className = 'status-dot ' + state;
-  txt.textContent = text;
-}
-
-function setBar(pct) {
-  document.getElementById('loadingBar').style.width = pct + '%';
 
   try {
-
-    document.getElementById('errorScreen').classList.remove('show');
 
     setStatus('loading', 'Carregando planilha local...');
     setBar(20);
 
-    // CAMINHO DA SUA PLANILHA
+    // caminho da planilha
     const response = await fetch('./lotofacil.xlsx');
 
     if (!response.ok) {
-      throw new Error('Arquivo lotofacil.xlsx não encontrado');
+      throw new Error('Planilha não encontrada');
     }
 
     const arrayBuffer = await response.arrayBuffer();
 
-    setStatus('loading', 'Lendo planilha...');
     setBar(40);
 
     const workbook = XLSX.read(arrayBuffer, {
@@ -727,7 +714,6 @@ function setBar(pct) {
           data: row['Data Sorteio'],
           dezenas
         };
-
       })
       .filter(item => item.dezenas.length === 15)
       .sort((a, b) => a.concurso - b.concurso);
@@ -746,9 +732,7 @@ function setBar(pct) {
 
     setStatus('ok', `${allDraws.length} concursos carregados`);
 
-  } catch(e) {
-
-    console.error(e);
+  } catch (e) {
 
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('errorScreen').classList.add('show');
@@ -758,6 +742,18 @@ function setBar(pct) {
 
     setStatus('error', 'Erro ao carregar');
   }
+}
+
+function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+
+  dot.className = 'status-dot ' + state;
+  txt.textContent = text;
+}
+
+function setBar(pct) {
+  document.getElementById('loadingBar').style.width = pct + '%';
 }
 
 // ============================================================
