@@ -689,41 +689,40 @@ console.log(rows);
     setBar(60);
     
 console.log(rows[0]);
-    allDraws = rows
-      .map(row => {
+   allDraws = rows
+  .slice(1)
+  .map(row => {
 
-        const dezenas = [
-          row.Bola1,
-          row.Bola2,
-          row.Bola3,
-          row.Bola4,
-          row.Bola5,
-          row.Bola6,
-          row.Bola7,
-          row.Bola8,
-          row.Bola9,
-          row.Bola10,
-          row.Bola11,
-          row.Bola12,
-          row.Bola13,
-          row.Bola14,
-          row.Bola15
-        ]
-        .map(n => Number(n))
-        .filter(n => !isNaN(n))
-        .sort((a, b) => a - b);
+       const dezenas = [
+      row[2],
+      row[3],
+      row[4],
+      row[5],
+      row[6],
+      row[7],
+      row[8],
+      row[9],
+      row[10],
+      row[11],
+      row[12],
+      row[13],
+      row[14],
+      row[15],
+      row[16]
+    ]
+    .map(n => Number(n))
+    .filter(n => !isNaN(n))
+    .sort((a, b) => a - b);
 
-        return {
-          concurso: Number(row.Concurso),
-          data: row['Data Sorteio'],
-          dezenas
-        };
-      })
-      .filter(item => {
-  console.log(item);
-  return true;
-})
-      .sort((a, b) => a.concurso - b.concurso);
+    return {
+      concurso: Number(row[0]),
+      data: row[1],
+      dezenas
+    };
+  })
+  .filter(item => item.dezenas.length === 15)
+  .sort((a, b) => a.concurso - b.concurso);
+     
 
     if (allDraws.length === 0) {
       throw new Error('Nenhum concurso válido encontrado');
