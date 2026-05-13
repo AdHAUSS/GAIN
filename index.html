@@ -677,7 +677,10 @@ async function initDashboard() {
 
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-
+console.log(workbook.SheetNames);
+    const workbook = XLSX.read(arrayBuffer, {
+  type: 'array'
+});
     const rows = XLSX.utils.sheet_to_json(worksheet, {
       defval: ''
     });
