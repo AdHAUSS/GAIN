@@ -637,6 +637,30 @@ box-shadow: var(--shadow);
 
     <!-- PARITY + DELAY -->
     <div class="two-col section">
+      <!-- REPETIÇÃO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">
+      <span class="dot" style="background:var(--accent3)"></span>
+      Repetição entre Concursos
+    </div>
+  </div>
+
+  <div class="parity-card">
+
+    <div id="repeatSummary"
+      style="
+        margin-bottom:20px;
+        font-size:13px;
+        color:var(--text2);
+        line-height:1.7;
+      ">
+    </div>
+
+    <div class="parity-bars" id="repeatBars"></div>
+
+  </div>
+</div>
       <!-- PARITY -->
       <div>
         <div class="section-header">
@@ -784,6 +808,98 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
+  // ============================================================
+// REPETIÇÃO ENTRE CONCURSOS
+// ============================================================
+function renderRepeatStats() {
+
+  const repeatMap = {};
+
+  for (let i = 1; i < allDraws.length; i++) {
+
+    const prev = allDraws[i - 1].dezenas;
+    const current = allDraws[i].dezenas;
+
+    const repeated = current.filter(n => prev.includes(n)).length;
+
+    repeatMap[repeated] = (repeatMap[repeated] || 0) + 1;
+  }
+
+  const entries = Object.entries(repeatMap)
+    .map(([k,v]) => ({
+      repeated: Number(k),
+      count: v
+    }))
+    .sort((a,b) => a.repeated - b.repeated);
+
+  const total = entries.reduce((s,e) => s + e.count, 0);
+
+  const lastDraw = allDraws[allDraws.length - 1];
+  const prevDraw = allDraws[allDraws.length - 2];
+
+  const lastRepeated = lastDraw.dezenas.filter(
+    n => prevDraw.dezenas.includes(n)
+  ).length;
+
+  const avg =
+    entries.reduce((s,e) => s + (e.repeated * e.count), 0)
+    / total;
+
+  const maxCount = Math.max(...entries.map(e => e.count));
+
+  document.getElementById('repeatSummary').innerHTML = `
+    Último concurso repetiu
+    <strong style="color:var(--accent)">
+      ${lastRepeated} dezenas
+    </strong>
+    do anterior.<br>
+
+    Média histórica:
+    <strong style="color:var(--accent2)">
+      ${avg.toFixed(1)} dezenas repetidas
+    </strong>
+    por concurso.
+  `;
+
+  const bars = document.getElementById('repeatBars');
+
+  bars.innerHTML = '';
+
+  entries.forEach((e, i) => {
+
+    const pct = (e.count / total * 100).toFixed(1);
+
+    const width = (e.count / maxCount * 100).toFixed(0);
+
+    const row = document.createElement('div');
+
+    row.className = 'parity-row';
+
+    row.innerHTML = `
+      <div class="parity-label">
+        <strong>${e.repeated} repetidas</strong>
+        <span>${e.count}x (${pct}%)</span>
+      </div>
+
+      <div class="parity-track">
+        <div
+          class="parity-fill"
+          style="
+            width:${width}%;
+            background:
+              linear-gradient(
+                90deg,
+                var(--accent3),
+                var(--accent)
+              );
+          ">
+        </div>
+      </div>
+    `;
+
+    bars.appendChild(row);
+  });
+}
 // ============================================================
 // STATE
 // ============================================================
@@ -926,6 +1042,7 @@ function renderAll() {
   renderRanking();
   renderParity();
   renderDelay();
+  renderRepeatStats();
   renderCycle();
   renderLastDraws();
 }
