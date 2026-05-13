@@ -654,7 +654,26 @@ themeBtn.addEventListener('click', () => {
 });
 
 async function initDashboard() {
-  setStatus('loading', 'Carregando planilha local...');
+
+  try {
+
+    document.getElementById('errorScreen').classList.remove('show');
+
+    setStatus('loading', 'Carregando planilha local...');
+    setBar(20);
+
+    // CAMINHO DA SUA PLANILHA
+    const response = await fetch('./lotofacil.xlsx');
+
+    if (!response.ok) {
+      throw new Error('Arquivo lotofacil.xlsx não encontrado');
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+
+    setStatus('loading', 'Lendo planilha...');
+    setBar(40);
+
     const workbook = XLSX.read(arrayBuffer, {
       type: 'array'
     });
@@ -668,10 +687,6 @@ async function initDashboard() {
 
     setStatus('loading', 'Processando concursos...');
     setBar(60);
-
-    // ========================================================
-    // CONVERSÃO DOS DADOS DA PLANILHA
-    // ========================================================
 
     allDraws = rows
       .map(row => {
@@ -702,13 +717,13 @@ async function initDashboard() {
           data: row['Data Sorteio'],
           dezenas
         };
+
       })
       .filter(item => item.dezenas.length === 15)
       .sort((a, b) => a.concurso - b.concurso);
 
-
     if (allDraws.length === 0) {
-      throw new Error('Nenhum concurso válido encontrado na planilha');
+      throw new Error('Nenhum concurso válido encontrado');
     }
 
     setBar(100);
@@ -723,23 +738,16 @@ async function initDashboard() {
 
   } catch(e) {
 
+    console.error(e);
+
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('errorScreen').classList.add('show');
 
     document.getElementById('errorMsg').textContent =
-      `Erro ao carregar a planilha local: ${e.message}`;
+      `Erro ao carregar a planilha: ${e.message}`;
 
     setStatus('error', 'Erro ao carregar');
   }
-}
-function setStatus(state, text) {
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
-  dot.className = 'status-dot ' + state;
-  txt.textContent = text;
-}
-function setBar(pct) {
-  document.getElementById('loadingBar').style.width = pct + '%';
 }
 
 // ============================================================
