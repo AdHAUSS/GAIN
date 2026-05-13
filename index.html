@@ -985,6 +985,7 @@ const slice = allDraws.slice(start, end);
     const missing = [];
     for (let i = 1; i <= 25; i++) if (!seen.has(i)) missing.push(i);
     groups.push({
+      incomplete: slice.length < size
       idx: g+1,
       from: slice[0]?.concurso,
       to: slice[slice.length-1]?.concurso,
@@ -1007,7 +1008,12 @@ const slice = allDraws.slice(start, end);
     ).join('');
     div.innerHTML = `
       <div class="cycle-group-header">
-        <span class="cycle-group-title">Ciclo #${g.idx} &nbsp;·&nbsp; Concursos ${g.from}–${g.to}</span>
+        <span class="cycle-group-title">
+  Ciclo #${g.idx}
+  ${g.incomplete ? ' · 🔄 Em andamento' : ''}
+  &nbsp;·&nbsp;
+  Concursos ${g.from}–${g.to}
+</span>
         <span style="font-size:12px;font-family:'DM Mono',monospace;color:${g.missing.length===0?'var(--accent)':'var(--hot)'}">
           ${g.seen.length}/25 dezenas (${(g.seen.length/25*100).toFixed(0)}%)
         </span>
