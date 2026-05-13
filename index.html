@@ -1078,13 +1078,13 @@ for (let i = 1; i <= 25; i++) {
     attempts++;
     let pool = Array.from({length:25}, (_,i) => i+1);
 
-    // Frequency bias: weighted shuffle
-   let weighted = [...pool];
+ // Frequency bias: weighted shuffle
+let weighted = [...pool];
 
 // ciclo atual incompleto
-const cycleSize = parseInt(document.getElementById('cycleSize').value) || 4;
+const currentCycleSize = parseInt(document.getElementById('cycleSize').value) || 4;
 
-const currentSlice = allDraws.slice(-cycleSize);
+const currentSlice = allDraws.slice(-currentCycleSize);
 
 const currentSeen = new Set(
   currentSlice.flatMap(d => d.dezenas)
@@ -1112,27 +1112,17 @@ if (freqFilter.includes('delayed')) {
 }
 
 if (freqFilter.includes('mixed')) {
-  weighted.push(...hot.slice(0,6));
-  weighted.push(...cold.slice(0,6));
+  weighted.push(...hot.slice(0, 6));
+  weighted.push(...cold.slice(0, 6));
 }
 
-if (freqFilter.includes('cycle')) {
-  weighted.push(...cycleMissing, ...cycleMissing, ...cycleMissing);
+if (freqFilter.includes('cycle_missing')) {
+  weighted.push(
+    ...cycleMissing,
+    ...cycleMissing,
+    ...cycleMissing
+  );
 }
-
-} else if (freqFilter === 'cycle_missing') {
-
-  weighted = [
-    ...missingCycleNums,
-    ...missingCycleNums,
-    ...missingCycleNums,
-    ...pool
-  ];
-
-} else {
-      weighted = [...pool];
-    }
-
     // Shuffle
     for (let i = weighted.length-1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i+1));
