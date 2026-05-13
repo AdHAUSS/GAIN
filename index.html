@@ -661,6 +661,30 @@ box-shadow: var(--shadow);
 
   </div>
 </div>
+      <!-- SOMA DAS DEZENAS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">
+      <span class="dot" style="background:var(--accent4)"></span>
+      Soma das Dezenas
+    </div>
+  </div>
+
+  <div class="parity-card">
+
+    <div id="sumAnalysis"
+      style="
+        margin-bottom:20px;
+        font-size:13px;
+        color:var(--text2);
+        line-height:1.7;
+      ">
+    </div>
+
+    <div class="parity-bars" id="sumBars"></div>
+
+  </div>
+</div>
       <!-- PARITY -->
       <div>
         <div class="section-header">
@@ -808,6 +832,107 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
+  // ============================================================
+// SOMA DAS DEZENAS
+// ============================================================
+function renderSumAnalysis() {
+
+  const ranges = {
+    '120-139': 0,
+    '140-159': 0,
+    '160-179': 0,
+    '180-199': 0,
+    '200-219': 0,
+    '220+': 0
+  };
+
+  const sums = [];
+
+  for (const d of allDraws) {
+
+    const total = d.dezenas.reduce((a,b) => a+b, 0);
+
+    sums.push(total);
+
+    if (total < 140) ranges['120-139']++;
+    else if (total < 160) ranges['140-159']++;
+    else if (total < 180) ranges['160-179']++;
+    else if (total < 200) ranges['180-199']++;
+    else if (total < 220) ranges['200-219']++;
+    else ranges['220+']++;
+  }
+
+  const avg =
+    sums.reduce((a,b)=>a+b,0) / sums.length;
+
+  const lastSum =
+    sums[sums.length - 1];
+
+  const maxCount =
+    Math.max(...Object.values(ranges));
+
+  const mostCommon =
+    Object.entries(ranges)
+      .sort((a,b)=>b[1]-a[1])[0];
+
+  document.getElementById('sumAnalysis').innerHTML = `
+    Último concurso teve soma
+    <strong style="color:var(--accent4)">
+      ${lastSum}
+    </strong>.<br>
+
+    Média histórica:
+    <strong style="color:var(--accent)">
+      ${avg.toFixed(1)}
+    </strong>.<br>
+
+    Faixa mais comum:
+    <strong style="color:var(--accent2)">
+      ${mostCommon[0]}
+    </strong>.
+  `;
+
+  const bars = document.getElementById('sumBars');
+
+  bars.innerHTML = '';
+
+  Object.entries(ranges).forEach(([label, count]) => {
+
+    const pct =
+      (count / allDraws.length * 100).toFixed(1);
+
+    const width =
+      (count / maxCount * 100).toFixed(0);
+
+    const row = document.createElement('div');
+
+    row.className = 'parity-row';
+
+    row.innerHTML = `
+      <div class="parity-label">
+        <strong>${label}</strong>
+        <span>${count}x (${pct}%)</span>
+      </div>
+
+      <div class="parity-track">
+        <div
+          class="parity-fill"
+          style="
+            width:${width}%;
+            background:
+              linear-gradient(
+                90deg,
+                var(--accent4),
+                var(--accent3)
+              );
+          ">
+        </div>
+      </div>
+    `;
+
+    bars.appendChild(row);
+  });
+}
   // ============================================================
 // REPETIÇÃO ENTRE CONCURSOS
 // ============================================================
@@ -1043,6 +1168,7 @@ function renderAll() {
   renderParity();
   renderDelay();
   renderRepeatStats();
+  renderSumAnalysis();
   renderCycle();
   renderLastDraws();
 }
