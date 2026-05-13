@@ -385,6 +385,61 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
 
+  /* MULTI FILTERS */
+.multi-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.multi-tag {
+  position: relative;
+  cursor: pointer;
+}
+
+.multi-tag input {
+  display: none;
+}
+
+.multi-tag span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 14px;
+
+  border-radius: 999px;
+
+  background: var(--bg3);
+
+  border: 1px solid var(--border);
+
+  color: var(--text2);
+
+  font-size: 12px;
+
+  font-family: 'DM Mono', monospace;
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.15s;
+}
+
+.multi-tag:hover span {
+  border-color: var(--accent2);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.multi-tag input:checked + span {
+  background: rgba(0,229,160,0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0,229,160,0.15);
+}
+
 /* Responsive */
 @media(max-width: 900px) {
   .summary-row { grid-template-columns: repeat(2,1fr); }
@@ -582,14 +637,36 @@ body {
             </select>
           </div>
           <div class="gen-control">
-            <label>Priorizar dezenas</label>
-            <select class="gen-select" id="genFreq" multiple size="5">
-              <option value="hot">Quentes (top 12)</option>
-              <option value="cold">Frias (bottom 12)</option>
-              <option value="delayed">Com atraso alto</option>
-              <option value="mixed">Mix quente+fria</option>
-              <option value="cycle_missing">Faltantes do ciclo atual</option>
-            </select>
+          <label>Priorizar dezenas</label>
+
+  <div class="multi-filters" id="genFreq">
+
+    <label class="multi-tag">
+      <input type="checkbox" value="hot">
+      <span>Quentes</span>
+    </label>
+
+    <label class="multi-tag">
+      <input type="checkbox" value="cold">
+      <span>Frias</span>
+    </label>
+
+    <label class="multi-tag">
+      <input type="checkbox" value="delayed">
+      <span>Atrasadas</span>
+    </label>
+
+    <label class="multi-tag">
+      <input type="checkbox" value="mixed">
+      <span>Mix</span>
+    </label>
+
+    <label class="multi-tag">
+      <input type="checkbox" value="cycle_missing">
+      <span>Ciclo Atual</span>
+    </label>
+
+  </div>
           </div>
           <div class="gen-control">
             <label>Mín. consecutivos</label>
@@ -1038,8 +1115,8 @@ function generateGames() {
   const nums = Math.min(20, Math.max(15, parseInt(document.getElementById('genNums').value) || 15));
   const parity = document.getElementById('genParity').value;
   const freqFilter = Array.from(
-  document.getElementById('genFreq').selectedOptions
-).map(o => o.value);
+  document.querySelectorAll('#genFreq input:checked')
+).map(el => el.value);
   const consecFilter = document.getElementById('genConsec').value;
 
   // Build pool based on frequency filter
