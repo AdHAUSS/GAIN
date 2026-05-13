@@ -511,59 +511,6 @@ box-shadow: var(--shadow);
   color: var(--accent);
   box-shadow: 0 0 0 1px rgba(0,229,160,0.15);
 }
-  .sim-ball {
-  aspect-ratio: 1;
-  border-radius: 12px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Syne',sans-serif;
-  font-weight:700;
-  cursor:pointer;
-  transition:all .2s;
-  user-select:none;
-}
-
-.sim-ball:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.sim-ball.active {
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#000;
-  border-color: transparent;
-}
-
-.sim-stats {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-  margin-top:20px;
-}
-
-.sim-stat {
-  background: var(--bg3);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-}
-
-.sim-stat-label {
-  font-size:11px;
-  color:var(--text3);
-  text-transform:uppercase;
-  font-family:'DM Mono',monospace;
-  margin-bottom:6px;
-}
-
-.sim-stat-value {
-  font-size:28px;
-  font-family:'Syne',sans-serif;
-  font-weight:800;
-}
 
 /* Responsive */
 @media(max-width: 900px) {
@@ -669,38 +616,6 @@ box-shadow: var(--shadow);
 
     <!-- RANKING + PARITY -->
     <div class="two-col section">
-      <!-- SIMULADOR -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-title">
-      <span class="dot" style="background:var(--accent3)"></span>
-      Simulador Histórico de Jogos
-    </div>
-  </div>
-
-  <div class="gen-card">
-
-    <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7">
-      Escolha suas dezenas e veja como esse jogo teria performado
-      historicamente nos concursos da Lotofácil.
-    </div>
-
-    <div id="simulatorGrid" class="heatmap-grid" style="max-width:520px;margin-bottom:24px"></div>
-
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <button class="gen-btn" onclick="runSimulation()">
-        Simular Jogo
-      </button>
-
-      <button class="copy-btn" onclick="clearSimulation()">
-        Limpar
-      </button>
-    </div>
-
-    <div id="simResults" style="margin-top:24px"></div>
-
-  </div>
-</div>
       <!-- TOP/BOTTOM RANKING -->
       <div>
         <div class="section-header">
@@ -917,140 +832,6 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
-  let selectedSimulation = [];
-  function renderSimulator() {
-
-  const grid = document.getElementById('simulatorGrid');
-
-  grid.innerHTML = '';
-
-  for (let i = 1; i <= 25; i++) {
-
-    const div = document.createElement('div');
-
-    div.className = 'sim-ball';
-
-    div.textContent = String(i).padStart(2,'0');
-
-    div.onclick = () => toggleSimulationNumber(i, div);
-
-    grid.appendChild(div);
-  }
-}
-  function toggleSimulationNumber(num, el) {
-
-  const idx = selectedSimulation.indexOf(num);
-
-  if (idx >= 0) {
-
-    selectedSimulation.splice(idx, 1);
-
-    el.classList.remove('active');
-
-  } else {
-
-    if (selectedSimulation.length >= 20) return;
-
-    selectedSimulation.push(num);
-
-    el.classList.add('active');
-  }
-
-}
-  function runSimulation() {
-
-  if (selectedSimulation.length < 15) {
-
-    alert('Selecione ao menos 15 dezenas.');
-
-    return;
-  }
-
-  let hits11 = 0;
-  let hits12 = 0;
-  let hits13 = 0;
-  let hits14 = 0;
-  let hits15 = 0;
-
-  let bestHit = 0;
-  let bestContest = null;
-
-  for (const draw of allDraws) {
-
-    const hits = draw.dezenas.filter(n =>
-      selectedSimulation.includes(n)
-    ).length;
-
-    if (hits === 11) hits11++;
-    if (hits === 12) hits12++;
-    if (hits === 13) hits13++;
-    if (hits === 14) hits14++;
-    if (hits === 15) hits15++;
-
-    if (hits > bestHit) {
-
-      bestHit = hits;
-
-      bestContest = draw.concurso;
-    }
-
-  }
-
-  const results = document.getElementById('simResults');
-
-  results.innerHTML = `
-
-    <div class="sim-stats">
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">11 Pontos</div>
-        <div class="sim-stat-value">${hits11}</div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">12 Pontos</div>
-        <div class="sim-stat-value">${hits12}</div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">13 Pontos</div>
-        <div class="sim-stat-value">${hits13}</div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">14 Pontos</div>
-        <div class="sim-stat-value">${hits14}</div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">15 Pontos</div>
-        <div class="sim-stat-value">${hits15}</div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">Melhor Concurso</div>
-        <div class="sim-stat-value">
-          ${bestHit} pts
-        </div>
-
-        <div style="font-size:12px;color:var(--text2)">
-          Concurso #${bestContest}
-        </div>
-      </div>
-
-    </div>
-
-  `;
-}
-  function clearSimulation() {
-
-  selectedSimulation = [];
-
-  document.querySelectorAll('.sim-ball')
-    .forEach(el => el.classList.remove('active'));
-
-  document.getElementById('simResults').innerHTML = '';
-}
   // ============================================================
 // SOMA DAS DEZENAS
 // ============================================================
@@ -1388,7 +1169,6 @@ function renderAll() {
   renderDelay();
   renderRepeatStats();
   renderSumAnalysis();
-  renderSimulator();
   renderCycle();
   renderLastDraws();
 }
