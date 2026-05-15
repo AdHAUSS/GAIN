@@ -1183,6 +1183,7 @@ function renderScoreGrid() {
     ) / 5
   );
 
+  const historical = calculateHistoricalHits(game);
   let level = 'Fraco';
 
   if (finalScore >= 85) level = 'Excelente';
@@ -1195,35 +1196,84 @@ function renderScoreGrid() {
 
   const results = document.getElementById('scoreResults');
 
-  results.innerHTML = `
+ <div class="score-summary" style="margin-top:20px">
 
-    <div class="score-summary">
+    <div
+      style="
+        font-size:13px;
+        color:var(--text2);
+        margin-bottom:18px;
+        line-height:1.7;
+      "
+    >
+      Incidência histórica deste padrão de jogo
+      baseada em todos os concursos analisados.
+    </div>
 
-      <div class="score-main">
+    <div class="sim-stats">
+
+      <div class="sim-stat">
+        <div class="sim-stat-label">11 Pontos</div>
+        <div class="sim-stat-value">
+          ${historical.p11}%
+        </div>
+      </div>
+
+      <div class="sim-stat">
+        <div class="sim-stat-label">12 Pontos</div>
+        <div class="sim-stat-value">
+          ${historical.p12}%
+        </div>
+      </div>
+
+      <div class="sim-stat">
+        <div class="sim-stat-label">13 Pontos</div>
+        <div class="sim-stat-value">
+          ${historical.p13}%
+        </div>
+      </div>
+
+      <div class="sim-stat">
+        <div class="sim-stat-label">14 Pontos</div>
+        <div class="sim-stat-value">
+          ${historical.p14}%
+        </div>
+      </div>
+
+      <div class="sim-stat">
+        <div class="sim-stat-label">15 Pontos</div>
+        <div class="sim-stat-value">
+          ${historical.p15}%
+        </div>
+      </div>
+
+    </div>
+
+    <div class="score-main">
+
+      <div
+        class="score-circle"
+        style="--score:${finalScore}"
+      >
+        <div class="score-number">
+          ${finalScore}
+        </div>
+      </div>
+
+      <div>
 
         <div
-          class="score-circle"
-          style="--score:${finalScore}"
+          style="
+            font-size:30px;
+            font-family:'Syne',sans-serif;
+            font-weight:800;
+            line-height:1;
+          "
         >
-          <div class="score-number">
-            ${finalScore}
-          </div>
+          ${level}
         </div>
 
-        <div>
-
-          <div
-            style="
-              font-size:30px;
-              font-family:'Syne',sans-serif;
-              font-weight:800;
-              line-height:1;
-            "
-          >
-            ${level}
-          </div>
-
-          <div class="score-label">
+        <div class="score-label">
             Score Estatístico do Jogo
           </div>
 
@@ -1336,6 +1386,38 @@ function renderScoreGrid() {
     </div>
 
   `;
+}
+
+  function calculateHistoricalHits(game) {
+
+  let hits11 = 0;
+  let hits12 = 0;
+  let hits13 = 0;
+  let hits14 = 0;
+  let hits15 = 0;
+
+  for (const draw of allDraws) {
+
+    const hits = draw.dezenas.filter(n =>
+      game.includes(n)
+    ).length;
+
+    if (hits >= 11) hits11++;
+    if (hits >= 12) hits12++;
+    if (hits >= 13) hits13++;
+    if (hits >= 14) hits14++;
+    if (hits >= 15) hits15++;
+  }
+
+  const total = allDraws.length;
+
+  return {
+    p11: ((hits11 / total) * 100).toFixed(2),
+    p12: ((hits12 / total) * 100).toFixed(2),
+    p13: ((hits13 / total) * 100).toFixed(2),
+    p14: ((hits14 / total) * 100).toFixed(3),
+    p15: ((hits15 / total) * 100).toFixed(4),
+  };
 }
   
   // ============================================================
