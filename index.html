@@ -1920,7 +1920,6 @@ function processData() {
 // ============================================================
 function renderAll() {
   renderSummary();
-  renderHeatmap('freq');
   renderRanking();
   renderScoreGrid();
   renderParity();
@@ -1950,65 +1949,6 @@ function renderSummary() {
   document.getElementById('sumLastDate').textContent = formatDate(last.data);
 }
 
-// ============================================================
-// HEATMAP
-// ============================================================
-function getHeatColor(val, min, max) {
-  const t = (val - min) / (max - min);
-  // cold (blue) -> neutral -> hot (red)
-  if (t < 0.5) {
-    const u = t * 2;
-    const r = Math.round(77 + (200-77)*u);
-    const g = Math.round(166 + (200-166)*u);
-    const b = Math.round(255 + (200-255)*u);
-    return `rgb(${r},${g},${b})`;
-  } else {
-    const u = (t - 0.5) * 2;
-    const r = Math.round(200 + (255-200)*u);
-    const g = Math.round(200 - 200*u);
-    const b = Math.round(200 - 200*u);
-    return `rgb(${r},${g},${b})`;
-  }
-}
-
-function sortHeatmap(el, mode) {
-  document.querySelectorAll('[data-sort]').forEach(e => e.classList.remove('active'));
-  el.classList.add('active');
-  renderHeatmap(mode);
-}
-
-function renderHeatmap(mode) {
-  const nums = Array.from({length:25}, (_,i) => i+1);
-  let sorted;
-  if (mode === 'freq') sorted = nums.sort((a,b) => freq[b]-freq[a]);
-  else if (mode === 'delay') sorted = nums.sort((a,b) => delay[b]-delay[a]);
-  else sorted = nums.sort((a,b) => a-b);
-
-  const freqVals = Object.values(freq);
-  const minF = Math.min(...freqVals), maxF = Math.max(...freqVals);
-  const delayVals = Object.values(delay);
-  const maxD = Math.max(...delayVals);
-
-  const grid = document.getElementById('heatmapGrid');
-  grid.innerHTML = '';
-  for (const n of sorted) {
-    const f = freq[n] || 0;
-    const d = delay[n] || 0;
-    const color = mode === 'delay'
-      ? `rgb(${Math.round(77 + (255-77)*(d/maxD))},${Math.round(166*(1-d/maxD))},${Math.round(255*(1-d/maxD))})`
-      : getHeatColor(f, minF, maxF);
-    const cell = document.createElement('div');
-    cell.className = 'heat-cell';
-    cell.style.background = color + '22';
-    cell.style.borderColor = color + '55';
-    cell.title = `Dezena ${n} | ${f}x sorteada | Atraso: ${d} concursos`;
-    cell.innerHTML = `
-      <span class="heat-num" style="color:${color}">${String(n).padStart(2,'0')}</span>
-      <span class="heat-count" style="color:${color}">${mode === 'delay' ? d+'c' : f+'x'}</span>
-    `;
-    grid.appendChild(cell);
-  }
-}
 
 // ============================================================
 // RANKING
