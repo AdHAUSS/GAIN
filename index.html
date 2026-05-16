@@ -663,17 +663,6 @@ box-shadow: var(--shadow);
   color:var(--text2);
 }
 
-.score-bar {
-  height:8px;
-  border-radius:999px;
-  background:var(--bg2);
-  overflow:hidden;
-}
-
-.score-bar-fill {
-  height:100%;
-  border-radius:999px;
-}
 
 /* Responsive */
 @media(max-width: 900px) {
@@ -793,6 +782,7 @@ box-shadow: var(--shadow);
 
     <!-- 🔥 RESULTADO AGORA AO LADO -->
     <div id="scoreResults" style="margin-top:20px"></div>
+    
   </div>
 
 </div>
@@ -1302,156 +1292,61 @@ function toggleScoreNumber(num, el) {
 
   const results = document.getElementById('scoreResults');
 
+<div class="score-result-main">
+
   results.innerHTML = `
- <div class="score-summary" style="margin-top:20px">
+  <!-- BLOCO PRINCIPAL -->
+  <div class="score-highlight">
 
-    <div
-      style="
-        font-size:13px;
-        color:var(--text2);
-        margin-bottom:18px;
-        line-height:1.7;
-      "
-    >
+    <div style="font-size:13px;color:var(--text2);margin-bottom:12px">
       Incidência histórica deste padrão de jogo
-      baseada em todos os concursos analisados.
     </div>
 
-    <div class="sim-stats">
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">11 Pontos</div>
-        <div class="sim-stat-value">
-          ${historical.p11}%
-        </div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">12 Pontos</div>
-        <div class="sim-stat-value">
-          ${historical.p12}%
-        </div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">13 Pontos</div>
-        <div class="sim-stat-value">
-          ${historical.p13}%
-        </div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">14 Pontos</div>
-        <div class="sim-stat-value">
-          ${historical.p14}%
-        </div>
-      </div>
-
-      <div class="sim-stat">
-        <div class="sim-stat-label">15 Pontos</div>
-        <div class="sim-stat-value">
-          ${historical.p15}%
-        </div>
-      </div>
-
+    <div class="sim-stats" style="margin-bottom:16px">
+      <div>11 pts: ${historical.p11}%</div>
+      <div>12 pts: ${historical.p12}%</div>
+      <div>13 pts: ${historical.p13}%</div>
+      <div>14 pts: ${historical.p14}%</div>
+      <div>15 pts: ${historical.p15}%</div>
     </div>
-
-    <div class="score-layout">
-
-  <div id="scoreGrid" class="score-grid"></div>
-
-  <div id="scoreSide"></div>
-
-</div>
 
     <div class="score-main">
 
-      <div
-        class="score-circle"
-        style="--score:${finalScore}"
-      >
-        <div class="score-number">
-          ${finalScore}
-        </div>
+      <div class="score-circle" style="--score:${finalScore}">
+        <div class="score-number">${finalScore}</div>
       </div>
 
       <div>
-
-        <div
-          style="
-            font-size:30px;
-            font-family:'Syne',sans-serif;
-            font-weight:800;
-            line-height:1;
-          "
-        >
+        <div style="font-size:28px;font-weight:800;">
           ${level}
         </div>
 
         <div class="score-label">
-            Score Estatístico do Jogo
-          </div>
-
-          <div
-            style="
-              margin-top:16px;
-              font-size:13px;
-              color:var(--text2);
-              line-height:1.7;
-            "
-          >
-            ${game.map(n =>
-              String(n).padStart(2,'0')
-            ).join(' • ')}
-          </div>
-
+          Score Estatístico do Jogo
         </div>
 
+        <div style="margin-top:10px;font-size:12px;color:var(--text2)">
+          ${game.map(n => String(n).padStart(2,'0')).join(' • ')}
+        </div>
       </div>
 
     </div>
 
-    <div class="score-list">
+  </div>
 
-      ${makeScoreItem(
-        'Paridade',
-        `${evens}P / ${odds}I`,
-        parityScore,
-        'Equilíbrio entre pares e ímpares'
-      )}
+  <!-- BLOCO DETALHES -->
+  <div class="score-details">
 
-      ${makeScoreItem(
-        'Soma Total',
-        sum,
-        sumScore,
-        'Faixa histórica média'
-      )}
+    ${makeScoreItem('Paridade', `${evens}P / ${odds}I`, parityScore)}
+    ${makeScoreItem('Soma Total', sum, sumScore)}
+    ${makeScoreItem('Sequências', `${consecutivePairs}`, consecScore)}
+    ${makeScoreItem('Repetidas', `${repeated}`, repeatScore)}
+    ${makeScoreItem('Quentes', `${hotCount}`, hotScore)}
 
-      ${makeScoreItem(
-        'Sequências',
-        `${consecutivePairs} consecutivos`,
-        consecScore,
-        'Padrão de dezenas sequenciais'
-      )}
+  </div>
 
-      ${makeScoreItem(
-        'Repetidas',
-        `${repeated} repetidas`,
-        repeatScore,
-        'Comparação com último concurso'
-      )}
-
-      ${makeScoreItem(
-        'Dezenas Quentes',
-        `${hotCount} quentes`,
-        hotScore,
-        'Frequência histórica'
-      )}
-
-    </div>
-
-  `;
-}
+</div>
+`;
 
   function makeScoreItem(title, value, score, desc) {
 
@@ -1488,17 +1383,7 @@ function toggleScoreNumber(num, el) {
 
       </div>
 
-      <div class="score-bar">
-        <div
-          class="score-bar-fill"
-          style="
-            width:${score}%;
-            background:${color};
-          "
-        ></div>
       </div>
-
-    </div>
 
   `;
 }
