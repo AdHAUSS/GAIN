@@ -1025,7 +1025,6 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
-  console.log(allDraws[allDraws.length - 1]);
 let analyticalGame = [];
   let selectedSimulation = [];
 function renderScoreGrid() {
@@ -1864,6 +1863,9 @@ async function initDashboard() {
     setBar(100);
 
     processData();
+    console.log('TOTAL:', allDraws.length);
+console.log('ÚLTIMO:', allDraws[allDraws.length - 1].concurso);
+    
     renderAll();
     renderLineColumnAnalysis();
     document.getElementById('loadingScreen').style.display = 'none';
