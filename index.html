@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESTRATÉGIA DA SORTE — Dashboard Lotofácil</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  
 <style>
 :root {
   --bg: #0a0c10;
@@ -41,14 +42,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', sans-serif;
-}
-
-.section-title,
-.summary-value,
-.score-number {
-  font-family: 'Space Grotesk', sans-serif;
-  }
+ font-family: 'Inter', sans-serif;
 
   background:
     radial-gradient(circle at top left, rgba(0,229,160,0.08), transparent 28%),
@@ -57,16 +51,20 @@ body {
     linear-gradient(180deg, #07090d 0%, #0b0f16 100%);
 
   background-attachment: fixed;
-
   color: var(--text);
-
   min-height: 100vh;
-
   line-height: 1.5;
 
   transition:
     background 0.4s ease,
     color 0.3s ease;
+}
+
+/* títulos mais modernos */
+.section-title,
+.summary-value,
+.score-number {
+  font-family: 'Space Grotesk', sans-serif;
 }
 /* HEADER */
 .header {
