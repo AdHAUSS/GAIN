@@ -1338,12 +1338,40 @@ function toggleScoreNumber(num, el) {
   <!-- BLOCO DETALHES -->
   <div class="score-details">
 
-    ${makeScoreItem('Paridade', `${evens}P / ${odds}I`, parityScore)}
-    ${makeScoreItem('Soma Total', sum, sumScore)}
-    ${makeScoreItem('Sequências', `${consecutivePairs}`, consecScore)}
-    ${makeScoreItem('Repetidas', `${repeated}`, repeatScore)}
-    ${makeScoreItem('Quentes', `${hotCount}`, hotScore)}
+${makeScoreItem(
+  'Paridade',
+  `${evens}P / ${odds}I`,
+  parityScore,
+  'Equilíbrio entre pares e ímpares'
+)}
 
+${makeScoreItem(
+  'Soma Total',
+  `${sum}`,
+  sumScore,
+  'Faixa histórica média'
+)}
+
+${makeScoreItem(
+  'Sequências',
+  `${consecutivePairs} pares`,
+  consecScore,
+  'Números consecutivos no jogo'
+)}
+
+${makeScoreItem(
+  'Repetidas',
+  `${repeated} dezenas`,
+  repeatScore,
+  'Comparação com último concurso'
+)}
+
+${makeScoreItem(
+  'Quentes',
+  `${hotCount} dezenas`,
+  hotScore,
+  'Frequência histórica das dezenas'
+)}
   </div>
 
 </div>
