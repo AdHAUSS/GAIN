@@ -770,9 +770,13 @@ box-shadow: var(--shadow);
       dentro dos padrões históricos da Lotofácil.
     </div>
 
-    <div id="scoreGrid" class="score-grid" style="max-width:520px;margin-bottom:24px"></div>
+<div class="score-layout">
 
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
+  <div>
+
+    <div id="scoreGrid" class="score-grid"></div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
       <button class="gen-btn" onclick="runAnalyticalScore()">
         Analisar Jogo
       </button>
@@ -782,10 +786,17 @@ box-shadow: var(--shadow);
       </button>
     </div>
 
-    <div id="scoreResults" style="margin-top:24px"></div>
-
   </div>
+
+  <div>
+    <div id="scoreSide"></div>
+
+    <!-- 🔥 RESULTADO AGORA AO LADO -->
+    <div id="scoreResults" style="margin-top:20px"></div>
+  </div>
+
 </div>
+    
     <!-- LINHAS E COLUNAS -->
 <div class="section">
 
