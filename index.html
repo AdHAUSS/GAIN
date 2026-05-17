@@ -1405,41 +1405,7 @@ ${makeScoreItem(
   };
 }
 
-  Object.entries(colFreq).forEach(([col, total]) => {
-
-    const width =
-      (total / maxCol) * 100;
-
-    colEl.innerHTML += `
-      <div class="parity-row">
-
-        <div class="parity-label">
-          <strong>Coluna ${col}</strong>
-          <span>${total}</span>
-        </div>
-
-        <div class="parity-track">
-          <div
-            class="parity-fill"
-            style="
-              width:${width}%;
-              background:
-                linear-gradient(
-                  90deg,
-                  var(--accent3),
-                  var(--accent4)
-                );
-            "
-          ></div>
-        </div>
-
-      </div>
-    `;
-  });
-
-}
-  
-  // ============================================================
+   // ============================================================
 // SOMA DAS DEZENAS
 // ============================================================
 function renderSumAnalysis() {
