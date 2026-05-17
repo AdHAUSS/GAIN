@@ -793,58 +793,7 @@ box-shadow: var(--shadow);
 
 </div>
     
-    <!-- LINHAS E COLUNAS -->
-<div class="section">
-
-  <div class="section-header">
-    <div class="section-title">
-      <span class="dot" style="background:var(--accent2)"></span>
-      Distribuição por Linhas e Colunas
-    </div>
-  </div>
-
-  <div class="two-col">
-
-    <!-- LINHAS -->
-    <div class="parity-card">
-
-      <div
-        style="
-          font-size:13px;
-          color:var(--text2);
-          margin-bottom:18px;
-          line-height:1.7;
-        "
-      >
-        Frequência histórica de dezenas por linha.
-      </div>
-
-      <div id="lineStats" class="parity-bars"></div>
-
-    </div>
-
-    <!-- COLUNAS -->
-    <div class="parity-card">
-
-      <div
-        style="
-          font-size:13px;
-          color:var(--text2);
-          margin-bottom:18px;
-          line-height:1.7;
-        "
-      >
-        Frequência histórica de dezenas por coluna.
-      </div>
-
-      <div id="columnStats" class="parity-bars"></div>
-
-    </div>
-
-  </div>
-
-</div>
-
+   
     <!-- RANKING + PARITY -->
     <div class="two-col section">
       <!-- TOP/BOTTOM RANKING -->
@@ -1456,111 +1405,6 @@ ${makeScoreItem(
   };
 }
 
-  function renderLineColumnAnalysis() {
-
-  const lineFreq = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0
-  };
-
-  const colFreq = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0
-  };
-
-  for (const draw of allDraws) {
-
-    const lines = {
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0
-    };
-
-    const cols = {
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0
-    };
-
-    for (const n of draw.dezenas) {
-
-      const line =
-        Math.ceil(n / 5);
-
-      const col =
-        ((n - 1) % 5) + 1;
-
-      lines[line]++;
-      cols[col]++;
-    }
-
-    Object.keys(lines).forEach(k => {
-      lineFreq[k] += lines[k];
-    });
-
-    Object.keys(cols).forEach(k => {
-      colFreq[k] += cols[k];
-    });
-
-  }
-
-  const maxLine =
-    Math.max(...Object.values(lineFreq));
-
-  const maxCol =
-    Math.max(...Object.values(colFreq));
-
-  const lineEl =
-    document.getElementById('lineStats');
-
-  const colEl =
-    document.getElementById('columnStats');
-
-  lineEl.innerHTML = '';
-  colEl.innerHTML = '';
-
-  Object.entries(lineFreq).forEach(([line, total]) => {
-
-    const width =
-      (total / maxLine) * 100;
-
-    lineEl.innerHTML += `
-      <div class="parity-row">
-
-        <div class="parity-label">
-          <strong>Linha ${line}</strong>
-          <span>${total}</span>
-        </div>
-
-        <div class="parity-track">
-          <div
-            class="parity-fill"
-            style="
-              width:${width}%;
-              background:
-                linear-gradient(
-                  90deg,
-                  var(--accent2),
-                  var(--accent)
-                );
-            "
-          ></div>
-        </div>
-
-      </div>
-    `;
-  });
-
   Object.entries(colFreq).forEach(([col, total]) => {
 
     const width =
@@ -1873,7 +1717,7 @@ async function initDashboard() {
 console.log('ÚLTIMO:', allDraws[allDraws.length - 1].concurso);
     
     renderAll();
-    renderLineColumnAnalysis();
+   
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('dashboard').classList.add('show');
 
