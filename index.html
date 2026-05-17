@@ -5,983 +5,274 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESTRATÉGIA DA SORTE</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
 <style>
-/* =========================================================
-   TOKENS BASE
-========================================================= */
 :root {
-  --bg:        #08090d;
-  --bg2:       #0e1018;
-  --bg3:       #161923;
-  --bg4:       #1e2230;
-  --border:    rgba(255,255,255,0.06);
-  --border2:   rgba(255,255,255,0.12);
-  --text:      #eceef5;
-  --text2:     #7c839e;
-  --text3:     #3d4260;
-  --hot:       #ff4455;
-  --cold:      #4da6ff;
-  --r:         14px;
-  --r-sm:      8px;
-  --r-lg:      20px;
-  --shadow-sm: 0 2px 12px rgba(0,0,0,0.4);
-  --shadow:    0 8px 32px rgba(0,0,0,0.5);
-  --shadow-lg: 0 16px 64px rgba(0,0,0,0.6);
-  --font:      'Outfit', sans-serif;
-  --mono:      'JetBrains Mono', monospace;
+  --bg:#08090d;--bg2:#0e1018;--bg3:#161923;--bg4:#1e2230;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#eceef5;--text2:#7c839e;--text3:#3d4260;
+  --hot:#ff4455;--cold:#4da6ff;
+  --r:14px;--r-sm:8px;--r-lg:20px;
+  --shadow-sm:0 2px 12px rgba(0,0,0,0.4);
+  --shadow:0 8px 32px rgba(0,0,0,0.5);
+  --shadow-lg:0 16px 64px rgba(0,0,0,0.6);
+  --font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+  --accent:#9b59b6;--accent2:#7d3c98;--accent3:#ff6b35;--accent4:#ffd60a;
+  --game-glow:rgba(155,89,182,0.2);--game-glow2:rgba(125,60,152,0.15);
+}
+[data-game="lotofacil"]{--accent:#9b59b6;--accent2:#7d3c98;--accent3:#c39bd3;--accent4:#d7bde2;--game-glow:rgba(155,89,182,.18);--game-glow2:rgba(125,60,152,.12);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(155,89,182,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(125,60,152,.06) 0%,transparent 55%)}
+[data-game="megasena"]{--accent:#1db954;--accent2:#169c44;--accent3:#57d68a;--accent4:#a8e6be;--game-glow:rgba(29,185,84,.18);--game-glow2:rgba(22,156,68,.12);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(29,185,84,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(22,156,68,.06) 0%,transparent 55%)}
+[data-game="quina"]{--accent:#0057b8;--accent2:#003d8a;--accent3:#4d94e0;--accent4:#99c4f0;--game-glow:rgba(0,87,184,.2);--game-glow2:rgba(0,61,138,.15);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(0,87,184,.09) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(0,61,138,.07) 0%,transparent 55%)}
+[data-game="milionaria"]{--accent:#e8560a;--accent2:#c44408;--accent3:#f5935a;--accent4:#ffc59a;--game-glow:rgba(232,86,10,.18);--game-glow2:rgba(196,68,8,.12);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(232,86,10,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(196,68,8,.06) 0%,transparent 55%)}
+[data-game="timemania"]{--accent:#e82020;--accent2:#c01010;--accent3:#f06060;--accent4:#f5a0a0;--game-glow:rgba(232,32,32,.18);--game-glow2:rgba(192,16,16,.12);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(232,32,32,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(192,16,16,.06) 0%,transparent 55%)}
+[data-theme="light"]{--bg:#f2f4f9;--bg2:#ffffff;--bg3:#e8eaf2;--bg4:#d8dce8;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.14);--text:#12141f;--text2:#5a5f7a;--text3:#aaafcc;--shadow-sm:0 2px 12px rgba(0,0,0,0.08);--shadow:0 8px 32px rgba(0,0,0,0.1);--shadow-lg:0 16px 64px rgba(0,0,0,0.12)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;transition:background .35s,color .25s;background-image:var(--game-bg-grad,none);background-attachment:fixed}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:99px}::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+.mono{font-family:var(--mono)}
+.label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);font-family:var(--mono)}
+/* HEADER */
+.header{position:sticky;top:0;z-index:200;background:rgba(8,9,13,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+[data-theme="light"] .header{background:rgba(242,244,249,.9)}
+.header-top{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;letter-spacing:-.02em;box-shadow:0 0 16px var(--game-glow);transition:background .4s,box-shadow .4s}
+.logo-name{font-weight:800;font-size:16px;letter-spacing:-.03em;line-height:1}
+.logo-name em{font-style:normal;color:var(--accent);transition:color .4s}
+.logo-sub{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:.08em;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.status-pill{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:99px;border:1px solid var(--border);background:var(--bg2);font-family:var(--mono);font-size:11px;color:var(--text2)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .3s}
+.status-dot.loading{background:var(--accent4);animation:blink 1s ease infinite}
+.status-dot.ok{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.status-dot.error{background:var(--hot)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+/* GAME NAV */
+.game-nav{display:flex;align-items:center;gap:2px;padding:0 28px 10px;overflow-x:auto;scrollbar-width:none}
+.game-nav::-webkit-scrollbar{display:none}
+.game-tab{display:flex;align-items:center;gap:8px;padding:7px 16px;border-radius:99px;border:1px solid transparent;background:transparent;color:var(--text2);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;position:relative;letter-spacing:-.01em}
+.game-tab:hover{background:var(--bg3);color:var(--text)}
+.game-tab.active{background:var(--bg3);border-color:var(--border2);color:var(--text)}
+.game-tab.active .tab-dot{box-shadow:0 0 8px currentColor;opacity:1}
+.tab-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;opacity:.6;transition:opacity .2s,box-shadow .2s}
+.game-tab[data-target="lotofacil"] .tab-dot{background:#9b59b6}
+.game-tab[data-target="megasena"] .tab-dot{background:#1db954}
+.game-tab[data-target="quina"] .tab-dot{background:#0057b8}
+.game-tab[data-target="milionaria"] .tab-dot{background:#e8560a}
+.game-tab[data-target="timemania"] .tab-dot{background:#e82020}
+.game-tab.active::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:20px;height:2px;border-radius:99px;background:var(--accent);transition:background .4s}
+/* MAIN */
+.main{max-width:1320px;margin:0 auto;padding:32px 28px}
+/* LOADING/ERROR */
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:18px}
+.spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--text2)}
+.progress-track{width:260px;height:3px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;width:0%;transition:width .5s ease}
+.error-screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:14px;text-align:center}
+.error-screen.show{display:flex;animation:fadeIn .3s ease}
+.error-icon{font-size:40px}.error-title{font-size:20px;font-weight:700}
+.error-msg{color:var(--text2);font-size:13px;max-width:440px;line-height:1.7}
+.retry-btn{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-weight:700;font-size:13px;font-family:var(--font);cursor:pointer;transition:opacity .2s}
+.retry-btn:hover{opacity:.85}
+/* DASHBOARD */
+.dashboard{display:none}
+.dashboard.show{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* BANNER */
+.banner{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border-radius:var(--r);border:1px solid rgba(255,107,53,.15);background:rgba(255,107,53,.05);font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:14px}
+.banner strong{color:var(--text)}
+/* SUMMARY */
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.s-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 20px 18px;display:flex;flex-direction:column;gap:5px;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+.s-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+.s-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.s-card:hover::before{opacity:1}
+.s-card:nth-child(1)::before{background:var(--accent)}
+.s-card:nth-child(2)::before{background:var(--hot)}
+.s-card:nth-child(3)::before{background:var(--cold)}
+.s-card:nth-child(4)::before{background:var(--accent4)}
+.s-value{font-size:30px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.s-sub{font-size:12px;color:var(--text2)}
+/* SECTIONS */
+.section{margin-bottom:24px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+.section-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm)}
+/* GRIDS */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+/* RANKING */
+.rank-list{display:flex;flex-direction:column;gap:5px}
+.rank-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--r-sm);transition:background .15s}
+.rank-item:hover{background:var(--bg3)}
+.rank-pos{font-family:var(--mono);font-size:10px;color:var(--text3);width:16px}
+.rank-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;flex-shrink:0}
+.rank-bar-wrap{flex:1;height:4px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.rank-bar{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.rank-val{font-family:var(--mono);font-size:11px;color:var(--text2);width:44px;text-align:right}
+/* BAR GROUP */
+.bar-group{display:flex;flex-direction:column;gap:9px}
+.bar-row{display:flex;flex-direction:column;gap:4px}
+.bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text2)}
+.bar-label strong{color:var(--text);font-weight:500}
+.bar-track{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+/* DELAY */
+.delay-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.delay-cell{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 5px;text-align:center;transition:border-color .2s}
+.delay-cell.overdue{border-color:rgba(255,68,85,.5);background:rgba(255,68,85,.06)}
+.delay-cell.warning{border-color:rgba(255,214,10,.35);background:rgba(255,214,10,.04)}
+.delay-num{font-size:14px;font-weight:800;display:block;letter-spacing:-.02em}
+.delay-ago{font-family:var(--mono);font-size:9px;color:var(--text2);display:block;margin-top:2px}
+/* CYCLE */
+.cycle-controls{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+.cycle-field{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+.cycle-field input[type=number]{width:68px;padding:6px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:var(--mono);font-size:12px;outline:none;transition:border-color .2s}
+.cycle-field input:focus{border-color:var(--accent)}
+.cycle-groups{display:flex;flex-direction:column;gap:8px}
+.cycle-group{border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.cycle-group-header{background:var(--bg3);padding:9px 14px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.cycle-group-title{font-weight:700;font-size:12px}
+.cycle-group-body{padding:12px 14px}
+.cycle-nums-row{display:flex;flex-wrap:wrap;gap:5px}
+.cycle-ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px}
+.cycle-ball.seen{background:var(--game-glow);color:var(--accent);border:1px solid rgba(255,255,255,.1)}
+.cycle-ball.missing{background:rgba(255,68,85,.12);color:var(--hot);border:1px solid rgba(255,68,85,.25)}
+.cycle-miss-label{font-size:11px;color:var(--text2);margin-top:7px}
+/* GENERATOR */
+.gen-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.gen-control{display:flex;flex-direction:column;gap:5px}
+.gen-select,.gen-input{padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;outline:none;cursor:pointer;transition:border-color .2s}
+.gen-select:focus,.gen-input:focus{border-color:var(--accent)}
+.multi-filters{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.multi-tag{position:relative;cursor:pointer}
+.multi-tag input{display:none}
+.multi-tag span{display:flex;align-items:center;padding:6px 12px;border-radius:99px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:11px;font-family:var(--mono);transition:all .15s;white-space:nowrap}
+.multi-tag:hover span{border-color:var(--accent);color:var(--text)}
+.multi-tag input:checked+span{background:var(--game-glow);border-color:var(--accent);color:var(--accent)}
+.gen-btn{padding:10px 22px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);border:none;border-radius:var(--r-sm);font-family:var(--font);font-weight:700;font-size:13px;color:#fff;cursor:pointer;transition:opacity .2s,transform .15s;align-self:flex-end;letter-spacing:-.01em}
+.gen-btn:hover{opacity:.9;transform:translateY(-1px)}
+.gen-btn:active{transform:translateY(0)}
+.gen-results{display:flex;flex-direction:column;gap:9px}
+.gen-game{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;animation:fadeIn .25s ease}
+.gen-game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-family:var(--mono);font-size:11px;color:var(--text2)}
+.gen-balls{display:flex;flex-wrap:wrap;gap:5px}
+.gen-ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;letter-spacing:-.02em}
+.copy-btn{padding:4px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all .2s}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+/* SCORE */
+.score-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+.score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.score-ball{aspect-ratio:1;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;letter-spacing:-.02em}
+.score-ball:hover{border-color:var(--accent);transform:scale(1.06)}
+.score-ball.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;box-shadow:0 0 12px var(--game-glow)}
+.score-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.score-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:74px}
+.preview-balls{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.preview-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff}
+.score-result{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;margin-top:18px}
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:7px}
+.score-ring{width:104px;height:104px;position:relative;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-ring-num{font-size:28px;font-weight:900;letter-spacing:-.04em}
+.score-ring-lbl{font-size:9px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.score-items{display:flex;flex-direction:column;gap:7px}
+.score-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;display:flex;align-items:center;gap:12px}
+.score-item-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.score-item-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.score-item-name{font-size:12px;font-weight:600;width:90px;flex-shrink:0}
+.score-item-detail{font-size:11px;color:var(--text2);width:78px;text-align:right;font-family:var(--mono);flex-shrink:0}
+.historical-stats{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-top:12px}
+.hist-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:9px}
+.hist-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 6px;text-align:center}
+.hist-pts{font-family:var(--mono);font-size:10px;color:var(--text2)}
+.hist-pct{font-size:14px;font-weight:800;letter-spacing:-.03em;margin-top:2px}
+/* DRAWS TABLE */
+.draws-scroll{overflow-x:auto}
+.draws-table{border-collapse:collapse;width:100%;min-width:600px;font-size:12px}
+.draws-table th{text-align:left;padding:7px 10px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);border-bottom:1px solid var(--border)}
+.draws-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.draws-table tr:last-child td{border-bottom:none}
+.draws-table tr:hover td{background:var(--bg3)}
+.draw-balls-row{display:flex;flex-wrap:wrap;gap:3px}
+.draw-ball{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:8px;background:var(--bg3);border:1px solid var(--border)}
+.draw-ball.highlight{background:var(--game-glow);border-color:var(--accent);color:var(--accent)}
 
-  /* Acento padrão — sobrescrito por jogo */
-  --accent:    #9b59b6;
-  --accent2:   #7d3c98;
-  --accent3:   #ff6b35;
-  --accent4:   #ffd60a;
-  --game-glow: rgba(155,89,182,0.2);
-  --game-glow2: rgba(125,60,152,0.15);
-}
+/* ========= TREVOS ========= */
+.trevos-section{margin-top:16px}
+.trevo-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.trevo-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:80px;transition:border-color .2s,transform .2s;cursor:default}
+.trevo-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.trevo-icon{font-size:24px;display:block;margin-bottom:4px}
+.trevo-num{font-size:11px;font-weight:700;color:var(--text2);font-family:var(--mono)}
+.trevo-count{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-.03em}
+.trevo-pct{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.trevo-bar-wrap{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:6px}
+.trevo-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
 
-/* =========================================================
-   TEMAS POR JOGO
-========================================================= */
+/* Score trevo selector */
+.score-trevo-section{margin-top:16px;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)}
+.score-trevo-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.trevo-sel-btn{width:44px;height:44px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:var(--text2);font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px}
+.trevo-sel-btn:hover{border-color:var(--accent)}
+.trevo-sel-btn.active{border-color:var(--accent);background:var(--game-glow);box-shadow:0 0 10px var(--game-glow)}
+.trevo-sel-btn .trevo-sel-num{font-size:8px;font-family:var(--mono);font-weight:700;color:var(--text3);line-height:1}
 
-/* LOTOFÁCIL — roxo/violeta */
-[data-game="lotofacil"] {
-  --accent:     #9b59b6;
-  --accent2:    #7d3c98;
-  --accent3:    #c39bd3;
-  --accent4:    #d7bde2;
-  --game-glow:  rgba(155,89,182,0.18);
-  --game-glow2: rgba(125,60,152,0.12);
-  --game-bg-grad: radial-gradient(ellipse 80% 60% at 10% 0%, rgba(155,89,182,.08) 0%, transparent 55%),
-                  radial-gradient(ellipse 60% 50% at 90% 5%,  rgba(125,60,152,.06) 0%, transparent 55%);
-}
+/* ========= TIMES ========= */
+.team-section{margin-top:16px}
+.team-rank-list{display:flex;flex-direction:column;gap:4px;max-height:340px;overflow-y:auto}
+.team-rank-item{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:var(--r-sm);transition:background .15s;cursor:default}
+.team-rank-item:hover{background:var(--bg3)}
+.team-rank-pos{font-family:var(--mono);font-size:10px;color:var(--text3);width:18px;flex-shrink:0}
+.team-name{font-size:12px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.team-bar-wrap{width:80px;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden;flex-shrink:0}
+.team-bar{height:100%;border-radius:99px}
+.team-count{font-family:var(--mono);font-size:11px;color:var(--text2);width:34px;text-align:right;flex-shrink:0}
 
-/* MEGA-SENA — verde */
-[data-game="megasena"] {
-  --accent:     #1db954;
-  --accent2:    #169c44;
-  --accent3:    #57d68a;
-  --accent4:    #a8e6be;
-  --game-glow:  rgba(29,185,84,0.18);
-  --game-glow2: rgba(22,156,68,0.12);
-  --game-bg-grad: radial-gradient(ellipse 80% 60% at 10% 0%, rgba(29,185,84,.08) 0%, transparent 55%),
-                  radial-gradient(ellipse 60% 50% at 90% 5%,  rgba(22,156,68,.06) 0%, transparent 55%);
-}
+/* Score team selector - dropdown invisível */
+.score-team-section{margin-top:16px;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)}
+.team-search-wrap{position:relative;margin-top:10px}
+.team-search-input{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;outline:none;transition:border-color .2s}
+.team-search-input:focus{border-color:var(--accent)}
+.team-search-input::placeholder{color:var(--text3)}
+.team-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);max-height:220px;overflow-y:auto;z-index:100;display:none;box-shadow:var(--shadow)}
+.team-dropdown.open{display:block}
+.team-option{padding:9px 14px;font-size:13px;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:space-between}
+.team-option:hover{background:var(--bg3);color:var(--accent)}
+.team-option-count{font-size:10px;font-family:var(--mono);color:var(--text3)}
+.selected-team-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--game-glow);border:1px solid var(--accent);color:var(--accent);font-size:12px;font-weight:700;margin-top:8px}
+.selected-team-badge button{background:none;border:none;color:var(--accent);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
 
-/* QUINA — azul */
-[data-game="quina"] {
-  --accent:     #0057b8;
-  --accent2:    #003d8a;
-  --accent3:    #4d94e0;
-  --accent4:    #99c4f0;
-  --game-glow:  rgba(0,87,184,0.2);
-  --game-glow2: rgba(0,61,138,0.15);
-  --game-bg-grad: radial-gradient(ellipse 80% 60% at 10% 0%, rgba(0,87,184,.09) 0%, transparent 55%),
-                  radial-gradient(ellipse 60% 50% at 90% 5%,  rgba(0,61,138,.07) 0%, transparent 55%);
-}
+/* ========= PADRÕES ========= */
+.patterns-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.pattern-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.pattern-card-title{font-size:11px;font-weight:700;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.pattern-insight{font-size:13px;color:var(--text2);line-height:1.65}
+.pattern-insight strong{color:var(--text)}
+.pattern-insight .accent{color:var(--accent)}
 
-/* +MILIONÁRIA — laranja/dourado */
-[data-game="milionaria"] {
-  --accent:     #e8560a;
-  --accent2:    #c44408;
-  --accent3:    #f5935a;
-  --accent4:    #ffc59a;
-  --game-glow:  rgba(232,86,10,0.18);
-  --game-glow2: rgba(196,68,8,0.12);
-  --game-bg-grad: radial-gradient(ellipse 80% 60% at 10% 0%, rgba(232,86,10,.08) 0%, transparent 55%),
-                  radial-gradient(ellipse 60% 50% at 90% 5%,  rgba(196,68,8,.06) 0%, transparent 55%);
-}
+/* Tabs inside sections */
+.tab-group{display:flex;gap:4px;margin-bottom:16px}
+.tab-pill{padding:6px 14px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--mono);transition:all .2s}
+.tab-pill:hover{background:var(--bg3)}
+.tab-pill.active{background:var(--game-glow);border-color:var(--accent);color:var(--accent)}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeIn .25s ease}
 
-/* TIMEMANIA — vermelho */
-[data-game="timemania"] {
-  --accent:     #e82020;
-  --accent2:    #c01010;
-  --accent3:    #f06060;
-  --accent4:    #f5a0a0;
-  --game-glow:  rgba(232,32,32,0.18);
-  --game-glow2: rgba(192,16,16,0.12);
-  --game-bg-grad: radial-gradient(ellipse 80% 60% at 10% 0%, rgba(232,32,32,.08) 0%, transparent 55%),
-                  radial-gradient(ellipse 60% 50% at 90% 5%,  rgba(192,16,16,.06) 0%, transparent 55%);
-}
-
-/* =========================================================
-   LIGHT MODE
-========================================================= */
-[data-theme="light"] {
-  --bg:        #f2f4f9;
-  --bg2:       #ffffff;
-  --bg3:       #e8eaf2;
-  --bg4:       #d8dce8;
-  --border:    rgba(0,0,0,0.07);
-  --border2:   rgba(0,0,0,0.14);
-  --text:      #12141f;
-  --text2:     #5a5f7a;
-  --text3:     #aaafcc;
-  --shadow-sm: 0 2px 12px rgba(0,0,0,0.08);
-  --shadow:    0 8px 32px rgba(0,0,0,0.1);
-  --shadow-lg: 0 16px 64px rgba(0,0,0,0.12);
-}
-
-/* =========================================================
-   RESET & BASE
-========================================================= */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.5;
-  transition: background 0.35s, color 0.25s;
-  background-image: var(--game-bg-grad, none),
-    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(0,0,0,0) 0%, transparent 50%);
-  background-attachment: fixed;
-}
-
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text3); }
-
-.mono { font-family: var(--mono); }
-.label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--text3);
-  font-family: var(--mono);
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: rgba(8,9,13,.8);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-[data-theme="light"] .header { background: rgba(242,244,249,.9); }
-
-.header-top {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.logo-mark {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 13px; color: #fff;
-  letter-spacing: -.02em;
-  box-shadow: 0 0 16px var(--game-glow);
-  transition: background .4s, box-shadow .4s;
-}
-.logo-name {
-  font-weight: 800;
-  font-size: 16px;
-  letter-spacing: -.03em;
-  line-height: 1;
-}
-.logo-name em { font-style: normal; color: var(--accent); transition: color .4s; }
-.logo-sub {
-  font-size: 10px;
-  color: var(--text3);
-  font-family: var(--mono);
-  letter-spacing: .08em;
-  margin-top: 2px;
-  transition: color .3s;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.status-pill {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px;
-  border-radius: 99px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-}
-.status-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--text3);
-  flex-shrink: 0;
-  transition: background .3s;
-}
-.status-dot.loading { background: var(--accent4); animation: blink 1s ease infinite; }
-.status-dot.ok      { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
-.status-dot.error   { background: var(--hot); }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
-
-.icon-btn {
-  width: 34px; height: 34px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text2);
-  cursor: pointer;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-}
-.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* =========================================================
-   GAME NAV
-========================================================= */
-.game-nav {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 0 28px 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.game-nav::-webkit-scrollbar { display: none; }
-
-.game-tab {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 16px;
-  border-radius: 99px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text2);
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all .2s;
-  position: relative;
-  letter-spacing: -.01em;
-}
-.game-tab:hover {
-  background: var(--bg3);
-  color: var(--text);
-}
-.game-tab.active {
-  background: var(--bg3);
-  border-color: var(--border2);
-  color: var(--text);
-}
-.game-tab.active .tab-dot {
-  box-shadow: 0 0 8px currentColor;
-  opacity: 1;
-}
-.tab-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  opacity: .6;
-  transition: opacity .2s, box-shadow .2s;
-}
-.tab-name { line-height: 1; }
-.tab-badge {
-  font-size: 9px;
-  font-family: var(--mono);
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: var(--bg4);
-  color: var(--text3);
-  letter-spacing: .05em;
-}
-.tab-badge.soon {
-  background: rgba(255,255,255,.05);
-  color: var(--text3);
-}
-
-/* Cores dos dots por jogo */
-[data-game="lotofacil"] .game-tab[data-target="lotofacil"] .tab-dot,
-.game-tab[data-target="lotofacil"] .tab-dot { background: #9b59b6; }
-.game-tab[data-target="megasena"] .tab-dot   { background: #1db954; }
-.game-tab[data-target="quina"] .tab-dot      { background: #0057b8; }
-.game-tab[data-target="milionaria"] .tab-dot { background: #e8560a; }
-.game-tab[data-target="timemania"] .tab-dot  { background: #e82020; }
-
-/* Active tab accent line */
-.game-tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 2px;
-  border-radius: 99px;
-  background: var(--accent);
-  transition: background .4s;
-}
-
-/* =========================================================
-   GAME ID BADGE (embaixo do menu)
-========================================================= */
-.game-id-bar {
-  padding: 10px 28px 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(0,0,0,.15);
-  transition: display .3s;
-}
-[data-theme="light"] .game-id-bar { background: rgba(0,0,0,.03); }
-
-.game-id-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px 6px 10px;
-  border-radius: 99px;
-  border: 1px solid rgba(255,255,255,.1);
-  background: var(--game-glow);
-  transition: background .4s, border-color .4s;
-}
-[data-theme="light"] .game-id-pill { border-color: var(--border2); }
-
-.game-id-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
-  transition: background .4s, box-shadow .4s;
-  flex-shrink: 0;
-}
-.game-id-name {
-  font-weight: 800;
-  font-size: 14px;
-  color: var(--accent);
-  letter-spacing: -.02em;
-  transition: color .4s;
-}
-.game-id-range {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-}
-.game-id-nums {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-  margin-left: auto;
-}
-
-/* =========================================================
-   MAIN
-========================================================= */
-.main {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 32px 28px;
-}
-
-/* =========================================================
-   LOADING / ERROR
-========================================================= */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  gap: 18px;
-}
-.spinner {
-  width: 40px; height: 40px;
-  border: 3px solid var(--border2);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  transition: border-top-color .4s;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { font-family: var(--mono); font-size: 12px; color: var(--text2); }
-.progress-track { width: 260px; height: 3px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 99px;
-  width: 0%;
-  transition: width .5s ease, background .4s;
-}
-
-.error-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh; gap: 14px; text-align: center; }
-.error-screen.show { display: flex; animation: fadeIn .3s ease; }
-.error-icon { font-size: 40px; }
-.error-title { font-size: 20px; font-weight: 700; }
-.error-msg { color: var(--text2); font-size: 13px; max-width: 440px; line-height: 1.7; }
-.retry-btn {
-  padding: 10px 24px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 9px;
-  font-weight: 700;
-  font-size: 13px;
-  font-family: var(--font);
-  cursor: pointer;
-  transition: opacity .2s;
-}
-.retry-btn:hover { opacity: .85; }
-
-/* =========================================================
-   COMING SOON
-========================================================= */
-.coming-soon {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  gap: 16px;
-  text-align: center;
-}
-.coming-soon.show { display: flex; animation: fadeIn .4s ease; }
-.cs-icon {
-  width: 80px; height: 80px;
-  border-radius: 22px;
-  background: var(--game-glow);
-  border: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 36px;
-  transition: background .4s;
-}
-.cs-name { font-size: 28px; font-weight: 900; color: var(--accent); letter-spacing: -.04em; transition: color .4s; }
-.cs-sub { font-size: 14px; color: var(--text2); max-width: 360px; line-height: 1.7; }
-.cs-bar {
-  width: 200px; height: 4px;
-  background: var(--bg3);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-top: 8px;
-}
-.cs-bar-fill {
-  height: 100%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  animation: csProgress 2.5s ease-in-out infinite alternate;
-  transition: background .4s;
-}
-@keyframes csProgress { from { width: 20%; } to { width: 80%; } }
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-.dashboard { display: none; }
-.dashboard.show { display: block; animation: fadeIn .4s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
-
-/* =========================================================
-   BANNER
-========================================================= */
-.banner {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 12px 16px;
-  border-radius: var(--r);
-  border: 1px solid rgba(255,107,53,.15);
-  background: rgba(255,107,53,.05);
-  font-size: 12px;
-  color: var(--text2);
-  line-height: 1.65;
-  margin-bottom: 28px;
-}
-.banner strong { color: var(--text); }
-
-/* =========================================================
-   SUMMARY CARDS
-========================================================= */
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.s-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 20px 20px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  transition: transform .2s, border-color .2s, box-shadow .2s;
-  position: relative;
-  overflow: hidden;
-}
-.s-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  opacity: 0;
-  transition: opacity .2s, background .4s;
-}
-.s-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.s-card:hover::before { opacity: 1; }
-.s-card:nth-child(1)::before { background: var(--accent); }
-.s-card:nth-child(2)::before { background: var(--hot); }
-.s-card:nth-child(3)::before { background: var(--cold); }
-.s-card:nth-child(4)::before { background: var(--accent4); }
-
-.s-value {
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: -.04em;
-  line-height: 1;
-}
-.s-sub { font-size: 12px; color: var(--text2); }
-
-/* =========================================================
-   SECTIONS
-========================================================= */
-.section { margin-bottom: 24px; }
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.section-title {
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  letter-spacing: -.01em;
-}
-.section-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-/* =========================================================
-   CARD
-========================================================= */
-.card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 22px;
-  box-shadow: var(--shadow-sm);
-}
-
-/* =========================================================
-   GRIDS
-========================================================= */
-.col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.col3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-
-/* =========================================================
-   RANKING
-========================================================= */
-.rank-list { display: flex; flex-direction: column; gap: 5px; }
-.rank-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
-  border-radius: var(--r-sm);
-  transition: background .15s;
-}
-.rank-item:hover { background: var(--bg3); }
-.rank-pos { font-family: var(--mono); font-size: 10px; color: var(--text3); width: 16px; }
-.rank-ball {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 11px;
-  flex-shrink: 0;
-}
-.rank-bar-wrap { flex: 1; height: 4px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
-.rank-bar { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
-.rank-val { font-family: var(--mono); font-size: 11px; color: var(--text2); width: 44px; text-align: right; }
-
-/* =========================================================
-   PARITY / BAR GROUPS
-========================================================= */
-.bar-group { display: flex; flex-direction: column; gap: 9px; }
-.bar-row { display: flex; flex-direction: column; gap: 4px; }
-.bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); }
-.bar-label strong { color: var(--text); font-weight: 500; }
-.bar-track { height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
-
-/* =========================================================
-   DELAY GRID
-========================================================= */
-.delay-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-}
-.delay-cell {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 9px 5px;
-  text-align: center;
-  transition: border-color .2s;
-}
-.delay-cell.overdue  { border-color: rgba(255,68,85,.5);  background: rgba(255,68,85,.06); }
-.delay-cell.warning  { border-color: rgba(255,214,10,.35); background: rgba(255,214,10,.04); }
-.delay-num { font-size: 14px; font-weight: 800; display: block; letter-spacing: -.02em; }
-.delay-ago { font-family: var(--mono); font-size: 9px; color: var(--text2); display: block; margin-top: 2px; }
-
-/* =========================================================
-   CYCLE
-========================================================= */
-.cycle-controls {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
-}
-.cycle-field {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--text2);
-}
-.cycle-field input[type=number] {
-  width: 68px;
-  padding: 6px 10px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 12px;
-  outline: none;
-  transition: border-color .2s;
-}
-.cycle-field input:focus { border-color: var(--accent); }
-
-.cycle-groups { display: flex; flex-direction: column; gap: 8px; }
-.cycle-group { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
-.cycle-group-header {
-  background: var(--bg3);
-  padding: 9px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-}
-.cycle-group-title { font-weight: 700; font-size: 12px; }
-.cycle-group-body { padding: 12px 14px; }
-.cycle-nums-row { display: flex; flex-wrap: wrap; gap: 5px; }
-
-.cycle-ball {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 11px;
-  transition: background .4s, color .4s, border-color .4s;
-}
-.cycle-ball.seen    { background: var(--game-glow); color: var(--accent); border: 1px solid rgba(255,255,255,.1); }
-.cycle-ball.missing { background: rgba(255,68,85,.12); color: var(--hot); border: 1px solid rgba(255,68,85,.25); }
-.cycle-miss-label { font-size: 11px; color: var(--text2); margin-top: 7px; }
-
-/* =========================================================
-   GENERATOR
-========================================================= */
-.gen-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.gen-control { display: flex; flex-direction: column; gap: 5px; }
-
-.gen-select, .gen-input {
-  padding: 8px 12px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-  transition: border-color .2s;
-}
-.gen-select:focus, .gen-input:focus { border-color: var(--accent); }
-
-.multi-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
-.multi-tag { position: relative; cursor: pointer; }
-.multi-tag input { display: none; }
-.multi-tag span {
-  display: flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: 99px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--text2);
-  font-size: 11px;
-  font-family: var(--mono);
-  transition: all .15s;
-  white-space: nowrap;
-}
-.multi-tag:hover span { border-color: var(--accent); color: var(--text); }
-.multi-tag input:checked + span {
-  background: var(--game-glow);
-  border-color: var(--accent);
-  color: var(--accent);
-  transition: background .4s, border-color .4s, color .4s;
-}
-
-.gen-btn {
-  padding: 10px 22px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-  border: none;
-  border-radius: var(--r-sm);
-  font-family: var(--font);
-  font-weight: 700;
-  font-size: 13px;
-  color: #fff;
-  cursor: pointer;
-  transition: opacity .2s, transform .15s, background .4s;
-  align-self: flex-end;
-  letter-spacing: -.01em;
-}
-.gen-btn:hover { opacity: .9; transform: translateY(-1px); }
-.gen-btn:active { transform: translateY(0); }
-
-.gen-results { display: flex; flex-direction: column; gap: 9px; }
-.gen-game {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 13px 15px;
-  animation: fadeIn .25s ease;
-}
-.gen-game-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 9px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-}
-.gen-balls { display: flex; flex-wrap: wrap; gap: 5px; }
-.gen-ball {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 11px;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  color: #fff;
-  letter-spacing: -.02em;
-  transition: background .4s;
-}
-
-.copy-btn {
-  padding: 4px 11px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 11px;
-  font-family: var(--mono);
-  color: var(--text2);
-  cursor: pointer;
-  transition: all .2s;
-}
-.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* =========================================================
-   SCORE
-========================================================= */
-.score-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-.score-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 7px;
-}
-.score-ball {
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 12px;
-  cursor: pointer;
-  transition: all .2s;
-  letter-spacing: -.02em;
-}
-.score-ball:hover { border-color: var(--accent); transform: scale(1.06); }
-.score-ball.active {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-  border: none;
-  box-shadow: 0 0 12px var(--game-glow);
-  transition: background .4s, box-shadow .4s;
-}
-
-.score-actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 14px; }
-
-.score-preview {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px;
-  min-height: 74px;
-}
-.preview-balls { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
-.preview-ball {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 11px;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  color: #fff;
-  transition: background .4s;
-}
-
-.score-result { display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: start; margin-top: 18px; }
-
-.score-ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 7px; }
-.score-ring { width: 104px; height: 104px; position: relative; flex-shrink: 0; }
-.score-ring svg { transform: rotate(-90deg); }
-.score-ring-val {
-  position: absolute;
-  inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.score-ring-num { font-size: 28px; font-weight: 900; letter-spacing: -.04em; }
-.score-ring-lbl { font-size: 9px; font-family: var(--mono); color: var(--text2); text-transform: uppercase; letter-spacing: .08em; }
-
-.score-items { display: flex; flex-direction: column; gap: 7px; }
-.score-item {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.score-item-bar-wrap { flex: 1; height: 4px; background: var(--bg4); border-radius: 99px; overflow: hidden; }
-.score-item-bar { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(.22,1,.36,1); }
-.score-item-name { font-size: 12px; font-weight: 600; width: 90px; flex-shrink: 0; }
-.score-item-detail { font-size: 11px; color: var(--text2); width: 78px; text-align: right; font-family: var(--mono); flex-shrink: 0; }
-
-.historical-stats {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 14px;
-  margin-top: 12px;
-}
-.hist-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 7px;
-  margin-top: 9px;
-}
-.hist-item {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 9px 6px;
-  text-align: center;
-}
-.hist-pts { font-family: var(--mono); font-size: 10px; color: var(--text2); }
-.hist-pct { font-size: 14px; font-weight: 800; letter-spacing: -.03em; margin-top: 2px; }
-
-/* =========================================================
-   DRAWS TABLE
-========================================================= */
-.draws-scroll { overflow-x: auto; }
-.draws-table { border-collapse: collapse; width: 100%; min-width: 600px; font-size: 12px; }
-.draws-table th {
-  text-align: left;
-  padding: 7px 10px;
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--text3);
-  border-bottom: 1px solid var(--border);
-}
-.draws-table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-.draws-table tr:last-child td { border-bottom: none; }
-.draws-table tr:hover td { background: var(--bg3); }
-
-.draw-balls-row { display: flex; flex-wrap: wrap; gap: 3px; }
-.draw-ball {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 8px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  transition: background .4s;
-}
-.draw-ball.highlight {
-  background: var(--game-glow);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-@media (max-width: 960px) {
-  .summary-grid { grid-template-columns: repeat(2, 1fr); }
-  .col2, .col3 { grid-template-columns: 1fr; }
-  .score-layout { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .main { padding: 14px; }
-  .header-top { padding: 0 14px; }
-  .game-nav { padding: 0 14px 10px; }
-  .game-id-bar { padding: 8px 14px 12px; }
-  .summary-grid { grid-template-columns: 1fr 1fr; }
-  .hist-grid { grid-template-columns: repeat(3, 1fr); }
-}
+/* RESPONSIVE */
+@media(max-width:960px){.summary-grid{grid-template-columns:repeat(2,1fr)}.col2,.col3{grid-template-columns:1fr}.score-layout{grid-template-columns:1fr}.patterns-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.main{padding:14px}.header-top{padding:0 14px}.game-nav{padding:0 14px 10px}.summary-grid{grid-template-columns:1fr 1fr}.hist-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <div class="header-top">
     <div class="logo">
@@ -999,42 +290,31 @@ body {
       <button class="icon-btn" id="themeBtn" title="Alternar tema">🌙</button>
     </div>
   </div>
-
-  <!-- GAME NAV -->
   <nav class="game-nav">
-    <button class="game-tab active" data-target="lotofacil" onclick="switchGame('lotofacil', this)">
-      <span class="tab-dot"></span>
-      <span class="tab-name">Lotofácil</span>
+    <button class="game-tab active" data-target="lotofacil" onclick="switchGame('lotofacil',this)">
+      <span class="tab-dot"></span><span class="tab-name">Lotofácil</span>
     </button>
-    <button class="game-tab" data-target="megasena" onclick="switchGame('megasena', this)">
-      <span class="tab-dot"></span>
-      <span class="tab-name">Mega-Sena</span>
+    <button class="game-tab" data-target="megasena" onclick="switchGame('megasena',this)">
+      <span class="tab-dot"></span><span class="tab-name">Mega-Sena</span>
     </button>
-    <button class="game-tab" data-target="quina" onclick="switchGame('quina', this)">
-      <span class="tab-dot"></span>
-      <span class="tab-name">Quina</span>
+    <button class="game-tab" data-target="quina" onclick="switchGame('quina',this)">
+      <span class="tab-dot"></span><span class="tab-name">Quina</span>
     </button>
-    <button class="game-tab" data-target="milionaria" onclick="switchGame('milionaria', this)">
-      <span class="tab-dot"></span>
-      <span class="tab-name">+Milionária</span>
+    <button class="game-tab" data-target="milionaria" onclick="switchGame('milionaria',this)">
+      <span class="tab-dot"></span><span class="tab-name">+Milionária</span>
     </button>
-    <button class="game-tab" data-target="timemania" onclick="switchGame('timemania', this)">
-      <span class="tab-dot"></span>
-      <span class="tab-name">Timemania</span>
+    <button class="game-tab" data-target="timemania" onclick="switchGame('timemania',this)">
+      <span class="tab-dot"></span><span class="tab-name">Timemania</span>
     </button>
   </nav>
 </header>
 
 <main class="main">
-
-  <!-- LOADING -->
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
     <div class="loading-text" id="loadingMsg">Buscando dados…</div>
     <div class="progress-track"><div class="progress-fill" id="loadingBar"></div></div>
   </div>
-
-  <!-- ERROR -->
   <div class="error-screen" id="errorScreen">
     <div class="error-icon">⚠️</div>
     <div class="error-title">Não foi possível carregar</div>
@@ -1042,25 +322,11 @@ body {
     <button class="retry-btn" onclick="initDashboard()">Tentar novamente</button>
   </div>
 
-  <!-- COMING SOON -->
-  <div class="coming-soon" id="comingSoon">
-    <div class="cs-icon" id="csIcon">🎰</div>
-    <div class="cs-name" id="csName">—</div>
-    <div class="cs-sub">O suporte a este jogo está em desenvolvimento. Em breve você poderá analisar concursos aqui.</div>
-    <div class="cs-bar"><div class="cs-bar-fill"></div></div>
-  </div>
-
   <!-- DASHBOARD -->
   <div class="dashboard" id="dashboard">
 
-    <!-- BANNER -->
-    <div class="banner">
-      ⚠️&nbsp; <span><strong>Aviso importante:</strong> Este dashboard é uma ferramenta de análise estatística histórica. Cada sorteio é um evento independente — padrões passados <strong>não aumentam matematicamente suas chances</strong>. Use com consciência.</span>
-    </div>
-    <!-- NOTA DO JOGO -->
-    <div class="banner" id="gameNote" style="display:none;border-color:rgba(61,142,255,.2);background:rgba(61,142,255,.06)">
-      ℹ️&nbsp; <span id="gameNoteText"></span>
-    </div>
+    <div class="banner">⚠️&nbsp;<span><strong>Aviso:</strong> Ferramenta de análise estatística histórica. Cada sorteio é independente — padrões passados <strong>não aumentam matematicamente suas chances</strong>.</span></div>
+    <div class="banner" id="gameNote" style="display:none;border-color:rgba(61,142,255,.2);background:rgba(61,142,255,.06)">ℹ️&nbsp;<span id="gameNoteText"></span></div>
 
     <!-- SUMMARY -->
     <div class="summary-grid">
@@ -1086,21 +352,30 @@ body {
       </div>
     </div>
 
-    <!-- SCORE -->
+    <!-- SCORE ANALÍTICO -->
     <div class="section">
       <div class="section-head">
-        <div class="section-title">
-          <span class="section-dot" style="background:var(--accent3)"></span>
-          Score Analítico
-        </div>
+        <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Score Analítico</div>
       </div>
       <div class="card">
-        <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7" id="scoreDesc">
-          Monte um jogo e veja como ele se posiciona estatisticamente dentro dos padrões históricos. Selecione de 15 a 20 dezenas.
-        </p>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7" id="scoreDesc">Monte um jogo e veja como ele se posiciona estatisticamente.</p>
         <div class="score-layout">
           <div>
             <div class="score-grid" id="scoreGrid"></div>
+            <!-- Trevos (Milionária) -->
+            <div class="score-trevo-section" id="scoreTrevoSection" style="display:none">
+              <div class="label">Selecione os Trevos (escolha 2)</div>
+              <div class="score-trevo-btns" id="scoreTrevoBtns"></div>
+            </div>
+            <!-- Time (Timemania) -->
+            <div class="score-team-section" id="scoreTeamSection" style="display:none">
+              <div class="label">Selecione o Time do Coração</div>
+              <div class="team-search-wrap">
+                <input class="team-search-input" id="teamSearchInput" placeholder="🔍 Buscar time..." autocomplete="off" oninput="filterTeams()" onfocus="openTeamDropdown()" onclick="openTeamDropdown()">
+                <div class="team-dropdown" id="teamDropdown"></div>
+              </div>
+              <div id="selectedTeamBadge"></div>
+            </div>
             <div class="score-actions">
               <button class="gen-btn" onclick="runAnalyticalScore()">Analisar Jogo</button>
               <button class="copy-btn" onclick="clearScoreGame()">Limpar</button>
@@ -1131,6 +406,17 @@ body {
         </div>
         <div class="card"><div class="rank-list" id="rankBottom"></div></div>
       </div>
+    </div>
+
+    <!-- TREVOS / TIMES — seção especial -->
+    <div class="section" id="specialSection" style="display:none">
+      <div class="section-head">
+        <div class="section-title" id="specialSectionTitle">
+          <span class="section-dot" style="background:var(--accent)"></span>
+          <span id="specialSectionName">—</span>
+        </div>
+      </div>
+      <div class="card" id="specialSectionCard"></div>
     </div>
 
     <!-- REPEAT + SUM -->
@@ -1171,9 +457,20 @@ body {
           <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Atraso — Dezenas Frias</div>
         </div>
         <div class="card">
-          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde o último sorteio da dezena. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde o último sorteio. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div>
           <div class="delay-grid" id="delayGrid"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- PADRÕES AVANÇADOS -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Análise de Padrões Completa</div>
+      </div>
+      <div class="card">
+        <div class="tab-group" id="patternTabs"></div>
+        <div id="patternContent"></div>
       </div>
     </div>
 
@@ -1183,20 +480,10 @@ body {
         <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Análise de Ciclo das Dezenas</div>
       </div>
       <div class="card">
-        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">
-          A cada <strong>N concursos</strong>, verifique quais dezenas <span style="color:var(--hot)">não apareceram</span> em cada janela.
-        </p>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">A cada <strong>N concursos</strong>, verifique quais dezenas <span style="color:var(--hot)">não apareceram</span> em cada janela.</p>
         <div class="cycle-controls">
-          <div class="cycle-field">
-            <span>Tamanho do ciclo:</span>
-            <input type="number" id="cycleSize" value="4" min="2" max="20" onchange="renderCycle()">
-            <span>concursos</span>
-          </div>
-          <div class="cycle-field">
-            <span>Exibir últimos:</span>
-            <input type="number" id="cycleCount" value="10" min="2" max="50" onchange="renderCycle()">
-            <span>ciclos</span>
-          </div>
+          <div class="cycle-field"><span>Tamanho do ciclo:</span><input type="number" id="cycleSize" value="4" min="2" max="20" onchange="renderCycle()"><span>concursos</span></div>
+          <div class="cycle-field"><span>Exibir últimos:</span><input type="number" id="cycleCount" value="10" min="2" max="50" onchange="renderCycle()"><span>ciclos</span></div>
         </div>
         <div class="cycle-groups" id="cycleGroups"></div>
       </div>
@@ -1209,21 +496,15 @@ body {
       </div>
       <div class="card">
         <div class="gen-controls">
-          <div class="gen-control">
-            <div class="label">Qtd de jogos</div>
-            <input class="gen-input" type="number" id="genQty" value="5" min="1" max="50">
-          </div>
-          <div class="gen-control">
-            <div class="label">Núm. por jogo</div>
-            <input class="gen-input" type="number" id="genNums" value="15" min="15" max="20">
-          </div>
+          <div class="gen-control"><div class="label">Qtd de jogos</div><input class="gen-input" type="number" id="genQty" value="5" min="1" max="50"></div>
+          <div class="gen-control"><div class="label">Núm. por jogo</div><input class="gen-input" type="number" id="genNums" value="15" min="15" max="20"></div>
           <div class="gen-control">
             <div class="label">Filtro de paridade</div>
             <select class="gen-select" id="genParity">
               <option value="any">Qualquer</option>
-              <option value="more_odd">Mais ímpares (8+)</option>
-              <option value="more_even">Mais pares (8+)</option>
-              <option value="balanced">Equilibrado (7/8 cada)</option>
+              <option value="more_odd">Mais ímpares</option>
+              <option value="more_even">Mais pares</option>
+              <option value="balanced">Equilibrado</option>
             </select>
           </div>
           <div class="gen-control">
@@ -1232,7 +513,6 @@ body {
               <label class="multi-tag"><input type="checkbox" value="hot"><span>Quentes</span></label>
               <label class="multi-tag"><input type="checkbox" value="cold"><span>Frias</span></label>
               <label class="multi-tag"><input type="checkbox" value="delayed"><span>Atrasadas</span></label>
-              <label class="multi-tag"><input type="checkbox" value="mixed"><span>Mix</span></label>
               <label class="multi-tag"><input type="checkbox" value="cycle_missing"><span>Ciclo Atual</span></label>
             </div>
           </div>
@@ -1261,15 +541,7 @@ body {
       <div class="card">
         <div class="draws-scroll">
           <table class="draws-table">
-            <thead>
-              <tr>
-                <th>Concurso</th>
-                <th>Data</th>
-                <th>Dezenas Sorteadas</th>
-                <th>Pares</th>
-                <th>Ímpares</th>
-              </tr>
-            </thead>
+            <thead><tr id="drawsHead"></tr></thead>
             <tbody id="drawsBody"></tbody>
           </table>
         </div>
@@ -1281,251 +553,127 @@ body {
 
 <script>
 /* ============================================================
-   GAME CONFIGS
-   Aqui você mapeia cada loteria: qual CSV, quantas dezenas,
-   colunas no CSV, e metadados de exibição.
+   CONFIGS
 ============================================================ */
 const GAMES = {
-  lotofacil: {
-    name:        'Lotofácil',
-    emoji:       '🍀',
-    csvFile:     './lotofacil.csv',
-    numCount:    15,   // dezenas por sorteio
-    numMax:      25,   // maior número possível
-    minPick:     15,   // mínimo para score analítico
-    maxPick:     20,   // máximo para score analítico
-    colConcurso: 0,    // coluna do número do concurso (0-indexed)
-    colData:     1,    // coluna da data
-    colNums:     [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
-    note:        null,
-    ready:       true
-  },
-  megasena: {
-    // CSV: Concurso, Data do Sorteio, Bola1..Bola6
-    name:        'Mega-Sena',
-    emoji:       '💰',
-    csvFile:     './megasena.csv',
-    numCount:    6,
-    numMax:      60,
-    minPick:     6,
-    maxPick:     15,
-    colConcurso: 0,
-    colData:     1,
-    colNums:     [2,3,4,5,6,7],
-    note:        null,
-    ready:       true
-  },
-  quina: {
-    // CSV: Concurso, Data Sorteio, Bola1..Bola5
-    name:        'Quina',
-    emoji:       '5️⃣',
-    csvFile:     './quina.csv',
-    numCount:    5,
-    numMax:      80,
-    minPick:     5,
-    maxPick:     15,
-    colConcurso: 0,
-    colData:     1,
-    colNums:     [2,3,4,5,6],
-    note:        null,
-    ready:       true
-  },
-  milionaria: {
-    // CSV: Concurso, Data Sorteio, Bola1..Bola6, Trevo1, Trevo2
-    // Análise cobre apenas as 6 bolas principais (1–50).
-    // Trevos (1–6) são mecânica separada e não entram nas estatísticas.
-    name:        '+Milionária',
-    emoji:       '🌟',
-    csvFile:     './milionaria.csv',
-    numCount:    6,
-    numMax:      50,
-    minPick:     6,
-    maxPick:     12,
-    colConcurso: 0,
-    colData:     1,
-    colNums:     [2,3,4,5,6,7],   // bolas principais apenas
-    note:        'Análise das 6 bolas principais (1–50). Os Trevos (cols 8–9) são uma mecânica independente e não são considerados nas estatísticas.',
-    ready:       true
-  },
-  timemania: {
-    // CSV: Concurso, Data Sorteio, Bola1..Bola7, Time Coração
-    // "Time Coração" (col 8) é texto — ignorado na análise numérica.
-    name:        'Timemania',
-    emoji:       '⚽',
-    csvFile:     './timemania.csv',
-    numCount:    7,
-    numMax:      80,
-    minPick:     7,
-    maxPick:     7,
-    colConcurso: 0,
-    colData:     1,
-    colNums:     [2,3,4,5,6,7,8], // 7 bolas numéricas; col 9 = Time Coração (ignorada)
-    note:        'Análise das 7 bolas numéricas (1–80). O "Time Coração" não é considerado nas estatísticas.',
-    ready:       true
-  }
+  lotofacil:{name:'Lotofácil',emoji:'🍀',csvFile:'./lotofacil.csv',numCount:15,numMax:25,minPick:15,maxPick:20,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],note:null,ready:true,hasExtras:false},
+  megasena:{name:'Mega-Sena',emoji:'💰',csvFile:'./megasena.csv',numCount:6,numMax:60,minPick:6,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],note:null,ready:true,hasExtras:false},
+  quina:{name:'Quina',emoji:'5️⃣',csvFile:'./quina.csv',numCount:5,numMax:80,minPick:5,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6],note:null,ready:true,hasExtras:false},
+  milionaria:{name:'+Milionária',emoji:'🌟',csvFile:'./milionaria.csv',numCount:6,numMax:50,minPick:6,maxPick:12,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],colTrevo1:8,colTrevo2:9,note:'Análise inclui as 6 bolas principais (1–50) e os 2 Trevos (1–6). Os trevos têm mecânica independente mas afetam o score analítico.',ready:true,hasExtras:true,extraType:'trevos'},
+  timemania:{name:'Timemania',emoji:'⚽',csvFile:'./timemania.csv',numCount:7,numMax:80,minPick:7,maxPick:7,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8],colTime:9,note:'Análise inclui as 7 bolas numéricas (1–80) e o Time do Coração. O time afeta o score analítico.',ready:true,hasExtras:true,extraType:'time'}
 };
 
-/* ============================================================
-   STATE
-============================================================ */
-let currentGame   = 'lotofacil';
-let allDraws      = [];
-let freq          = {};
-let delay         = {};
-let analyticalGame = [];
+/* STATE */
+let currentGame='lotofacil', allDraws=[], freq={}, delay={}, analyticalGame=[], selectedTrevos=[], selectedTeam=null, teamFreq={}, trevoFreq={}, allTeams=[];
 
 /* ============================================================
-   GAME SWITCHER
+   THEME & SWITCHER
 ============================================================ */
-function switchGame(gameKey, tabEl) {
-  if (gameKey === currentGame) return;
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('themeBtn').textContent=dark?'☀️':'🌙';
+});
 
-  // Update active tab
-  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+function switchGame(gameKey,tabEl){
+  if(gameKey===currentGame)return;
+  document.querySelectorAll('.game-tab').forEach(t=>t.classList.remove('active'));
   tabEl.classList.add('active');
-
-  // Update HTML attribute (triggers CSS theme change)
-  document.documentElement.setAttribute('data-game', gameKey);
-  currentGame = gameKey;
-
-  // Reset state
-  allDraws = [];
-  freq = {};
-  delay = {};
-  analyticalGame = [];
-
-  const cfg = GAMES[gameKey];
-
-  // Update logo subtitle
-  document.getElementById('logoSub').textContent = cfg.name;
-
-  // Update score grid size
-  document.getElementById('scoreDesc').textContent =
-    `Monte um jogo e veja como ele se posiciona estatisticamente. Selecione de ${cfg.minPick} a ${cfg.maxPick} dezenas.`;
-
-  // Hide everything
+  document.documentElement.setAttribute('data-game',gameKey);
+  currentGame=gameKey;
+  allDraws=[];freq={};delay={};analyticalGame=[];selectedTrevos=[];selectedTeam=null;teamFreq={};trevoFreq={};allTeams=[];
   document.getElementById('dashboard').classList.remove('show');
   document.getElementById('errorScreen').classList.remove('show');
-  document.getElementById('comingSoon').classList.remove('show');
-
-  if (!cfg.ready) {
-    // Show coming soon
-    document.getElementById('csName').textContent = cfg.name;
-    document.getElementById('csIcon').textContent = cfg.emoji;
-    document.getElementById('comingSoon').classList.add('show');
-    setStatus('ok', cfg.name + ' — em breve');
-    return;
-  }
-
   initDashboard();
 }
 
 /* ============================================================
-   THEME
-============================================================ */
-document.getElementById('themeBtn').addEventListener('click', () => {
-  const html = document.documentElement;
-  const dark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', dark ? 'light' : 'dark');
-  document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
-});
-
-/* ============================================================
    INIT
 ============================================================ */
-async function initDashboard() {
-  const cfg = GAMES[currentGame];
-
+async function initDashboard(){
+  const cfg=GAMES[currentGame];
   document.getElementById('errorScreen').classList.remove('show');
-  document.getElementById('comingSoon').classList.remove('show');
-  document.getElementById('loadingScreen').style.display = 'flex';
+  document.getElementById('loadingScreen').style.display='flex';
   document.getElementById('dashboard').classList.remove('show');
-  document.getElementById('loadingMsg').textContent = `Buscando dados da ${cfg.name}…`;
-
-  try {
-    setStatus('loading', `Carregando ${cfg.name}…`);
-    setBar(20);
-
-    const response = await fetch(cfg.csvFile);
-    if (!response.ok) throw new Error(
-      `CSV "${cfg.csvFile}" não encontrado.\n\nCertifique-se de que o arquivo está na mesma pasta do index.html.`
-    );
-
-    const text = await response.text();
-    setBar(50);
-
-    const rows = text.trim().split('\n');
-    allDraws = rows.slice(1).map(line => {
-      const cols = line.split(',');
-      const dezenas = cfg.colNums
-        .map(i => Number(cols[i]))
-        .filter(n => !isNaN(n) && n > 0)
-        .sort((a, b) => a - b);
-      return {
-        concurso: Number(cols[cfg.colConcurso]),
-        data:     cols[cfg.colData],
-        dezenas
-      };
-    }).filter(item => item.dezenas.length === cfg.numCount)
-      .sort((a, b) => a.concurso - b.concurso);
-
-    if (allDraws.length === 0) throw new Error('Nenhum concurso válido encontrado no arquivo CSV.');
-
-    setBar(80);
-    processData();
-    setBar(100);
+  document.getElementById('loadingMsg').textContent=`Buscando dados da ${cfg.name}…`;
+  document.getElementById('logoSub').textContent=cfg.name;
+  try{
+    setStatus('loading',`Carregando ${cfg.name}…`);setBar(20);
+    const response=await fetch(cfg.csvFile);
+    if(!response.ok) throw new Error(`CSV "${cfg.csvFile}" não encontrado.`);
+    const text=await response.text();setBar(50);
+    parseCSV(text,cfg);setBar(80);
+    processData();setBar(100);
     renderAll();
-
-    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('loadingScreen').style.display='none';
     document.getElementById('dashboard').classList.add('show');
-    setStatus('ok', `${allDraws.length} concursos · ${cfg.name}`);
-
-  } catch(e) {
-    document.getElementById('loadingScreen').style.display = 'none';
+    setStatus('ok',`${allDraws.length} concursos · ${cfg.name}`);
+  }catch(e){
+    document.getElementById('loadingScreen').style.display='none';
     document.getElementById('errorScreen').classList.add('show');
-    document.getElementById('errorMsg').textContent = e.message;
-    setStatus('error', 'Erro ao carregar');
+    document.getElementById('errorMsg').textContent=e.message;
+    setStatus('error','Erro ao carregar');
     console.error(e);
   }
 }
 
-function setStatus(state, text) {
-  document.getElementById('statusDot').className = 'status-dot ' + state;
-  document.getElementById('statusText').textContent = text;
-}
-function setBar(pct) {
-  document.getElementById('loadingBar').style.width = pct + '%';
+function parseCSV(text,cfg){
+  const rows=text.trim().split('\n').slice(1);
+  allDraws=[];teamFreq={};trevoFreq={1:0,2:0,3:0,4:0,5:0,6:0};
+  for(const line of rows){
+    // handle quoted lines (lotofacil)
+    const raw=line.startsWith('"')?line.slice(1,-1):line;
+    const cols=raw.split(',');
+    const dezenas=cfg.colNums.map(i=>Number(cols[i])).filter(n=>!isNaN(n)&&n>0).sort((a,b)=>a-b);
+    if(dezenas.length!==cfg.numCount) continue;
+    const entry={concurso:Number(cols[cfg.colConcurso]),data:cols[cfg.colData],dezenas};
+    // trevos
+    if(cfg.extraType==='trevos'){
+      const t1=Number(cols[cfg.colTrevo1]),t2=Number(cols[cfg.colTrevo2]);
+      entry.trevos=[t1,t2].filter(n=>n>=1&&n<=6);
+      if(entry.trevos.length===2){
+        trevoFreq[t1]=(trevoFreq[t1]||0)+1;
+        trevoFreq[t2]=(trevoFreq[t2]||0)+1;
+      }
+    }
+    // time
+    if(cfg.extraType==='time'){
+      const raw_time=(cols[cfg.colTime]||'').trim().replace(/\r/g,'');
+      entry.time=raw_time;
+      if(raw_time) teamFreq[raw_time]=(teamFreq[raw_time]||0)+1;
+    }
+    allDraws.push(entry);
+  }
+  allDraws.sort((a,b)=>a.concurso-b.concurso);
+  allTeams=Object.entries(teamFreq).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
+  if(allDraws.length===0) throw new Error('Nenhum concurso válido encontrado.');
 }
 
-/* ============================================================
-   PROCESS
-============================================================ */
-function processData() {
-  const cfg = GAMES[currentGame];
-  freq = {};
-  for (let i = 1; i <= cfg.numMax; i++) freq[i] = 0;
-  for (const d of allDraws) for (const n of d.dezenas) freq[n] = (freq[n]||0) + 1;
-
-  delay = {};
-  const reversed = [...allDraws].reverse();
-  for (let i = 1; i <= cfg.numMax; i++) {
-    const idx = reversed.findIndex(d => d.dezenas.includes(i));
-    delay[i] = idx === -1 ? allDraws.length : idx;
+function processData(){
+  const cfg=GAMES[currentGame];
+  freq={};
+  for(let i=1;i<=cfg.numMax;i++) freq[i]=0;
+  for(const d of allDraws) for(const n of d.dezenas) freq[n]=(freq[n]||0)+1;
+  delay={};
+  const rev=[...allDraws].reverse();
+  for(let i=1;i<=cfg.numMax;i++){
+    const idx=rev.findIndex(d=>d.dezenas.includes(i));
+    delay[i]=idx===-1?allDraws.length:idx;
   }
 }
+
+function setStatus(s,t){document.getElementById('statusDot').className='status-dot '+s;document.getElementById('statusText').textContent=t}
+function setBar(p){document.getElementById('loadingBar').style.width=p+'%'}
+function formatDate(s){if(!s)return'—';try{const p=s.trim().split('/');return p.length===3?s.trim():new Date(s).toLocaleDateString('pt-BR')}catch{return s}}
 
 /* ============================================================
    RENDER ALL
 ============================================================ */
-function renderAll() {
-  const cfg = GAMES[currentGame];
-  const noteEl = document.getElementById('gameNote');
-  if (cfg.note) {
-    document.getElementById('gameNoteText').textContent = cfg.note;
-    noteEl.style.display = 'flex';
-  } else {
-    noteEl.style.display = 'none';
-  }
+function renderAll(){
+  const cfg=GAMES[currentGame];
+  const noteEl=document.getElementById('gameNote');
+  if(cfg.note){document.getElementById('gameNoteText').textContent=cfg.note;noteEl.style.display='flex'}
+  else noteEl.style.display='none';
   renderSummary();
   renderRanking();
   renderScoreGrid();
@@ -1534,97 +682,349 @@ function renderAll() {
   renderRepeatStats();
   renderSumAnalysis();
   renderCycle();
+  renderSpecialSection();
+  renderPatterns();
   renderLastDraws();
+  // Reset gen nums
+  const genNums=document.getElementById('genNums');
+  genNums.min=cfg.minPick;genNums.max=cfg.maxPick;genNums.value=cfg.numCount;
+  document.getElementById('scoreDesc').textContent=`Monte um jogo e veja como ele se posiciona estatisticamente. Selecione de ${cfg.minPick} a ${cfg.maxPick} dezenas.`;
 }
 
 /* ============================================================
    SUMMARY
 ============================================================ */
-function renderSummary() {
-  const sorted = Object.entries(freq).filter(([,c]) => c > 0).sort((a,b) => b[1]-a[1]);
-  const [hotNum, hotCnt]   = sorted[0];
-  const [coldNum, coldCnt] = sorted[sorted.length-1];
-  const first = allDraws[0];
-  const last  = allDraws[allDraws.length-1];
-
-  document.getElementById('sumTotal').textContent    = allDraws.length.toLocaleString('pt-BR');
-  document.getElementById('sumRange').textContent    = `Concurso ${first.concurso} → ${last.concurso}`;
-  document.getElementById('sumHot').textContent      = String(hotNum).padStart(2,'0');
-  document.getElementById('sumHotCount').textContent = `Saiu ${hotCnt}x (${(hotCnt/allDraws.length*100).toFixed(1)}%)`;
-  document.getElementById('sumCold').textContent     = String(coldNum).padStart(2,'0');
-  document.getElementById('sumColdCount').textContent= `Saiu ${coldCnt}x (${(coldCnt/allDraws.length*100).toFixed(1)}%)`;
-  document.getElementById('sumLast').textContent     = `#${last.concurso}`;
-  document.getElementById('sumLastDate').textContent = formatDate(last.data);
+function renderSummary(){
+  const sorted=Object.entries(freq).filter(([,c])=>c>0).sort((a,b)=>b[1]-a[1]);
+  const [hotNum,hotCnt]=sorted[0];const [coldNum,coldCnt]=sorted[sorted.length-1];
+  const first=allDraws[0],last=allDraws[allDraws.length-1];
+  document.getElementById('sumTotal').textContent=allDraws.length.toLocaleString('pt-BR');
+  document.getElementById('sumRange').textContent=`Concurso ${first.concurso} → ${last.concurso}`;
+  document.getElementById('sumHot').textContent=String(hotNum).padStart(2,'0');
+  document.getElementById('sumHotCount').textContent=`Saiu ${hotCnt}x (${(hotCnt/allDraws.length*100).toFixed(1)}%)`;
+  document.getElementById('sumCold').textContent=String(coldNum).padStart(2,'0');
+  document.getElementById('sumColdCount').textContent=`Saiu ${coldCnt}x (${(coldCnt/allDraws.length*100).toFixed(1)}%)`;
+  document.getElementById('sumLast').textContent=`#${last.concurso}`;
+  document.getElementById('sumLastDate').textContent=formatDate(last.data);
 }
 
 /* ============================================================
    RANKING
 ============================================================ */
-function renderRanking() {
-  const sorted = Object.entries(freq)
-    .filter(([,c]) => c > 0)
-    .map(([n,c]) => ({n:+n,c}))
-    .sort((a,b) => b.c-a.c);
-  const maxC = sorted[0].c;
-
-  function makeList(items, id, colorFn) {
-    const el = document.getElementById(id);
-    el.innerHTML = '';
-    items.slice(0,10).forEach((item, i) => {
-      const color = colorFn(i);
-      const pct = (item.c / maxC * 100).toFixed(0);
-      const row = document.createElement('div');
-      row.className = 'rank-item';
-      row.innerHTML = `
-        <span class="rank-pos">${i+1}</span>
-        <div class="rank-ball" style="background:${color}20;color:${color};border:1px solid ${color}40">${String(item.n).padStart(2,'0')}</div>
-        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%;background:${color}"></div></div>
-        <span class="rank-val">${item.c}x</span>
-      `;
+function renderRanking(){
+  const sorted=Object.entries(freq).filter(([,c])=>c>0).map(([n,c])=>({n:+n,c})).sort((a,b)=>b.c-a.c);
+  const maxC=sorted[0].c;
+  function makeList(items,id,colorFn){
+    const el=document.getElementById(id);el.innerHTML='';
+    items.slice(0,10).forEach((item,i)=>{
+      const color=colorFn(i);const pct=(item.c/maxC*100).toFixed(0);
+      const row=document.createElement('div');row.className='rank-item';
+      row.innerHTML=`<span class="rank-pos">${i+1}</span><div class="rank-ball" style="background:${color}20;color:${color};border:1px solid ${color}40">${String(item.n).padStart(2,'0')}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%;background:${color}"></div></div><span class="rank-val">${item.c}x</span>`;
       el.appendChild(row);
     });
   }
+  makeList(sorted,'rankTop',i=>['#ff4455','#ff6b35','#ffd60a','var(--accent)','#4da6ff'][Math.min(i,4)]);
+  makeList([...sorted].reverse(),'rankBottom',()=>'#4da6ff');
+}
 
-  makeList(sorted, 'rankTop', i => ['#ff4455','#ff6b35','#ffd60a','var(--accent)','#4da6ff'][Math.min(i,4)]);
-  makeList([...sorted].reverse(), 'rankBottom', () => '#4da6ff');
+/* ============================================================
+   SPECIAL SECTION — TREVOS ou TIMES
+============================================================ */
+function renderSpecialSection(){
+  const cfg=GAMES[currentGame];
+  const sec=document.getElementById('specialSection');
+  if(!cfg.hasExtras){sec.style.display='none';return;}
+  sec.style.display='block';
+
+  if(cfg.extraType==='trevos'){
+    document.getElementById('specialSectionName').textContent='Estatísticas dos Trevos';
+    renderTrevosSection();
+  } else if(cfg.extraType==='time'){
+    document.getElementById('specialSectionName').textContent='Estatísticas dos Times do Coração';
+    renderTimesSection();
+  }
+}
+
+/* ---- TREVOS ---- */
+function renderTrevosSection(){
+  const card=document.getElementById('specialSectionCard');
+  const total=allDraws.filter(d=>d.trevos&&d.trevos.length===2).length;
+  const maxC=Math.max(...Object.values(trevoFreq));
+  const TREVO_ICONS=['🍀','🍀','🍀','🍀','🍀','🍀'];
+  const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
+
+  // Par de trevos mais frequente
+  const pairFreq={};
+  for(const d of allDraws){
+    if(!d.trevos||d.trevos.length!==2)continue;
+    const key=d.trevos.slice().sort((a,b)=>a-b).join('-');
+    pairFreq[key]=(pairFreq[key]||0)+1;
+  }
+  const sortedPairs=Object.entries(pairFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  // Atraso dos trevos
+  const trevoDelay={};
+  const revDraws=[...allDraws].reverse();
+  for(let t=1;t<=6;t++){
+    const idx=revDraws.findIndex(d=>d.trevos&&d.trevos.includes(t));
+    trevoDelay[t]=idx===-1?allDraws.length:idx;
+  }
+
+  card.innerHTML=`
+    <div class="tab-group">
+      <button class="tab-pill active" onclick="switchSpecialTab(this,'trevo-freq')">Frequência</button>
+      <button class="tab-pill" onclick="switchSpecialTab(this,'trevo-pairs')">Pares de Trevos</button>
+      <button class="tab-pill" onclick="switchSpecialTab(this,'trevo-delay')">Atraso</button>
+      <button class="tab-pill" onclick="switchSpecialTab(this,'trevo-patterns')">Padrões</button>
+    </div>
+    <div class="tab-content active" id="trevo-freq">
+      <div class="trevo-grid">
+        ${[1,2,3,4,5,6].map(t=>{
+          const cnt=trevoFreq[t]||0;const pct=(cnt/(total*2)*100).toFixed(1);const w=(cnt/maxC*100).toFixed(0);
+          return `<div class="trevo-card">
+            <span class="trevo-icon" style="filter:hue-rotate(${t*40}deg)">🍀</span>
+            <div class="trevo-num">Trevo ${t}</div>
+            <div class="trevo-count" style="color:${TREVO_COLORS[t-1]}">${cnt}</div>
+            <div class="trevo-pct">${pct}%</div>
+            <div class="trevo-bar-wrap"><div class="trevo-bar" style="width:${w}%;background:${TREVO_COLORS[t-1]}"></div></div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--text2)">
+        Total de sorteios analisados: <strong style="color:var(--text)">${total}</strong> · 
+        Total de trevos sorteados: <strong style="color:var(--text)">${total*2}</strong> ·
+        Mais frequente: <strong style="color:var(--accent)">Trevo ${Object.entries(trevoFreq).sort((a,b)=>b[1]-a[1])[0][0]}</strong>
+      </div>
+    </div>
+    <div class="tab-content" id="trevo-pairs">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px">Combinações de dois trevos mais sorteadas juntas.</div>
+      <div class="bar-group">
+        ${sortedPairs.map(([pair,cnt])=>{
+          const [t1,t2]=pair.split('-');const pct=(cnt/total*100).toFixed(1);
+          return `<div class="bar-row">
+            <div class="bar-label"><strong>🍀${t1} + 🍀${t2}</strong><span>${cnt}x (${pct}%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${(cnt/sortedPairs[0][1]*100).toFixed(0)}%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--text2)">Total de combinações únicas: <strong style="color:var(--text)">${Object.keys(pairFreq).length}</strong></div>
+    </div>
+    <div class="tab-content" id="trevo-delay">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px">Concursos desde a última aparição de cada trevo.</div>
+      <div class="trevo-grid">
+        ${[1,2,3,4,5,6].map(t=>{
+          const d=trevoDelay[t];const avgD=Object.values(trevoDelay).reduce((a,b)=>a+b,0)/6;
+          const color=d>avgD*1.5?'var(--hot)':d>avgD?'var(--accent4)':'var(--accent)';
+          return `<div class="trevo-card" style="${d>avgD*1.5?'border-color:rgba(255,68,85,.5);background:rgba(255,68,85,.06)':''}">
+            <span class="trevo-icon" style="filter:hue-rotate(${t*40}deg)">🍀</span>
+            <div class="trevo-num">Trevo ${t}</div>
+            <div class="trevo-count" style="color:${color}">${d}</div>
+            <div class="trevo-pct">${d===0?'último sorteio':`${d} conc. atrás`}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="tab-content" id="trevo-patterns">
+      ${renderTrevoPatterns(total)}
+    </div>
+  `;
+}
+
+function renderTrevoPatterns(total){
+  // Trevo baixo (1-3) vs alto (4-6)
+  let baixo=0,alto=0,umBaixo=0,umAlto=0,doisBaixo=0,doisAlto=0;
+  for(const d of allDraws){
+    if(!d.trevos||d.trevos.length!==2)continue;
+    const b=d.trevos.filter(t=>t<=3).length,a=d.trevos.filter(t=>t>=4).length;
+    baixo+=b;alto+=a;
+    if(b===1&&a===1)umBaixo++;
+    else if(b===2)doisBaixo++;
+    else doisAlto++;
+  }
+  const draws=allDraws.filter(d=>d.trevos&&d.trevos.length===2).length;
+  return `
+    <div class="patterns-grid" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="pattern-card">
+        <div class="pattern-card-title">Trevos Baixo (1-3) vs Alto (4-6)</div>
+        <div class="pattern-insight">
+          Trevos 1-3: <strong>${baixo}</strong> sorteios (${(baixo/(baixo+alto)*100).toFixed(1)}%)<br>
+          Trevos 4-6: <strong>${alto}</strong> sorteios (${(alto/(baixo+alto)*100).toFixed(1)}%)
+        </div>
+        <div class="bar-group" style="margin-top:10px">
+          <div class="bar-row"><div class="bar-label"><strong>Baixo (1-3)</strong></div><div class="bar-track"><div class="bar-fill" style="width:${(baixo/(baixo+alto)*100).toFixed(0)}%;background:var(--accent)"></div></div></div>
+          <div class="bar-row"><div class="bar-label"><strong>Alto (4-6)</strong></div><div class="bar-track"><div class="bar-fill" style="width:${(alto/(baixo+alto)*100).toFixed(0)}%;background:var(--accent3)"></div></div></div>
+        </div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-title">Combinação dos 2 Trevos</div>
+        <div class="pattern-insight">
+          1 baixo + 1 alto: <strong class="accent">${umBaixo}x (${(umBaixo/draws*100).toFixed(1)}%)</strong><br>
+          2 baixos: <strong>${doisBaixo}x (${(doisBaixo/draws*100).toFixed(1)}%)</strong><br>
+          2 altos: <strong>${doisAlto}x (${(doisAlto/draws*100).toFixed(1)}%)</strong>
+        </div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-title">Último Sorteio</div>
+        ${(()=>{const last=allDraws[allDraws.length-1];return`<div class="pattern-insight">Trevos: <strong class="accent" style="font-size:20px">🍀${last.trevos?.[0]||'?'} 🍀${last.trevos?.[1]||'?'}</strong><br>Concurso #${last.concurso} · ${formatDate(last.data)}</div>`})()}
+      </div>
+    </div>
+  `;
+}
+
+/* ---- TIMES ---- */
+function renderTimesSection(){
+  const card=document.getElementById('specialSectionCard');
+  const total=allDraws.filter(d=>d.time).length;
+  const top10=allTeams.slice(0,10);
+  const maxC=top10[0]?.count||1;
+
+  // Atraso dos times
+  const topTeamsSorted=[...allTeams].slice(0,20);
+  const teamDelay={};
+  const revDraws=[...allDraws].reverse();
+  for(const {name} of topTeamsSorted){
+    const idx=revDraws.findIndex(d=>d.time===name);
+    teamDelay[name]=idx===-1?allDraws.length:idx;
+  }
+  const avgTeamDelay=Object.values(teamDelay).reduce((a,b)=>a+b,0)/Object.keys(teamDelay).length||1;
+
+  // UF stats
+  const ufFreq={};
+  for(const d of allDraws){
+    if(!d.time)continue;
+    const uf=d.time.includes('/')?d.time.split('/').pop().trim():'??';
+    ufFreq[uf]=(ufFreq[uf]||0)+1;
+  }
+  const sortedUF=Object.entries(ufFreq).sort((a,b)=>b[1]-a[1]);
+  const maxUF=sortedUF[0]?.[1]||1;
+
+  card.innerHTML=`
+    <div class="tab-group">
+      <button class="tab-pill active" onclick="switchSpecialTab(this,'team-ranking')">Ranking</button>
+      <button class="tab-pill" onclick="switchSpecialTab(this,'team-delay')">Atraso</button>
+      <button class="tab-pill" onclick="switchSpecialTab(this,'team-uf')">Por Estado</button>
+      <button class="tab-pill" onclick="switchSpecialTab(this,'team-patterns')">Padrões</button>
+    </div>
+    <div class="tab-content active" id="team-ranking">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Top 20 Times mais sorteados como Time do Coração. Total: <strong style="color:var(--text)">${allTeams.length}</strong> times diferentes em <strong style="color:var(--text)">${total}</strong> sorteios.</div>
+      <div class="team-rank-list">
+        ${allTeams.slice(0,20).map((t,i)=>{
+          const pct=(t.count/maxC*100).toFixed(0);
+          const colors=['#ff4455','#ff6b35','#ffd60a','var(--accent)','#4da6ff'];
+          const color=colors[Math.min(i,4)];
+          return `<div class="team-rank-item">
+            <span class="team-rank-pos">${i+1}</span>
+            <span class="team-name">${t.name}</span>
+            <div class="team-bar-wrap"><div class="team-bar" style="width:${pct}%;background:${color}"></div></div>
+            <span class="team-count">${t.count}x</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="tab-content" id="team-delay">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde a última aparição (top 20 times mais frequentes).</div>
+      <div class="team-rank-list">
+        ${topTeamsSorted.map(({name})=>{
+          const d=teamDelay[name];
+          const color=d>avgTeamDelay*1.5?'var(--hot)':d>avgTeamDelay?'var(--accent4)':'var(--accent)';
+          return `<div class="team-rank-item">
+            <span class="team-rank-pos" style="color:${color}">⏱</span>
+            <span class="team-name">${name}</span>
+            <span class="team-count" style="color:${color};width:80px">${d===0?'último':d+'c atrás'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="tab-content" id="team-uf">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Sorteios por estado de origem do Time do Coração.</div>
+      <div class="bar-group">
+        ${sortedUF.slice(0,15).map(([uf,cnt])=>`
+          <div class="bar-row">
+            <div class="bar-label"><strong>${uf}</strong><span>${cnt}x (${(cnt/total*100).toFixed(1)}%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${(cnt/maxUF*100).toFixed(0)}%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="tab-content" id="team-patterns">
+      ${renderTeamPatterns(total)}
+    </div>
+  `;
+}
+
+function renderTeamPatterns(total){
+  // Consecutive same team
+  let sameTeam=0;
+  for(let i=1;i<allDraws.length;i++){
+    if(allDraws[i].time&&allDraws[i].time===allDraws[i-1].time)sameTeam++;
+  }
+  const last=allDraws[allDraws.length-1];
+  const lastTeamCount=teamFreq[last.time]||0;
+
+  // Times that appeared only once
+  const oneHit=allTeams.filter(t=>t.count===1).length;
+  const topTeam=allTeams[0];
+
+  return `
+    <div class="patterns-grid" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="pattern-card">
+        <div class="pattern-card-title">Último Time Sorteado</div>
+        <div class="pattern-insight">
+          <strong class="accent" style="font-size:16px">⚽ ${last.time||'—'}</strong><br>
+          Concurso #${last.concurso} · ${formatDate(last.data)}<br>
+          <span style="color:var(--text3)">Apareceu ${lastTeamCount}x no total</span>
+        </div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-title">Time Mais Sorteado (All-Time)</div>
+        <div class="pattern-insight">
+          <strong class="accent" style="font-size:16px">⚽ ${topTeam?.name||'—'}</strong><br>
+          ${topTeam?.count||0}x sorteado<br>
+          <span style="color:var(--text3)">${((topTeam?.count||0)/total*100).toFixed(1)}% dos concursos</span>
+        </div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-title">Curiosidades</div>
+        <div class="pattern-insight">
+          Mesmo time 2x seguidas: <strong>${sameTeam}</strong><br>
+          Times diferentes usados: <strong>${allTeams.length}</strong><br>
+          Apareceram apenas 1x: <strong>${oneHit}</strong> times
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function switchSpecialTab(btn,tabId){
+  const card=document.getElementById('specialSectionCard');
+  card.querySelectorAll('.tab-pill').forEach(p=>p.classList.remove('active'));
+  card.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  const el=document.getElementById(tabId);if(el)el.classList.add('active');
 }
 
 /* ============================================================
    PARITY
 ============================================================ */
-function renderParity() {
-  const cfg = GAMES[currentGame];
-  const nc = cfg.numCount;
-  const pairs = [];
-  for (let e = Math.floor(nc/2)-2; e <= Math.ceil(nc/2)+2; e++) {
-    if (e >= 0 && e <= nc) pairs.push({label:`${e}P / ${nc-e}I`, even:e, odd:nc-e});
+function renderParity(){
+  const cfg=GAMES[currentGame];const nc=cfg.numCount;
+  const pairs=[];
+  for(let e=Math.max(0,Math.floor(nc/2)-2);e<=Math.min(nc,Math.ceil(nc/2)+2);e++) pairs.push({label:`${e}P / ${nc-e}I`,even:e});
+  pairs.push({label:'Outros',even:-1});
+  const counts={};pairs.forEach(p=>counts[p.label]=0);
+  for(const d of allDraws){
+    const evens=d.dezenas.filter(n=>n%2===0).length;
+    const found=pairs.find(p=>p.even===evens);
+    if(found)counts[found.label]++;else counts['Outros']++;
   }
-  pairs.push({label:'Outros', even:-1, odd:-1});
-
-  const counts = {};
-  pairs.forEach(p => counts[p.label] = 0);
-  for (const d of allDraws) {
-    const evens = d.dezenas.filter(n => n%2===0).length;
-    const found = pairs.find(p => p.even === evens);
-    if (found) counts[found.label]++; else counts['Outros']++;
-  }
-  const avgEven = allDraws.reduce((s,d) => s+d.dezenas.filter(n=>n%2===0).length,0)/allDraws.length;
-  document.getElementById('parityStats').innerHTML =
-    `Média histórica: <strong>${avgEven.toFixed(1)} pares</strong> e <strong>${(nc-avgEven).toFixed(1)} ímpares</strong> por concurso.`;
-
-  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5);
-  const maxCnt = sorted[0][1];
-  const barsEl = document.getElementById('parityBars');
-  barsEl.innerHTML = '';
-  const colors = ['var(--accent2)','var(--accent)','var(--accent4)','var(--accent3)','var(--text3)'];
-  sorted.forEach(([label, cnt], i) => {
-    const pct = (cnt/maxCnt*100).toFixed(0);
-    const row = document.createElement('div');
-    row.className = 'bar-row';
-    row.innerHTML = `
-      <div class="bar-label"><strong>${label}</strong><span>${cnt}x (${(cnt/allDraws.length*100).toFixed(1)}%)</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
-    `;
+  const avgEven=allDraws.reduce((s,d)=>s+d.dezenas.filter(n=>n%2===0).length,0)/allDraws.length;
+  document.getElementById('parityStats').innerHTML=`Média histórica: <strong>${avgEven.toFixed(1)} pares</strong> e <strong>${(nc-avgEven).toFixed(1)} ímpares</strong> por concurso.`;
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxCnt=sorted[0][1];
+  const barsEl=document.getElementById('parityBars');barsEl.innerHTML='';
+  const colors=['var(--accent2)','var(--accent)','var(--accent4)','var(--accent3)','var(--text3)'];
+  sorted.forEach(([label,cnt],i)=>{
+    const row=document.createElement('div');row.className='bar-row';
+    row.innerHTML=`<div class="bar-label"><strong>${label}</strong><span>${cnt}x (${(cnt/allDraws.length*100).toFixed(1)}%)</span></div><div class="bar-track"><div class="bar-fill" style="width:${(cnt/maxCnt*100).toFixed(0)}%;background:${colors[i]}"></div></div>`;
     barsEl.appendChild(row);
   });
 }
@@ -1632,23 +1032,16 @@ function renderParity() {
 /* ============================================================
    DELAY
 ============================================================ */
-function renderDelay() {
-  const cfg = GAMES[currentGame];
-  const avgDelay = Object.values(delay).reduce((a,b)=>a+b,0) / cfg.numMax;
-  const sorted = Object.entries(delay)
-    .map(([n,d]) => ({n:+n,d}))
-    .filter(x => x.n <= cfg.numMax)
-    .sort((a,b) => b.d-a.d)
-    .slice(0, 25); // mostrar top 25 mais atrasados
-
-  const grid = document.getElementById('delayGrid');
-  grid.innerHTML = '';
-  sorted.forEach(({n,d}) => {
-    const cls  = d > avgDelay*1.5 ? ' overdue' : d > avgDelay ? ' warning' : '';
-    const color= d > avgDelay*1.5 ? 'var(--hot)' : d > avgDelay ? 'var(--accent4)' : 'var(--text)';
-    const cell = document.createElement('div');
-    cell.className = 'delay-cell' + cls;
-    cell.innerHTML = `<span class="delay-num" style="color:${color}">${String(n).padStart(2,'0')}</span><span class="delay-ago">${d===0?'último':d+'c atrás'}</span>`;
+function renderDelay(){
+  const cfg=GAMES[currentGame];
+  const avgDelay=Object.values(delay).reduce((a,b)=>a+b,0)/cfg.numMax;
+  const sorted=Object.entries(delay).map(([n,d])=>({n:+n,d})).filter(x=>x.n<=cfg.numMax).sort((a,b)=>b.d-a.d).slice(0,25);
+  const grid=document.getElementById('delayGrid');grid.innerHTML='';
+  sorted.forEach(({n,d})=>{
+    const cls=d>avgDelay*1.5?' overdue':d>avgDelay?' warning':'';
+    const color=d>avgDelay*1.5?'var(--hot)':d>avgDelay?'var(--accent4)':'var(--text)';
+    const cell=document.createElement('div');cell.className='delay-cell'+cls;
+    cell.innerHTML=`<span class="delay-num" style="color:${color}">${String(n).padStart(2,'0')}</span><span class="delay-ago">${d===0?'último':d+'c atrás'}</span>`;
     grid.appendChild(cell);
   });
 }
@@ -1656,199 +1049,444 @@ function renderDelay() {
 /* ============================================================
    REPEAT
 ============================================================ */
-function renderRepeatStats() {
-  const repeatMap = {};
-  for (let i = 1; i < allDraws.length; i++) {
-    const rep = allDraws[i].dezenas.filter(n => allDraws[i-1].dezenas.includes(n)).length;
-    repeatMap[rep] = (repeatMap[rep]||0)+1;
+function renderRepeatStats(){
+  const repeatMap={};
+  for(let i=1;i<allDraws.length;i++){
+    const rep=allDraws[i].dezenas.filter(n=>allDraws[i-1].dezenas.includes(n)).length;
+    repeatMap[rep]=(repeatMap[rep]||0)+1;
   }
-  const entries = Object.entries(repeatMap).map(([k,v]) => ({repeated:+k,count:v})).sort((a,b)=>a.repeated-b.repeated);
-  const total = entries.reduce((s,e)=>s+e.count,0);
-  const lastRep = allDraws[allDraws.length-1].dezenas.filter(n=>allDraws[allDraws.length-2].dezenas.includes(n)).length;
-  const avg = entries.reduce((s,e)=>s+(e.repeated*e.count),0)/total;
-  const maxCnt = Math.max(...entries.map(e=>e.count));
-
-  document.getElementById('repeatSummary').innerHTML =
-    `Último concurso repetiu <strong style="color:var(--accent)">${lastRep} dezenas</strong> do anterior. Média histórica: <strong style="color:var(--accent2)">${avg.toFixed(1)} dezenas repetidas</strong>.`;
-
-  const bars = document.getElementById('repeatBars');
-  bars.innerHTML = '';
-  entries.forEach(e => {
-    const pct = (e.count/total*100).toFixed(1);
-    const w   = (e.count/maxCnt*100).toFixed(0);
-    const row = document.createElement('div');
-    row.className = 'bar-row';
-    row.innerHTML = `
-      <div class="bar-label"><strong>${e.repeated} repetidas</strong><span>${e.count}x (${pct}%)</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:linear-gradient(90deg,var(--accent3),var(--accent))"></div></div>
-    `;
+  const entries=Object.entries(repeatMap).map(([k,v])=>({repeated:+k,count:v})).sort((a,b)=>a.repeated-b.repeated);
+  const total=entries.reduce((s,e)=>s+e.count,0);
+  const lastRep=allDraws[allDraws.length-1].dezenas.filter(n=>allDraws[allDraws.length-2].dezenas.includes(n)).length;
+  const avg=entries.reduce((s,e)=>s+(e.repeated*e.count),0)/total;
+  const maxCnt=Math.max(...entries.map(e=>e.count));
+  document.getElementById('repeatSummary').innerHTML=`Último concurso repetiu <strong style="color:var(--accent)">${lastRep} dezenas</strong> do anterior. Média histórica: <strong style="color:var(--accent2)">${avg.toFixed(1)} dezenas</strong>.`;
+  const bars=document.getElementById('repeatBars');bars.innerHTML='';
+  entries.forEach(e=>{
+    const row=document.createElement('div');row.className='bar-row';
+    row.innerHTML=`<div class="bar-label"><strong>${e.repeated} repetidas</strong><span>${e.count}x (${(e.count/total*100).toFixed(1)}%)</span></div><div class="bar-track"><div class="bar-fill" style="width:${(e.count/maxCnt*100).toFixed(0)}%;background:linear-gradient(90deg,var(--accent3),var(--accent))"></div></div>`;
     bars.appendChild(row);
   });
 }
 
 /* ============================================================
-   SUM ANALYSIS
+   SUM
 ============================================================ */
-function renderSumAnalysis() {
-  const cfg = GAMES[currentGame];
-  const nc = cfg.numCount;
-  const minSum = nc * 1 + (nc*(nc-1)/2);  // soma mínima teórica
-  const midSum = nc * ((1+cfg.numMax)/2);  // soma esperada
-  const step = Math.round(midSum * 0.08);
-
-  // Criar faixas dinâmicas ao redor da média
-  const bands = [];
-  for (let i = -3; i <= 3; i++) {
-    const lo = Math.round(midSum + i*step);
-    const hi = Math.round(midSum + (i+1)*step);
-    bands.push({ label: `${lo}–${hi}`, lo, hi, count: 0 });
+function renderSumAnalysis(){
+  const cfg=GAMES[currentGame];const nc=cfg.numCount;
+  const midSum=nc*((1+cfg.numMax)/2);const step=Math.round(midSum*0.08);
+  const bands=[];
+  for(let i=-3;i<=3;i++){
+    const lo=Math.round(midSum+i*step),hi=Math.round(midSum+(i+1)*step);
+    bands.push({label:`${lo}–${hi}`,lo,hi,count:0});
   }
-
-  const sums = [];
-  for (const d of allDraws) {
-    const s = d.dezenas.reduce((a,b)=>a+b, 0);
-    sums.push(s);
-    const band = bands.find(b => s >= b.lo && s < b.hi);
-    if (band) band.count++;
+  const sums=[];
+  for(const d of allDraws){
+    const s=d.dezenas.reduce((a,b)=>a+b,0);sums.push(s);
+    const band=bands.find(b=>s>=b.lo&&s<b.hi);if(band)band.count++;
   }
-  const avg = sums.reduce((a,b)=>a+b,0)/sums.length;
-  const lastSum = sums[sums.length-1];
-  const mostCommon = [...bands].sort((a,b)=>b.count-a.count)[0];
-  const maxCnt = Math.max(...bands.map(b=>b.count));
-
-  document.getElementById('sumAnalysis').innerHTML =
-    `Último concurso: soma <strong style="color:var(--accent4)">${lastSum}</strong>. Média histórica: <strong style="color:var(--accent)">${avg.toFixed(1)}</strong>. Faixa mais comum: <strong style="color:var(--accent2)">${mostCommon.label}</strong>.`;
-
-  const bars = document.getElementById('sumBars');
-  bars.innerHTML = '';
-  bands.forEach(b => {
-    const w = b.count > 0 ? (b.count/maxCnt*100).toFixed(0) : '0';
-    const row = document.createElement('div');
-    row.className = 'bar-row';
-    row.innerHTML = `
-      <div class="bar-label"><strong>${b.label}</strong><span>${b.count}x (${(b.count/allDraws.length*100).toFixed(1)}%)</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:linear-gradient(90deg,var(--accent4),var(--accent3))"></div></div>
-    `;
+  const avg=sums.reduce((a,b)=>a+b,0)/sums.length;
+  const lastSum=sums[sums.length-1];
+  const mostCommon=[...bands].sort((a,b)=>b.count-a.count)[0];
+  const maxCnt=Math.max(...bands.map(b=>b.count));
+  document.getElementById('sumAnalysis').innerHTML=`Último: soma <strong style="color:var(--accent4)">${lastSum}</strong>. Média: <strong style="color:var(--accent)">${avg.toFixed(1)}</strong>. Faixa mais comum: <strong style="color:var(--accent2)">${mostCommon.label}</strong>.`;
+  const bars=document.getElementById('sumBars');bars.innerHTML='';
+  bands.forEach(b=>{
+    const row=document.createElement('div');row.className='bar-row';
+    row.innerHTML=`<div class="bar-label"><strong>${b.label}</strong><span>${b.count}x (${(b.count/allDraws.length*100).toFixed(1)}%)</span></div><div class="bar-track"><div class="bar-fill" style="width:${b.count>0?(b.count/maxCnt*100).toFixed(0):'0'}%;background:linear-gradient(90deg,var(--accent4),var(--accent3))"></div></div>`;
     bars.appendChild(row);
   });
 }
 
 /* ============================================================
-   SCORE GRID
+   PADRÕES AVANÇADOS
 ============================================================ */
-function renderScoreGrid() {
-  const cfg = GAMES[currentGame];
-  analyticalGame = [];
-  const grid = document.getElementById('scoreGrid');
-  grid.innerHTML = '';
-  // Ajustar colunas conforme numMax
-  const cols = cfg.numMax <= 25 ? 5 : cfg.numMax <= 60 ? 10 : 10;
-  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+function renderPatterns(){
+  const cfg=GAMES[currentGame];
+  const tabs=document.getElementById('patternTabs');
+  const content=document.getElementById('patternContent');
+  const patternList=[
+    {id:'pat-num',label:'Numéricas',render:renderNumericPatterns},
+    {id:'pat-seq',label:'Sequências',render:renderSequencePatterns},
+  ];
+  if(cfg.extraType==='trevos') patternList.push({id:'pat-trevo',label:'Trevos',render:renderTrevoPatternTab});
+  if(cfg.extraType==='time') patternList.push({id:'pat-time',label:'Times',render:renderTimePatternTab});
+  patternList.push({id:'pat-trend',label:'Tendência',render:renderTrendPatterns});
 
-  for (let i = 1; i <= cfg.numMax; i++) {
-    const div = document.createElement('div');
-    div.className = 'score-ball';
-    div.textContent = String(i).padStart(2,'0');
-    div.dataset.num = i;
-    div.onclick = () => toggleScoreNumber(i, div);
+  tabs.innerHTML='';content.innerHTML='';
+  patternList.forEach((p,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab-pill'+(i===0?' active':'');
+    btn.textContent=p.label;
+    btn.onclick=()=>{
+      tabs.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      content.innerHTML=p.render();
+      content.classList.add('active');
+    };
+    tabs.appendChild(btn);
+  });
+  content.innerHTML=patternList[0].render();
+  content.classList.add('active');
+}
+
+function renderNumericPatterns(){
+  const cfg=GAMES[currentGame];const nc=cfg.numCount;
+  // Quadrantes
+  const q=Math.ceil(cfg.numMax/4);
+  const quadrants=[`1-${q}`,`${q+1}-${q*2}`,`${q*2+1}-${q*3}`,`${q*3+1}-${cfg.numMax}`];
+  const qCounts=allDraws.map(d=>quadrants.map((_,i)=>d.dezenas.filter(n=>n>=i*q+1&&n<=(i+1)*q).length));
+  const qAvg=quadrants.map((_,i)=>qCounts.reduce((s,c)=>s+c[i],0)/allDraws.length);
+  const lastQ=allDraws[allDraws.length-1].dezenas;
+  const lastQCount=quadrants.map((_,i)=>lastQ.filter(n=>n>=i*q+1&&n<=(i+1)*q).length);
+  // Primos
+  const primes=[];for(let n=2;n<=cfg.numMax;n++){let p=true;for(let d=2;d<=Math.sqrt(n);d++)if(n%d===0){p=false;break}if(p)primes.push(n);}
+  const avgPrimes=allDraws.reduce((s,d)=>s+d.dezenas.filter(n=>primes.includes(n)).length,0)/allDraws.length;
+  const lastPrimes=lastQ.filter(n=>primes.includes(n)).length;
+  // Dezenas vs unidades
+  const avgTens=allDraws.reduce((s,d)=>s+d.dezenas.filter(n=>n>=10).length,0)/allDraws.length;
+  return `<div class="patterns-grid">
+    <div class="pattern-card">
+      <div class="pattern-card-title">Distribuição por Quadrante</div>
+      <div class="pattern-insight">
+        ${quadrants.map((q,i)=>`<div style="display:flex;justify-content:space-between;margin:4px 0"><span>${q}</span><strong class="${lastQCount[i]>qAvg[i]?'accent':''}">${lastQCount[i]} (média ${qAvg[i].toFixed(1)})</strong></div>`).join('')}
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-title">Números Primos</div>
+      <div class="pattern-insight">
+        Média por sorteio: <strong>${avgPrimes.toFixed(1)}</strong><br>
+        Último sorteio: <strong class="accent">${lastPrimes}</strong><br>
+        Primos disponíveis: <strong>${primes.length}</strong>
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-title">Dezenas vs Unidades</div>
+      <div class="pattern-insight">
+        Média de dezenas (≥10): <strong>${avgTens.toFixed(1)}</strong><br>
+        Último sorteio: <strong class="accent">${lastQ.filter(n=>n>=10).length}</strong><br>
+        Unidades (&lt;10): <strong>${lastQ.filter(n=>n<10).length}</strong>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSequencePatterns(){
+  const cfg=GAMES[currentGame];
+  // Consecutivos
+  let totalConsec=0;const consecDist={};
+  for(const d of allDraws){
+    let cp=0;for(let i=0;i<d.dezenas.length-1;i++)if(d.dezenas[i+1]-d.dezenas[i]===1)cp++;
+    totalConsec+=cp;consecDist[cp]=(consecDist[cp]||0)+1;
+  }
+  const avgConsec=(totalConsec/allDraws.length).toFixed(2);
+  const lastConsec=(()=>{const d=allDraws[allDraws.length-1];let cp=0;for(let i=0;i<d.dezenas.length-1;i++)if(d.dezenas[i+1]-d.dezenas[i]===1)cp++;return cp;})();
+  const maxConsecCnt=Math.max(...Object.values(consecDist));
+
+  // Diferença entre consecutivos sorteados
+  const gaps=[];
+  for(const d of allDraws){for(let i=1;i<d.dezenas.length;i++)gaps.push(d.dezenas[i]-d.dezenas[i-1]);}
+  const avgGap=(gaps.reduce((a,b)=>a+b,0)/gaps.length).toFixed(1);
+
+  return `<div class="patterns-grid">
+    <div class="pattern-card">
+      <div class="pattern-card-title">Pares Consecutivos</div>
+      <div class="pattern-insight">
+        Média por sorteio: <strong>${avgConsec}</strong><br>
+        Último sorteio: <strong class="accent">${lastConsec} par(es)</strong>
+      </div>
+      <div class="bar-group" style="margin-top:10px">
+        ${Object.entries(consecDist).sort((a,b)=>+a[0]-+b[0]).map(([k,v])=>`
+          <div class="bar-row">
+            <div class="bar-label"><strong>${k} par(es)</strong><span>${v}x</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${(v/maxConsecCnt*100).toFixed(0)}%;background:var(--accent)"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-title">Distância Média entre Números</div>
+      <div class="pattern-insight">
+        Gap médio entre dezenas adjacentes: <strong class="accent">${avgGap}</strong><br>
+        Esperado (aleatório): <strong>${(cfg.numMax/(cfg.numCount+1)).toFixed(1)}</strong>
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-title">Amplitude (Max - Min)</div>
+      ${(()=>{
+        const amps=allDraws.map(d=>d.dezenas[d.dezenas.length-1]-d.dezenas[0]);
+        const avgAmp=(amps.reduce((a,b)=>a+b,0)/amps.length).toFixed(1);
+        const lastAmp=amps[amps.length-1];
+        return`<div class="pattern-insight">Amplitude média: <strong>${avgAmp}</strong><br>Último sorteio: <strong class="accent">${lastAmp}</strong><br>Máxima possível: <strong>${cfg.numMax-1}</strong></div>`;
+      })()}
+    </div>
+  </div>`;
+}
+
+function renderTrevoPatternTab(){
+  return renderTrevoPatterns(allDraws.filter(d=>d.trevos&&d.trevos.length===2).length);
+}
+function renderTimePatternTab(){
+  return renderTeamPatterns(allDraws.filter(d=>d.time).length);
+}
+
+function renderTrendPatterns(){
+  // Últimos 50 vs histórico
+  const last50=allDraws.slice(-50);
+  const freqLast50={};
+  for(const d of last50)for(const n of d.dezenas)freqLast50[n]=(freqLast50[n]||0)+1;
+  // Rising: mais no last50 relativo à média
+  const total=allDraws.length;
+  const rising=[],falling=[];
+  for(let n=1;n<=GAMES[currentGame].numMax;n++){
+    const overallRate=(freq[n]||0)/total;
+    const recentRate=(freqLast50[n]||0)/50;
+    const delta=recentRate-overallRate;
+    if(delta>0.02)rising.push({n,delta});
+    else if(delta<-0.02)falling.push({n,delta});
+  }
+  rising.sort((a,b)=>b.delta-a.delta);falling.sort((a,b)=>a.delta-b.delta);
+
+  return `<div class="patterns-grid">
+    <div class="pattern-card">
+      <div class="pattern-card-title">Em Alta (últimos 50 concursos)</div>
+      <div class="pattern-insight">
+        ${rising.slice(0,8).map(({n,delta})=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(29,185,84,.15);border-radius:99px;font-weight:700;color:#1db954;font-size:12px">↑${String(n).padStart(2,'0')}<span style="font-size:10px;opacity:.7">+${(delta*100).toFixed(1)}%</span></span>`).join('')}
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-title">Em Queda (últimos 50 concursos)</div>
+      <div class="pattern-insight">
+        ${falling.slice(0,8).map(({n,delta})=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(255,68,85,.12);border-radius:99px;font-weight:700;color:var(--hot);font-size:12px">↓${String(n).padStart(2,'0')}<span style="font-size:10px;opacity:.7">${(delta*100).toFixed(1)}%</span></span>`).join('')}
+      </div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-title">Consistentes (estáveis)</div>
+      <div class="pattern-insight">
+        ${Object.entries(freq).filter(([,c])=>c>0).map(([n,c])=>({n:+n,delta:Math.abs((freqLast50[+n]||0)/50-c/total)})).filter(x=>x.delta<=0.015).slice(0,8).map(({n})=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(255,255,255,.06);border-radius:99px;font-weight:700;color:var(--text2);font-size:12px">≈${String(n).padStart(2,'0')}</span>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   SCORE GRID + SELEÇÃO DE TREVOS/TIME
+============================================================ */
+function renderScoreGrid(){
+  const cfg=GAMES[currentGame];
+  analyticalGame=[];selectedTrevos=[];selectedTeam=null;
+  const grid=document.getElementById('scoreGrid');grid.innerHTML='';
+  const cols=cfg.numMax<=25?5:10;
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  for(let i=1;i<=cfg.numMax;i++){
+    const div=document.createElement('div');div.className='score-ball';
+    div.textContent=String(i).padStart(2,'0');div.dataset.num=i;
+    div.onclick=()=>toggleScoreNumber(i,div);
     grid.appendChild(div);
   }
-}
-
-function toggleScoreNumber(num, el) {
-  const cfg = GAMES[currentGame];
-  const idx = analyticalGame.indexOf(num);
-  if (idx >= 0) {
-    analyticalGame.splice(idx,1);
-    el.classList.remove('active');
+  // Trevos
+  const trevoSec=document.getElementById('scoreTrevoSection');
+  const teamSec=document.getElementById('scoreTeamSection');
+  if(cfg.extraType==='trevos'){
+    trevoSec.style.display='block';teamSec.style.display='none';
+    const btns=document.getElementById('scoreTrevoBtns');btns.innerHTML='';
+    for(let t=1;t<=6;t++){
+      const btn=document.createElement('button');btn.className='trevo-sel-btn';
+      btn.innerHTML=`<span style="font-size:20px;filter:hue-rotate(${t*40}deg)">🍀</span><span class="trevo-sel-num">${t}</span>`;
+      btn.dataset.trevo=t;
+      btn.onclick=()=>toggleTrevo(t,btn);
+      btns.appendChild(btn);
+    }
+  } else if(cfg.extraType==='time'){
+    trevoSec.style.display='none';teamSec.style.display='block';
+    buildTeamDropdown();
   } else {
-    if (analyticalGame.length >= cfg.maxPick) return;
-    analyticalGame.push(num);
-    el.classList.add('active');
+    trevoSec.style.display='none';teamSec.style.display='none';
   }
-  updateScorePreview(analyticalGame);
-}
-
-function clearScoreGame() {
-  analyticalGame = [];
-  document.querySelectorAll('.score-ball').forEach(el => el.classList.remove('active'));
-  document.getElementById('scoreResults').innerHTML = '';
+  document.getElementById('scoreResults').innerHTML='';
   updateScorePreview([]);
 }
 
-function updateScorePreview(game) {
-  const side = document.getElementById('scoreSide');
-  if (!side) return;
-  if (game.length === 0) {
-    side.innerHTML = `<div class="label">Seu jogo</div><div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>`;
-    return;
-  }
-  side.innerHTML = `
-    <div class="label" style="margin-bottom:9px">Seu jogo · ${game.length} dezenas</div>
-    <div class="preview-balls">
-      ${[...game].sort((a,b)=>a-b).map(n=>`<div class="preview-ball">${String(n).padStart(2,'0')}</div>`).join('')}
-    </div>
-  `;
+function toggleTrevo(t,btn){
+  const idx=selectedTrevos.indexOf(t);
+  if(idx>=0){selectedTrevos.splice(idx,1);btn.classList.remove('active');}
+  else{if(selectedTrevos.length>=2)return;selectedTrevos.push(t);btn.classList.add('active');}
 }
 
-function runAnalyticalScore() {
-  const cfg = GAMES[currentGame];
-  if (analyticalGame.length < cfg.minPick) {
-    alert(`Selecione ao menos ${cfg.minPick} dezenas.`);
-    return;
+function buildTeamDropdown(){
+  const dropdown=document.getElementById('teamDropdown');
+  dropdown.innerHTML='';
+  allTeams.forEach(({name,count})=>{
+    const opt=document.createElement('div');opt.className='team-option';
+    opt.innerHTML=`<span>⚽ ${name}</span><span class="team-option-count">${count}x</span>`;
+    opt.onclick=()=>selectTeam(name,count);
+    dropdown.appendChild(opt);
+  });
+}
+
+function filterTeams(){
+  const q=document.getElementById('teamSearchInput').value.toLowerCase();
+  document.getElementById('teamDropdown').querySelectorAll('.team-option').forEach(opt=>{
+    opt.style.display=opt.textContent.toLowerCase().includes(q)?'':'none';
+  });
+  openTeamDropdown();
+}
+
+function openTeamDropdown(){
+  document.getElementById('teamDropdown').classList.add('open');
+  document.addEventListener('click',closeTeamDropdownOutside,{once:true});
+}
+function closeTeamDropdownOutside(e){
+  const wrap=document.querySelector('.team-search-wrap');
+  if(wrap&&!wrap.contains(e.target)) document.getElementById('teamDropdown').classList.remove('open');
+}
+
+function selectTeam(name,count){
+  selectedTeam=name;
+  document.getElementById('teamSearchInput').value=name;
+  document.getElementById('teamDropdown').classList.remove('open');
+  document.getElementById('selectedTeamBadge').innerHTML=
+    `<div class="selected-team-badge">⚽ ${name} <span style="font-size:10px;opacity:.7">(${count}x)</span><button onclick="clearTeam()">×</button></div>`;
+}
+
+function clearTeam(){
+  selectedTeam=null;
+  document.getElementById('teamSearchInput').value='';
+  document.getElementById('selectedTeamBadge').innerHTML='';
+}
+
+function toggleScoreNumber(num,el){
+  const cfg=GAMES[currentGame];
+  const idx=analyticalGame.indexOf(num);
+  if(idx>=0){analyticalGame.splice(idx,1);el.classList.remove('active');}
+  else{if(analyticalGame.length>=cfg.maxPick)return;analyticalGame.push(num);el.classList.add('active');}
+  updateScorePreview(analyticalGame);
+}
+
+function clearScoreGame(){
+  analyticalGame=[];selectedTrevos=[];selectedTeam=null;
+  document.querySelectorAll('.score-ball').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.trevo-sel-btn').forEach(b=>b.classList.remove('active'));
+  clearTeam();
+  document.getElementById('scoreResults').innerHTML='';
+  updateScorePreview([]);
+}
+
+function updateScorePreview(game){
+  const side=document.getElementById('scoreSide');if(!side)return;
+  const cfg=GAMES[currentGame];
+  let extras='';
+  if(cfg.extraType==='trevos'&&selectedTrevos.length>0) extras=`<div style="margin-top:8px;font-size:12px;color:var(--text2)">Trevos: ${selectedTrevos.map(t=>`<span style="filter:hue-rotate(${t*40}deg)">🍀</span>${t}`).join(' + ')}</div>`;
+  if(cfg.extraType==='time'&&selectedTeam) extras=`<div style="margin-top:8px;font-size:12px;color:var(--text2)">Time: ⚽ <strong style="color:var(--text)">${selectedTeam}</strong></div>`;
+  if(game.length===0){side.innerHTML=`<div class="label">Seu jogo</div><div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>`;return;}
+  side.innerHTML=`<div class="label" style="margin-bottom:9px">Seu jogo · ${game.length} dezenas</div><div class="preview-balls">${[...game].sort((a,b)=>a-b).map(n=>`<div class="preview-ball">${String(n).padStart(2,'0')}</div>`).join('')}</div>${extras}`;
+}
+
+/* ============================================================
+   ANALYTICAL SCORE
+============================================================ */
+function runAnalyticalScore(){
+  const cfg=GAMES[currentGame];
+  if(analyticalGame.length<cfg.minPick){alert(`Selecione ao menos ${cfg.minPick} dezenas.`);return;}
+  if(cfg.extraType==='trevos'&&selectedTrevos.length!==2){alert('Selecione exatamente 2 Trevos para o score analítico.');return;}
+  const game=[...analyticalGame].sort((a,b)=>a-b);
+  const nc=cfg.numCount;
+
+  /* --- SCORES NUMÉRICOS --- */
+  const evens=game.filter(n=>n%2===0).length,odds=game.length-evens;
+  const halfNc=nc/2;
+  let parityScore=(evens===Math.floor(halfNc)||evens===Math.ceil(halfNc))?100:Math.abs(evens-halfNc)<=2?75:40;
+
+  const sum=game.reduce((a,b)=>a+b,0);
+  const expectedSum=nc*((1+cfg.numMax)/2);
+  const deviation=Math.abs(sum-expectedSum)/expectedSum;
+  let sumScore=deviation<0.05?100:deviation<0.12?75:deviation<0.20?55:35;
+
+  let consecPairs=0;for(let i=0;i<game.length-1;i++)if(game[i+1]-game[i]===1)consecPairs++;
+  let consecScore=consecPairs>=2&&consecPairs<=4?100:consecPairs<=5?70:40;
+
+  const lastDraw=allDraws[allDraws.length-1];
+  const repeated=game.filter(n=>lastDraw.dezenas.includes(n)).length;
+  const repRatio=repeated/nc;
+  let repeatScore=repRatio>=0.4&&repRatio<=0.7?100:repRatio>=0.25?70:40;
+
+  const sortedFreq=Object.entries(freq).filter(([,c])=>c>0).sort((a,b)=>b[1]-a[1]);
+  const hotList=sortedFreq.slice(0,Math.ceil(cfg.numMax*0.48)).map(([n])=>+n);
+  const hotCount=game.filter(n=>hotList.includes(n)).length;
+  const hotRatio=hotCount/game.length;
+  let hotScore=hotRatio>=0.45&&hotRatio<=0.65?100:hotRatio>=0.3?70:40;
+
+  /* --- SCORE EXTRAS: TREVOS --- */
+  let trevoScore=null, trevoDetail='';
+  if(cfg.extraType==='trevos'&&selectedTrevos.length===2){
+    const t1=selectedTrevos[0],t2=selectedTrevos[1];
+    const total2=allDraws.filter(d=>d.trevos&&d.trevos.length===2).length;
+    const freq1=(trevoFreq[t1]||0)/(total2*2);
+    const freq2=(trevoFreq[t2]||0)/(total2*2);
+    const pairKey=[t1,t2].sort((a,b)=>a-b).join('-');
+    const pairFreq={};
+    for(const d of allDraws){if(!d.trevos||d.trevos.length!==2)continue;const k=d.trevos.slice().sort((a,b)=>a-b).join('-');pairFreq[k]=(pairFreq[k]||0)+1;}
+    const pairCnt=pairFreq[pairKey]||0;
+    const pairPct=pairCnt/total2;
+    // Delay do par
+    const revD=[...allDraws].reverse();
+    const pairDelay=revD.findIndex(d=>d.trevos&&d.trevos.slice().sort((a,b)=>a-b).join('-')===pairKey);
+    const avgPairDelay=total2/Object.keys(pairFreq).length;
+    // Score
+    trevoScore=Math.round(((freq1+freq2)/2)*100*6*0.5+(pairPct*100*8)*0.3+((pairDelay>avgPairDelay?60:90)*0.2));
+    trevoScore=Math.min(100,Math.max(20,trevoScore));
+    trevoDetail=`🍀${t1}+🍀${t2} (${pairCnt}x juntos)`;
   }
-  const game = [...analyticalGame].sort((a,b)=>a-b);
-  const nc = cfg.numCount;
 
-  const evens = game.filter(n=>n%2===0).length, odds = game.length - evens;
-  const halfNc = nc/2;
-  let parityScore = (evens === Math.floor(halfNc) || evens === Math.ceil(halfNc)) ? 100
-    : Math.abs(evens - halfNc) <= 2 ? 75 : 40;
+  /* --- SCORE EXTRAS: TIME --- */
+  let teamScore=null, teamDetail='';
+  if(cfg.extraType==='time'&&selectedTeam){
+    const total_t=allDraws.filter(d=>d.time).length;
+    const teamCnt=teamFreq[selectedTeam]||0;
+    const teamRate=teamCnt/total_t;
+    const revD=[...allDraws].reverse();
+    const teamDelayVal=revD.findIndex(d=>d.time===selectedTeam);
+    const avgTD=total_t/allTeams.length;
+    // Score baseado em frequência relativa + atraso
+    const freqScore=Math.min(100,teamRate*100*allTeams.length*0.5);
+    const delayBonus=teamDelayVal>avgTD*1.5?15:teamDelayVal>avgTD?5:0;
+    teamScore=Math.min(100,Math.round(freqScore+delayBonus));
+    teamDetail=`${selectedTeam} (${teamCnt}x, ${teamDelayVal}c atrás)`;
+  }
 
-  const sum = game.reduce((a,b)=>a+b,0);
-  const expectedSum = nc * ((1+cfg.numMax)/2);
-  const deviation = Math.abs(sum - expectedSum) / expectedSum;
-  let sumScore = deviation < 0.05 ? 100 : deviation < 0.12 ? 75 : deviation < 0.20 ? 55 : 35;
+  /* --- FINAL SCORE --- */
+  let weights=[parityScore,sumScore,consecScore,repeatScore,hotScore];
+  let wLabels=['Paridade','Soma','Consecutivos','Repetidas','Quentes'];
+  if(trevoScore!==null){weights.push(trevoScore);wLabels.push('Trevos');}
+  if(teamScore!==null){weights.push(teamScore);wLabels.push('Time');}
+  const finalScore=Math.round(weights.reduce((a,b)=>a+b,0)/weights.length);
+  const level=finalScore>=85?'Excelente':finalScore>=70?'Forte':finalScore>=55?'Médio':'Fraco';
+  const levelColor=finalScore>=85?'var(--accent)':finalScore>=70?'var(--accent4)':'var(--hot)';
 
-  let consecPairs = 0;
-  for (let i=0;i<game.length-1;i++) if(game[i+1]-game[i]===1) consecPairs++;
-  let consecScore = consecPairs>=2&&consecPairs<=4 ? 100 : consecPairs<=5 ? 70 : 40;
+  const historical=calculateHistoricalHits(game,nc);
+  const r=48,cx=55,cy=55,circ=2*Math.PI*r;
+  const dash=(finalScore/100)*circ;
+  const histPoints=[];const base=nc-4;
+  for(let p=base;p<=nc;p++)histPoints.push(p);
 
-  const lastDraw = allDraws[allDraws.length-1];
-  const repeated = game.filter(n=>lastDraw.dezenas.includes(n)).length;
-  const repRatio = repeated / nc;
-  let repeatScore = repRatio >= 0.5 && repRatio <= 0.7 ? 100 : repRatio >= 0.35 ? 70 : 40;
+  const scoreItemsHTML=weights.map((sc,i)=>{
+    let det='';
+    if(wLabels[i]==='Paridade') det=`${evens}P/${odds}I`;
+    else if(wLabels[i]==='Soma') det=String(sum);
+    else if(wLabels[i]==='Consecutivos') det=`${consecPairs}par`;
+    else if(wLabels[i]==='Repetidas') det=`${repeated}dez.`;
+    else if(wLabels[i]==='Quentes') det=`${hotCount}dez.`;
+    else if(wLabels[i]==='Trevos') det=trevoDetail;
+    else if(wLabels[i]==='Time') det=selectedTeam?.split('/')[0]||'';
+    return makeScoreItem(wLabels[i],det,sc);
+  }).join('');
 
-  const sortedFreq = Object.entries(freq).filter(([,c])=>c>0).sort((a,b)=>b[1]-a[1]);
-  const hotList = sortedFreq.slice(0, Math.ceil(cfg.numMax * 0.48)).map(([n])=>+n);
-  const hotCount = game.filter(n=>hotList.includes(n)).length;
-  const hotRatio = hotCount / game.length;
-  let hotScore = hotRatio >= 0.45 && hotRatio <= 0.65 ? 100 : hotRatio >= 0.3 ? 70 : 40;
-
-  const finalScore = Math.round((parityScore+sumScore+consecScore+repeatScore+hotScore)/5);
-  const level = finalScore>=85 ? 'Excelente' : finalScore>=70 ? 'Forte' : finalScore>=55 ? 'Médio' : 'Fraco';
-  const levelColor = finalScore>=85 ? 'var(--accent)' : finalScore>=70 ? 'var(--accent4)' : 'var(--hot)';
-
-  const historical = calculateHistoricalHits(game, nc);
-
-  const r=48, cx=55, cy=55, circ=2*Math.PI*r;
-  const dash = (finalScore/100)*circ;
-
-  // Montar labels de histórico conforme numCount
-  const histPoints = [];
-  const base = nc - 4;
-  for (let p = base; p <= nc; p++) histPoints.push(p);
-
-  document.getElementById('scoreResults').innerHTML = `
-    <div class="score-result" style="margin-top:20px">
+  document.getElementById('scoreResults').innerHTML=`
+    <div class="score-result">
       <div class="score-ring-wrap">
         <div class="score-ring">
           <svg width="110" height="110" viewBox="0 0 110 110">
             <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--bg4)" stroke-width="9"/>
-            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${levelColor}"
-              stroke-width="9" stroke-linecap="round"
-              stroke-dasharray="${dash} ${circ}"
-              style="transition:stroke-dasharray 1.2s cubic-bezier(.22,1,.36,1)"/>
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${levelColor}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${dash} ${circ}" style="transition:stroke-dasharray 1.2s cubic-bezier(.22,1,.36,1)"/>
           </svg>
           <div class="score-ring-val">
             <div class="score-ring-num" style="color:${levelColor}">${finalScore}</div>
@@ -1857,107 +1495,57 @@ function runAnalyticalScore() {
         </div>
         <div style="font-size:16px;font-weight:800;color:${levelColor};letter-spacing:-.02em">${level}</div>
         <div style="font-size:10px;color:var(--text2);text-align:center;max-width:140px">${game.map(n=>String(n).padStart(2,'0')).join(' · ')}</div>
+        ${trevoScore!==null?`<div style="font-size:11px;color:var(--accent);margin-top:4px">${trevoDetail}</div>`:''}
+        ${teamScore!==null?`<div style="font-size:11px;color:var(--accent);margin-top:4px">⚽ ${selectedTeam?.split('/')[0]||''}</div>`:''}
       </div>
       <div>
-        <div class="score-items">
-          ${makeScoreItem('Paridade', `${evens}P / ${odds}I`, parityScore)}
-          ${makeScoreItem('Soma', String(sum), sumScore)}
-          ${makeScoreItem('Consecutivos', `${consecPairs} pares`, consecScore)}
-          ${makeScoreItem('Repetidas', `${repeated} dez.`, repeatScore)}
-          ${makeScoreItem('Quentes', `${hotCount} dez.`, hotScore)}
-        </div>
+        <div class="score-items">${scoreItemsHTML}</div>
         <div class="historical-stats">
           <div class="label">Incidência histórica deste padrão</div>
           <div class="hist-grid">
-            ${histPoints.map(p=>`
-              <div class="hist-item">
-                <div class="hist-pts">${p} pts</div>
-                <div class="hist-pct" style="color:${+historical[p]>5?'var(--accent)':+historical[p]>1?'var(--accent4)':'var(--text2)'}">${historical[p]}%</div>
-              </div>
-            `).join('')}
+            ${histPoints.map(p=>`<div class="hist-item"><div class="hist-pts">${p} pts</div><div class="hist-pct" style="color:${+historical[p]>5?'var(--accent)':+historical[p]>1?'var(--accent4)':'var(--text2)'}">${historical[p]}%</div></div>`).join('')}
           </div>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
-function makeScoreItem(name, detail, score) {
-  const color = score>=85 ? 'var(--accent)' : score>=70 ? 'var(--accent4)' : 'var(--hot)';
-  return `
-    <div class="score-item">
-      <div class="score-item-name">${name}</div>
-      <div class="score-item-bar-wrap"><div class="score-item-bar" style="width:${score}%;background:${color}"></div></div>
-      <div class="score-item-detail">${detail}</div>
-    </div>
-  `;
+function makeScoreItem(name,detail,score){
+  const color=score>=85?'var(--accent)':score>=70?'var(--accent4)':'var(--hot)';
+  return `<div class="score-item"><div class="score-item-name">${name}</div><div class="score-item-bar-wrap"><div class="score-item-bar" style="width:${score}%;background:${color}"></div></div><div class="score-item-detail">${detail}</div></div>`;
 }
 
-function calculateHistoricalHits(game, nc) {
-  const base = nc - 4;
-  const counts = {};
-  for (let p = base; p <= nc; p++) counts[p] = 0;
-  for (const draw of allDraws) {
-    const hits = draw.dezenas.filter(n => game.includes(n)).length;
-    for (let p = base; p <= nc; p++) if (hits >= p) counts[p]++;
-  }
-  const t = allDraws.length;
-  const result = {};
-  for (let p = base; p <= nc; p++) {
-    result[p] = (counts[p]/t*100).toFixed(p >= nc-1 ? 4 : p >= nc-2 ? 3 : 2);
-  }
+function calculateHistoricalHits(game,nc){
+  const base=nc-4;const counts={};
+  for(let p=base;p<=nc;p++)counts[p]=0;
+  for(const draw of allDraws){const hits=draw.dezenas.filter(n=>game.includes(n)).length;for(let p=base;p<=nc;p++)if(hits>=p)counts[p]++;}
+  const t=allDraws.length;const result={};
+  for(let p=base;p<=nc;p++)result[p]=(counts[p]/t*100).toFixed(p>=nc-1?4:p>=nc-2?3:2);
   return result;
 }
 
 /* ============================================================
    CYCLE
 ============================================================ */
-function renderCycle() {
-  const size  = parseInt(document.getElementById('cycleSize').value) || 4;
-  const count = parseInt(document.getElementById('cycleCount').value) || 10;
-  const cfg   = GAMES[currentGame];
-  const total = Math.ceil(allDraws.length / size);
-  const start = Math.max(0, total - count);
-  const groups = [];
-
-  for (let g = start; g < total; g++) {
-    const slice = allDraws.slice(g*size, Math.min((g+1)*size, allDraws.length));
-    const seen  = new Set(slice.flatMap(d => d.dezenas));
-    const missing = [];
-    for (let i=1; i<=cfg.numMax; i++) if(!seen.has(i)) missing.push(i);
-    groups.push({
-      idx: g+1,
-      from: slice[0]?.concurso,
-      to:   slice[slice.length-1]?.concurso,
-      seen: [...seen].sort((a,b)=>a-b),
-      missing,
-      incomplete: slice.length < size
-    });
+function renderCycle(){
+  const size=parseInt(document.getElementById('cycleSize').value)||4;
+  const count=parseInt(document.getElementById('cycleCount').value)||10;
+  const cfg=GAMES[currentGame];
+  const total=Math.ceil(allDraws.length/size);
+  const start=Math.max(0,total-count);
+  const groups=[];
+  for(let g=start;g<total;g++){
+    const slice=allDraws.slice(g*size,Math.min((g+1)*size,allDraws.length));
+    const seen=new Set(slice.flatMap(d=>d.dezenas));
+    const missing=[];for(let i=1;i<=cfg.numMax;i++)if(!seen.has(i))missing.push(i);
+    groups.push({idx:g+1,from:slice[0]?.concurso,to:slice[slice.length-1]?.concurso,seen:[...seen].sort((a,b)=>a-b),missing,incomplete:slice.length<size});
   }
-
-  const el = document.getElementById('cycleGroups');
-  el.innerHTML = '';
-  [...groups].reverse().forEach(g => {
-    const div = document.createElement('div');
-    div.className = 'cycle-group';
-    const seenBalls = g.seen.map(n=>`<div class="cycle-ball seen">${String(n).padStart(2,'0')}</div>`).join('');
-    const missBalls = g.missing.map(n=>`<div class="cycle-ball missing">${String(n).padStart(2,'0')}</div>`).join('');
-    div.innerHTML = `
-      <div class="cycle-group-header">
-        <span class="cycle-group-title">Ciclo #${g.idx}${g.incomplete?' · 🔄 Em andamento':''} · Concursos ${g.from}–${g.to}</span>
-        <span style="font-size:11px;font-family:var(--mono);color:${g.missing.length===0?'var(--accent)':'var(--hot)'}">
-          ${g.seen.length}/${cfg.numMax} (${(g.seen.length/cfg.numMax*100).toFixed(0)}%)
-        </span>
-      </div>
-      <div class="cycle-group-body">
-        <div class="cycle-nums-row">${seenBalls}</div>
-        ${g.missing.length>0
-          ? `<div class="cycle-miss-label" style="margin-top:9px">❌ Não apareceram:</div>
-             <div class="cycle-nums-row" style="margin-top:5px">${missBalls}</div>`
-          : `<div class="cycle-miss-label" style="color:var(--accent);margin-top:7px">✅ Ciclo completo!</div>`
-        }
-      </div>
-    `;
+  const el=document.getElementById('cycleGroups');el.innerHTML='';
+  [...groups].reverse().forEach(g=>{
+    const div=document.createElement('div');div.className='cycle-group';
+    const seenBalls=g.seen.map(n=>`<div class="cycle-ball seen">${String(n).padStart(2,'0')}</div>`).join('');
+    const missBalls=g.missing.map(n=>`<div class="cycle-ball missing">${String(n).padStart(2,'0')}</div>`).join('');
+    div.innerHTML=`<div class="cycle-group-header"><span class="cycle-group-title">Ciclo #${g.idx}${g.incomplete?' · 🔄 Em andamento':''} · Concursos ${g.from}–${g.to}</span><span style="font-size:11px;font-family:var(--mono);color:${g.missing.length===0?'var(--accent)':'var(--hot)'}">${g.seen.length}/${cfg.numMax} (${(g.seen.length/cfg.numMax*100).toFixed(0)}%)</span></div><div class="cycle-group-body"><div class="cycle-nums-row">${seenBalls}</div>${g.missing.length>0?`<div class="cycle-miss-label" style="margin-top:9px">❌ Não apareceram:</div><div class="cycle-nums-row" style="margin-top:5px">${missBalls}</div>`:`<div class="cycle-miss-label" style="color:var(--accent);margin-top:7px">✅ Ciclo completo!</div>`}</div>`;
     el.appendChild(div);
   });
 }
@@ -1965,118 +1553,79 @@ function renderCycle() {
 /* ============================================================
    GENERATOR
 ============================================================ */
-function generateGames() {
-  const cfg     = GAMES[currentGame];
-  const qty     = Math.min(50, Math.max(1, parseInt(document.getElementById('genQty').value)||5));
-  const nums    = Math.min(cfg.maxPick, Math.max(cfg.minPick, parseInt(document.getElementById('genNums').value)||cfg.numCount));
-  const parity  = document.getElementById('genParity').value;
-  const freqFilter = Array.from(document.querySelectorAll('#genFreq input:checked')).map(el=>el.value);
-  const consecFilter = document.getElementById('genConsec').value;
-
-  const sorted = Object.entries(freq).filter(([,c])=>c>0).map(([n,c])=>({n:+n,c})).sort((a,b)=>b.c-a.c);
-  const hotList = sorted.slice(0, Math.ceil(cfg.numMax*0.48)).map(x=>x.n);
-  const coldList = sorted.slice(Math.floor(cfg.numMax*0.52)).map(x=>x.n);
-  const delayedNums = Object.entries(delay).sort((a,b)=>+b[1]-+a[1]).slice(0,15).map(([n])=>+n);
-
-  const cycleSize = parseInt(document.getElementById('cycleSize').value)||4;
-  const remainder = allDraws.length % cycleSize;
-  const currentSlice = allDraws.slice(remainder===0?-cycleSize:-remainder);
-  const currentSeen = new Set(currentSlice.flatMap(d=>d.dezenas));
-  const cycleMissing = [];
-  for(let i=1;i<=cfg.numMax;i++) if(!currentSeen.has(i)) cycleMissing.push(i);
-
-  const games = [];
-  let attempts = 0;
-  while (games.length < qty && attempts < 5000) {
+function generateGames(){
+  const cfg=GAMES[currentGame];
+  const qty=Math.min(50,Math.max(1,parseInt(document.getElementById('genQty').value)||5));
+  const nums=Math.min(cfg.maxPick,Math.max(cfg.minPick,parseInt(document.getElementById('genNums').value)||cfg.numCount));
+  const parity=document.getElementById('genParity').value;
+  const freqFilter=Array.from(document.querySelectorAll('#genFreq input:checked')).map(el=>el.value);
+  const consecFilter=document.getElementById('genConsec').value;
+  const sorted=Object.entries(freq).filter(([,c])=>c>0).map(([n,c])=>({n:+n,c})).sort((a,b)=>b.c-a.c);
+  const hotList=sorted.slice(0,Math.ceil(cfg.numMax*0.48)).map(x=>x.n);
+  const coldList=sorted.slice(Math.floor(cfg.numMax*0.52)).map(x=>x.n);
+  const delayedNums=Object.entries(delay).sort((a,b)=>+b[1]-+a[1]).slice(0,15).map(([n])=>+n);
+  const cycleSize=parseInt(document.getElementById('cycleSize').value)||4;
+  const remainder=allDraws.length%cycleSize;
+  const currentSlice=allDraws.slice(remainder===0?-cycleSize:-remainder);
+  const currentSeen=new Set(currentSlice.flatMap(d=>d.dezenas));
+  const cycleMissing=[];for(let i=1;i<=cfg.numMax;i++)if(!currentSeen.has(i))cycleMissing.push(i);
+  const games=[];let attempts=0;
+  while(games.length<qty&&attempts<5000){
     attempts++;
-    let pool = Array.from({length:cfg.numMax}, (_,i)=>i+1);
-    if(freqFilter.includes('hot'))           pool.push(...hotList,...hotList);
-    if(freqFilter.includes('cold'))          pool.push(...coldList,...coldList);
-    if(freqFilter.includes('delayed'))       pool.push(...delayedNums,...delayedNums);
-    if(freqFilter.includes('mixed'))         pool.push(...hotList.slice(0,8),...coldList.slice(0,8));
+    let pool=Array.from({length:cfg.numMax},(_,i)=>i+1);
+    if(freqFilter.includes('hot')) pool.push(...hotList,...hotList);
+    if(freqFilter.includes('cold')) pool.push(...coldList,...coldList);
+    if(freqFilter.includes('delayed')) pool.push(...delayedNums,...delayedNums);
     if(freqFilter.includes('cycle_missing')) pool.push(...cycleMissing,...cycleMissing,...cycleMissing);
-
-    for(let i=pool.length-1;i>0;i--){
-      const j=Math.floor(Math.random()*(i+1));
-      [pool[i],pool[j]]=[pool[j],pool[i]];
-    }
-    const seen=new Set(), game=[];
-    for(const n of pool){ if(!seen.has(n)){ seen.add(n); game.push(n); } if(game.length===nums) break; }
-    if(game.length < nums) continue;
+    for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+    const seen=new Set(),game=[];
+    for(const n of pool){if(!seen.has(n)){seen.add(n);game.push(n);}if(game.length===nums)break;}
+    if(game.length<nums)continue;
     game.sort((a,b)=>a-b);
-
-    const evens = game.filter(n=>n%2===0).length;
-    const nc = nums;
-    if(parity==='more_odd'&&evens>Math.floor(nc/2)-1) continue;
-    if(parity==='more_even'&&evens<Math.ceil(nc/2)+1) continue;
-    if(parity==='balanced'&&Math.abs(evens - nc/2) > 1) continue;
-
-    if(consecFilter!=='any'){
-      let cp=0; for(let i=0;i<game.length-1;i++) if(game[i+1]-game[i]===1) cp++;
-      if(consecFilter==='0'&&cp>0) continue;
-      if(consecFilter==='1'&&cp<1) continue;
-      if(consecFilter==='2'&&cp<2) continue;
-    }
+    const evens=game.filter(n=>n%2===0).length;const nc=nums;
+    if(parity==='more_odd'&&evens>Math.floor(nc/2)-1)continue;
+    if(parity==='more_even'&&evens<Math.ceil(nc/2)+1)continue;
+    if(parity==='balanced'&&Math.abs(evens-nc/2)>1)continue;
+    if(consecFilter!=='any'){let cp=0;for(let i=0;i<game.length-1;i++)if(game[i+1]-game[i]===1)cp++;if(consecFilter==='0'&&cp>0)continue;if(consecFilter==='1'&&cp<1)continue;if(consecFilter==='2'&&cp<2)continue;}
     games.push(game);
   }
-
-  const el = document.getElementById('genResults');
-  el.innerHTML = '';
-  if(games.length===0){
-    el.innerHTML='<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou todos os filtros. Tente relaxar os critérios.</div>';
-    return;
-  }
-  games.forEach((game,i) => {
-    const evens = game.filter(n=>n%2===0).length;
-    const div = document.createElement('div');
-    div.className = 'gen-game';
-    div.innerHTML=`
-      <div class="gen-game-header">
-        <span>Jogo ${i+1} · ${game.length} dezenas · ${evens}P / ${game.length-evens}I</span>
-        <button class="copy-btn" onclick="copyGame(this,'${game.join(',')}')">Copiar</button>
-      </div>
-      <div class="gen-balls">
-        ${game.map(n=>`<div class="gen-ball">${String(n).padStart(2,'0')}</div>`).join('')}
-      </div>
-    `;
+  const el=document.getElementById('genResults');el.innerHTML='';
+  if(games.length===0){el.innerHTML='<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou todos os filtros. Tente relaxar os critérios.</div>';return;}
+  games.forEach((game,i)=>{
+    const evens=game.filter(n=>n%2===0).length;
+    const div=document.createElement('div');div.className='gen-game';
+    div.innerHTML=`<div class="gen-game-header"><span>Jogo ${i+1} · ${game.length} dezenas · ${evens}P/${game.length-evens}I</span><button class="copy-btn" onclick="copyGame(this,'${game.join(',')}')">Copiar</button></div><div class="gen-balls">${game.map(n=>`<div class="gen-ball">${String(n).padStart(2,'0')}</div>`).join('')}</div>`;
     el.appendChild(div);
   });
 }
 
-function copyGame(btn, nums) {
+function copyGame(btn,nums){
   navigator.clipboard.writeText(nums.split(',').map(n=>n.padStart(2,'0')).join(' - '));
-  btn.textContent='✓ Copiado';
-  setTimeout(()=>btn.textContent='Copiar',1500);
+  btn.textContent='✓ Copiado';setTimeout(()=>btn.textContent='Copiar',1500);
 }
 
 /* ============================================================
    LAST DRAWS
 ============================================================ */
-function renderLastDraws() {
-  const tbody = document.getElementById('drawsBody');
-  tbody.innerHTML = '';
-  const last20 = allDraws.slice(-20).reverse();
-  for (const d of last20) {
-    const evens = d.dezenas.filter(n=>n%2===0).length;
-    const balls = d.dezenas.map(n=>`<div class="draw-ball">${String(n).padStart(2,'0')}</div>`).join('');
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="font-family:var(--mono);font-size:11px">#${d.concurso}</td>
-      <td style="font-size:12px;color:var(--text2)">${formatDate(d.data)}</td>
-      <td><div class="draw-balls-row">${balls}</div></td>
-      <td style="font-family:var(--mono);font-size:11px;color:var(--accent2)">${evens}</td>
-      <td style="font-family:var(--mono);font-size:11px;color:var(--accent3)">${d.dezenas.length - evens}</td>
-    `;
+function renderLastDraws(){
+  const cfg=GAMES[currentGame];
+  const head=document.getElementById('drawsHead');
+  let headHTML='<th>Concurso</th><th>Data</th><th>Dezenas</th><th>Pares</th><th>Ímpares</th>';
+  if(cfg.extraType==='trevos') headHTML+='<th>Trevos</th>';
+  if(cfg.extraType==='time') headHTML+='<th>Time ❤️</th>';
+  head.innerHTML=headHTML;
+  const tbody=document.getElementById('drawsBody');tbody.innerHTML='';
+  const last20=allDraws.slice(-20).reverse();
+  for(const d of last20){
+    const evens=d.dezenas.filter(n=>n%2===0).length;
+    const balls=d.dezenas.map(n=>`<div class="draw-ball">${String(n).padStart(2,'0')}</div>`).join('');
+    let extras='';
+    if(cfg.extraType==='trevos'&&d.trevos) extras=`<td style="font-size:14px">${d.trevos.map(t=>`<span style="filter:hue-rotate(${t*40}deg)">🍀</span>${t}`).join(' ')}</td>`;
+    if(cfg.extraType==='time') extras=`<td style="font-size:11px;color:var(--text2);white-space:nowrap">⚽ ${d.time||'—'}</td>`;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-family:var(--mono);font-size:11px">#${d.concurso}</td><td style="font-size:12px;color:var(--text2)">${formatDate(d.data)}</td><td><div class="draw-balls-row">${balls}</div></td><td style="font-family:var(--mono);font-size:11px;color:var(--accent2)">${evens}</td><td style="font-family:var(--mono);font-size:11px;color:var(--accent3)">${d.dezenas.length-evens}</td>${extras}`;
     tbody.appendChild(tr);
   }
-}
-
-function formatDate(str) {
-  if (!str) return '—';
-  try {
-    const p = str.trim().split('/');
-    return p.length === 3 ? str.trim() : new Date(str).toLocaleDateString('pt-BR');
-  } catch { return str; }
 }
 
 /* ============================================================
