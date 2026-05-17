@@ -4,699 +4,807 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESTRATÉGIA DA SORTE — Dashboard Lotofácil</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-  
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
+/* =========================================================
+   TOKENS
+========================================================= */
 :root {
-  --bg: #0a0c10;
-  --bg2: #111318;
-  --bg3: #181c24;
-  --border: rgba(255,255,255,0.07);
-  --text: #e8eaf0;
-  --text2: #8a8fa8;
-  --text3: #4a4f66;
-  --accent: #00e5a0;
-  --accent2: #0090ff;
-  --accent3: #ff6b35;
-  --accent4: #ffd60a;
-  --hot: #ff4d4d;
-  --cold: #4da6ff;
-  --card-bg: #13161e;
-  --card-border: rgba(255,255,255,0.06);
-  --shadow: 0 4px 32px rgba(0,0,0,0.5);
-  --radius: 16px;
-  --radius-sm: 10px;
+  --bg:        #08090d;
+  --bg2:       #0e1018;
+  --bg3:       #161923;
+  --bg4:       #1e2230;
+  --border:    rgba(255,255,255,0.06);
+  --border2:   rgba(255,255,255,0.12);
+  --text:      #eceef5;
+  --text2:     #7c839e;
+  --text3:     #3d4260;
+  --accent:    #00e5a0;
+  --accent2:   #3d8eff;
+  --accent3:   #ff6b35;
+  --accent4:   #ffd60a;
+  --hot:       #ff4455;
+  --cold:      #4da6ff;
+  --r:         14px;
+  --r-sm:      8px;
+  --r-lg:      20px;
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.4);
+  --shadow:    0 8px 32px rgba(0,0,0,0.5);
+  --shadow-lg: 0 16px 64px rgba(0,0,0,0.6);
+  --font:      'Outfit', sans-serif;
+  --mono:      'JetBrains Mono', monospace;
 }
 [data-theme="light"] {
-  --bg: #f0f2f7;
-  --bg2: #ffffff;
-  --bg3: #e8ebf2;
-  --border: rgba(0,0,0,0.08);
-  --text: #1a1d2e;
-  --text2: #5a5f78;
-  --text3: #aaaabf;
-  --card-bg: #ffffff;
-  --card-border: rgba(0,0,0,0.07);
-  --shadow: 0 4px 32px rgba(0,0,0,0.1);
+  --bg:        #f2f4f9;
+  --bg2:       #ffffff;
+  --bg3:       #e8eaf2;
+  --bg4:       #d8dce8;
+  --border:    rgba(0,0,0,0.07);
+  --border2:   rgba(0,0,0,0.14);
+  --text:      #12141f;
+  --text2:     #5a5f7a;
+  --text3:     #aaafcc;
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow:    0 8px 32px rgba(0,0,0,0.1);
+  --shadow-lg: 0 16px 64px rgba(0,0,0,0.12);
 }
+
+/* =========================================================
+   RESET & BASE
+========================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
 body {
- font-family: 'Inter', sans-serif;
-
-  background:
-    radial-gradient(circle at top left, rgba(0,229,160,0.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(0,144,255,0.08), transparent 25%),
-    radial-gradient(circle at bottom center, rgba(255,107,53,0.05), transparent 30%),
-    linear-gradient(180deg, #07090d 0%, #0b0f16 100%);
-
-  background-attachment: fixed;
+  font-family: var(--font);
+  background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.5;
-
-  transition:
-    background 0.4s ease,
-    color 0.3s ease;
+  transition: background 0.35s, color 0.25s;
+  /* subtle noise texture */
+  background-image:
+    radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(0,229,160,.06) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 5%,  rgba(61,142,255,.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(255,107,53,.04) 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
-/* títulos mais modernos */
-.section-title,
-.summary-value,
-.score-number {
-  font-family: 'Space Grotesk', sans-serif;
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* =========================================================
+   TYPOGRAPHY HELPERS
+========================================================= */
+.mono { font-family: var(--mono); }
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  font-family: var(--mono);
 }
-/* HEADER */
+
+/* =========================================================
+   HEADER
+========================================================= */
 .header {
- position: sticky;
+  position: sticky;
   top: 0;
-  z-index: 100;
-
-  background: rgba(10,12,16,0.7);
-
-  backdrop-filter: blur(18px);
-
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-
-  padding: 0 32px;
-
-  height: 72px;
-
+  z-index: 200;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 32px;
+  background: rgba(8,9,13,.75);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
 }
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
-  color: #000;
+[data-theme="light"] .header {
+  background: rgba(242,244,249,.85);
 }
-.logo-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; }
-.logo-text span { color: var(--accent); }
-.header-right { display: flex; align-items: center; gap: 16px; }
-.status-badge {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; font-family: 'DM Mono', monospace;
-  color: var(--text2); padding: 6px 12px;
-  border: 1px solid var(--border); border-radius: 20px;
-}
-.status-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--text3);
-  transition: background 0.3s;
-}
-.status-dot.loading { background: var(--accent4); animation: pulse 1s infinite; }
-.status-dot.ok { background: var(--accent); }
-.status-dot.error { background: var(--hot); }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.theme-btn {
-  width: 36px; height: 36px; border-radius: 10px;
-  border: 1px solid var(--border); background: var(--bg2);
-  color: var(--text2); cursor: pointer; font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
-/* MAIN LAYOUT */
-.main { max-width: 1400px; margin: 0 auto; padding: 32px; }
-/* LOADING STATE */
-.loading-screen {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 60vh; gap: 24px;
-}
-.spinner {
-  width: 48px; height: 48px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
-.loading-progress {
-  width: 300px; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden;
-}
-.loading-bar {
-  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 2px; width: 0%; transition: width 0.5s ease;
-}
-/* ERROR STATE */
-.error-screen {
-  display: none; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 60vh; gap: 16px; text-align: center;
-}
-.error-screen.show { display: flex; }
-.error-icon { font-size: 48px; }
-.error-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
-.error-msg { color: var(--text2); font-size: 14px; max-width: 500px; line-height: 1.7; }
-.retry-btn {
-  padding: 10px 24px; background: var(--accent); color: #000;
-  border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
-  font-size: 14px; transition: opacity 0.2s;
-}
-.retry-btn:hover { opacity: 0.85; }
-/* DASHBOARD */
-.dashboard { display: none; }
-.dashboard.show { display: block; }
-/* SUMMARY ROW */
-.summary-row {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;
-}
-.summary-card {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.02),
-      rgba(255,255,255,0.01)
-    ),
-    var(--card-bg);
 
-  border: 1px solid rgba(255,255,255,0.05);
-
-  border-radius: var(--radius);
-
-  padding: 20px 24px;
-
+.logo {
   display: flex;
-  flex-direction: column;
-
-  gap: 4px;
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.03);
-
-  backdrop-filter: blur(12px);
-
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  align-items: center;
+  gap: 12px;
 }
-  .summary-card:hover {
-  transform: translateY(-4px);
-
-  border-color: rgba(0,229,160,0.15);
-
-  box-shadow:
-    0 14px 40px rgba(0,0,0,0.45),
-    0 0 0 1px rgba(0,229,160,0.05);
+.logo-mark {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 14px; color: #000;
+  letter-spacing: -.02em;
+  box-shadow: 0 0 20px rgba(0,229,160,.25);
 }
-  .summary-card:first-child {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(0,229,160,0.10),
-      rgba(0,229,160,0.02)
-    ),
-    var(--card-bg);
+.logo-name {
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -.03em;
+  line-height: 1;
 }
-.summary-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
-.summary-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
-.summary-sub { font-size: 12px; color: var(--text2); }
-/* SECTION TITLES */
-.section { margin-bottom: 32px; }
-.section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.section-title {
-  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-title .dot {
-  width: 8px; height: 8px; border-radius: 50%;
-}
-/* HEATMAP GRID */
-.score-result-main {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* controla o espaçamento geral */
-}
-  
-  #scoreSide {
-  flex:1;
-  min-width:260px;
-
-  background: var(--bg3);
-  border:1px solid var(--border);
-  border-radius:16px;
-
-  padding:20px;
-}
-.heatmap-card {
-  box-shadow: var(--shadow);
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 24px;
-}
-.heatmap-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
-  max-width: 500px;
-}
-  .score-grid {
-  display:grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap:10px;
-  max-width:280px;
-}
-  .score-layout {
-  display:flex;
-  gap:40px;
-  align-items:flex-start;
-  flex-wrap:wrap;
-}
-.heat-cell {
-  aspect-ratio: 1; border-radius: 12px; display: flex;
-  flex-direction: column; align-items: center; justify-content: center;
-  cursor: default; position: relative; transition: transform 0.15s;
-  border: 1px solid transparent;
-}
-.heat-cell:hover { transform: scale(1.08); z-index: 2; }
-.heat-num {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; line-height: 1;
-}
-.heat-count { font-size: 10px; font-family: 'DM Mono', monospace; opacity: 0.8; margin-top: 2px; }
-.heat-legend {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  margin-top: 20px; font-size: 12px; color: var(--text2);
-}
-.heat-legend-bar {
-  width: 160px; height: 8px; border-radius: 4px;
-  background: linear-gradient(90deg, var(--cold), var(--bg3), var(--hot));
-}
-/* TWO COL */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-/* PARITY CARD */
-.parity-card {
-  box-shadow: var(--shadow);
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 24px;
-}
-.parity-bars { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-.parity-row { display: flex; flex-direction: column; gap: 6px; }
-.parity-label {
-  display: flex; justify-content: space-between;
-  font-size: 13px; color: var(--text2);
-}
-.parity-label strong { color: var(--text); font-weight: 500; }
-.parity-track { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
-.parity-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
-/* RANKING TABLE */
-.rank-card {
-box-shadow: var(--shadow);
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 24px; overflow: hidden;
-}
-.rank-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.rank-item {
-  display: flex; align-items: center; gap: 12px; padding: 8px 12px;
-  border-radius: 8px; transition: background 0.15s;
-}
-.rank-item:hover { background: var(--bg3); }
-.rank-pos { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); width: 20px; }
-.rank-ball {
-  width: 32px; height: 32px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-  flex-shrink: 0;
-}
-.rank-bar-wrap { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-.rank-bar { height: 100%; border-radius: 3px; transition: width 1s ease; }
-.rank-val { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2); width: 50px; text-align: right; }
-/* DELAY TABLE */
-.delay-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px;
-}
-.delay-cell {
-  background: var(--bg3); border-radius: 10px; padding: 10px 8px;
-  text-align: center; border: 1px solid var(--card-border); transition: border-color 0.2s;
-}
-.delay-cell.overdue { border-color: var(--hot); }
-.delay-cell.warning { border-color: var(--accent4); }
-.delay-num {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
-  display: block;
-}
-.delay-ago { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text2); }
-/* CYCLE SECTION */
-.cycle-card {
-  box-shadow: var(--shadow);
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 24px;
-}
-.cycle-controls {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
-}
-.cycle-input {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; color: var(--text2);
-}
-.cycle-input input[type=number] {
-  width: 80px; padding: 7px 12px;
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; color: var(--text); font-size: 13px;
-  font-family: 'DM Mono', monospace; outline: none;
-  transition: border-color 0.2s;
-}
-.cycle-input input:focus { border-color: var(--accent2); }
-.cycle-groups { display: flex; flex-direction: column; gap: 16px; }
-.cycle-group {
-  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-}
-.cycle-group-header {
-  background: var(--bg3); padding: 10px 16px;
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 13px;
-}
-.cycle-group-title { font-family: 'Syne', sans-serif; font-weight: 600; }
-.cycle-group-body { padding: 12px 16px; }
-.cycle-nums-row {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;
-}
-.cycle-ball {
-  width: 36px; height: 36px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-  flex-shrink: 0;
-}
-.cycle-ball.seen { background: rgba(0,229,160,0.15); color: var(--accent); border: 1px solid rgba(0,229,160,0.3); }
-.cycle-ball.missing { background: rgba(255,77,77,0.15); color: var(--hot); border: 1px solid rgba(255,77,77,0.3); }
-.cycle-miss-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
-/* GENERATOR */
-.gen-card {
-  box-shadow: var(--shadow);
-  background: var(--card-bg); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 24px;
-}
-.gen-controls {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
-  margin-bottom: 24px;
-}
-.gen-control { display: flex; flex-direction: column; gap: 6px; }
-.gen-control label { font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
-.gen-select, .gen-input {
-  padding: 9px 14px;
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; color: var(--text); font-size: 13px;
-  font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer;
-  transition: border-color 0.2s;
-}
-.gen-select:focus, .gen-input:focus { border-color: var(--accent2); }
-.gen-btn {
-  padding: 11px 28px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border: none; border-radius: 10px;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
-  color: #000; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
-  align-self: flex-end;
-}
-.gen-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-.gen-btn:active { transform: translateY(0); }
-.gen-results { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-.gen-game {
-  background: var(--bg3); border-radius: 12px; padding: 14px 16px;
-  display: flex; flex-direction: column; gap: 8px;
-  border: 1px solid var(--card-border); animation: fadeIn 0.3s ease;
-}
-@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
-.gen-game-header {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 12px; font-family: 'DM Mono', monospace; color: var(--text2);
-}
-.gen-balls { display: flex; flex-wrap: wrap; gap: 6px; }
-.gen-ball {
-  width: 34px; height: 34px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  color: #000;
-}
-.copy-btn {
-  padding: 5px 12px; background: var(--bg2);
-  border: 1px solid var(--border); border-radius: 6px;
-  font-size: 11px; color: var(--text2); cursor: pointer;
-  font-family: 'DM Mono', monospace; transition: all 0.2s;
-}
-.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-/* DISCLAIMER */
-.disclaimer {
-  background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2);
-  border-radius: 10px; padding: 12px 16px;
-  font-size: 12px; color: var(--text2); line-height: 1.6;
-  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 32px;
-}
-.disclaimer-icon { flex-shrink: 0; margin-top: 1px; }
-/* LAST DRAWS */
-.draws-scroll { overflow-x: auto; padding-bottom: 8px; margin-top: 16px; }
-.draws-table {
-  border-collapse: collapse; width: 100%; min-width: 700px;
-  font-size: 13px;
-}
-.draws-table th {
-  text-align: left; padding: 8px 12px;
-  font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--text3); border-bottom: 1px solid var(--border);
-}
-.draws-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.draws-table tr:last-child td { border-bottom: none; }
-.draws-table tr:hover td { background: var(--bg3); }
-.draw-balls-row { display: flex; flex-wrap: wrap; gap: 4px; }
-.draw-ball-sm {
-  width: 24px; height: 24px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
-  background: var(--bg3); color: var(--text);
-  border: 1px solid var(--card-border);
-}
-/* FILTER TAGS */
-.filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.filter-tag {
-  padding: 5px 12px; border-radius: 20px; font-size: 12px;
-  border: 1px solid var(--border); background: var(--bg3);
-  color: var(--text2); cursor: pointer; transition: all 0.2s;
-  font-family: 'DM Mono', monospace;
-}
-.filter-tag.active {
-  background: rgba(0,229,160,0.12); border-color: var(--accent);
+.logo-name em {
+  font-style: normal;
   color: var(--accent);
 }
-/* scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg2); }
-::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+.logo-sub {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  letter-spacing: .08em;
+}
 
-  /* MULTI FILTERS */
-.multi-filters {
+.header-right {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
 }
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--text3);
+  flex-shrink: 0;
+  transition: background .3s;
+}
+.status-dot.loading { background: var(--accent4); animation: blink 1s ease infinite; }
+.status-dot.ok      { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.status-dot.error   { background: var(--hot); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
 
-.multi-tag {
-  position: relative;
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
   cursor: pointer;
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* =========================================================
+   MAIN WRAPPER
+========================================================= */
+.main {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 36px 28px;
 }
 
-.multi-tag input {
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  gap: 20px;
+}
+.spinner {
+  width: 44px; height: 44px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-family: var(--mono); font-size: 12px; color: var(--text2); }
+.progress-track {
+  width: 280px; height: 3px;
+  background: var(--bg3);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 99px;
+  width: 0%;
+  transition: width .5s ease;
+}
+
+.error-screen {
   display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  gap: 14px;
+  text-align: center;
+}
+.error-screen.show { display: flex; }
+.error-icon { font-size: 44px; }
+.error-title { font-size: 20px; font-weight: 700; }
+.error-msg { color: var(--text2); font-size: 13px; max-width: 440px; line-height: 1.7; }
+.retry-btn {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 13px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.retry-btn:hover { opacity: .85; }
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+.dashboard { display: none; }
+.dashboard.show { display: block; animation: fadeIn .4s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+/* =========================================================
+   DISCLAIMER BANNER
+========================================================= */
+.banner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  border-radius: var(--r);
+  border: 1px solid rgba(255,107,53,.2);
+  background: rgba(255,107,53,.06);
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 32px;
+}
+.banner strong { color: var(--text); }
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.s-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+}
+.s-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.s-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.s-card:hover::before { opacity: 1; }
+.s-card:nth-child(1)::before { background: var(--accent); }
+.s-card:nth-child(2)::before { background: var(--hot); }
+.s-card:nth-child(3)::before { background: var(--cold); }
+.s-card:nth-child(4)::before { background: var(--accent4); }
+
+.s-card .label { margin-bottom: 2px; }
+.s-value {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+.s-sub { font-size: 12px; color: var(--text2); }
+
+/* =========================================================
+   SECTION ANATOMY
+========================================================= */
+.section { margin-bottom: 28px; }
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  letter-spacing: -.01em;
+}
+.section-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
+/* =========================================================
+   CARD BASE
+========================================================= */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* =========================================================
+   GRID LAYOUTS
+========================================================= */
+.col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.col3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* =========================================================
+   HEATMAP
+========================================================= */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  max-width: 460px;
+}
+.heat-cell {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: transform .15s, box-shadow .15s;
+  border: 1px solid transparent;
+}
+.heat-cell:hover { transform: scale(1.06); box-shadow: var(--shadow); z-index: 1; }
+.heat-num {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.heat-count {
+  font-family: var(--mono);
+  font-size: 9px;
+  margin-top: 3px;
+  opacity: .75;
+}
+.heat-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font-size: 11px;
+  color: var(--text2);
+}
+.heat-legend-bar {
+  width: 120px; height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--cold), var(--bg4), var(--hot));
+}
+
+/* =========================================================
+   RANKING
+========================================================= */
+.rank-list { display: flex; flex-direction: column; gap: 6px; }
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--r-sm);
+  transition: background .15s;
+}
+.rank-item:hover { background: var(--bg3); }
+.rank-pos { font-family: var(--mono); font-size: 10px; color: var(--text3); width: 18px; }
+.rank-ball {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px;
+  flex-shrink: 0;
+}
+.rank-bar-wrap { flex: 1; height: 5px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+.rank-bar { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+.rank-val { font-family: var(--mono); font-size: 11px; color: var(--text2); width: 48px; text-align: right; }
+
+/* =========================================================
+   PARITY / BAR GROUPS
+========================================================= */
+.bar-group { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: flex; flex-direction: column; gap: 5px; }
+.bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); }
+.bar-label strong { color: var(--text); font-weight: 500; }
+.bar-track { height: 7px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+
+/* =========================================================
+   DELAY GRID
+========================================================= */
+.delay-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+}
+.delay-cell {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+  transition: border-color .2s;
+}
+.delay-cell.overdue  { border-color: rgba(255,68,85,.5);  background: rgba(255,68,85,.06); }
+.delay-cell.warning  { border-color: rgba(255,214,10,.4); background: rgba(255,214,10,.04); }
+.delay-num { font-size: 15px; font-weight: 800; display: block; letter-spacing: -.02em; }
+.delay-ago { font-family: var(--mono); font-size: 9px; color: var(--text2); display: block; margin-top: 2px; }
+
+/* =========================================================
+   CYCLE ANALYSIS
+========================================================= */
+.cycle-controls {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.cycle-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.cycle-field input[type=number] {
+  width: 72px;
+  padding: 7px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color .2s;
+}
+.cycle-field input:focus { border-color: var(--accent2); }
+
+.cycle-groups { display: flex; flex-direction: column; gap: 10px; }
+.cycle-group { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.cycle-group-header {
+  background: var(--bg3);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+.cycle-group-title { font-weight: 700; font-size: 13px; }
+.cycle-group-body { padding: 14px 16px; }
+.cycle-nums-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.cycle-ball {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px;
+}
+.cycle-ball.seen    { background: rgba(0,229,160,.12); color: var(--accent); border: 1px solid rgba(0,229,160,.25); }
+.cycle-ball.missing { background: rgba(255,68,85,.12); color: var(--hot);   border: 1px solid rgba(255,68,85,.25); }
+.cycle-miss-label { font-size: 11px; color: var(--text2); margin-top: 8px; }
+
+/* =========================================================
+   GENERATOR
+========================================================= */
+.gen-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.gen-control { display: flex; flex-direction: column; gap: 6px; }
+
+.gen-select, .gen-input {
+  padding: 9px 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.gen-select:focus, .gen-input:focus { border-color: var(--accent2); }
+
+.multi-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.multi-tag { position: relative; cursor: pointer; }
+.multi-tag input { display: none; }
 .multi-tag span {
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  padding: 10px 14px;
-
-  border-radius: 999px;
-
+  padding: 7px 13px;
+  border-radius: 99px;
   background: var(--bg3);
-
   border: 1px solid var(--border);
-
   color: var(--text2);
-
-  font-size: 12px;
-
-  font-family: 'DM Mono', monospace;
-
-  transition:
-    background 0.2s,
-    border-color 0.2s,
-    color 0.2s,
-    transform 0.15s;
+  font-size: 11px;
+  font-family: var(--mono);
+  transition: all .15s;
+  white-space: nowrap;
 }
-
-.multi-tag:hover span {
-  border-color: var(--accent2);
-  color: var(--text);
-  transform: translateY(-1px);
-}
-
+.multi-tag:hover span { border-color: var(--accent2); color: var(--text); }
 .multi-tag input:checked + span {
-  background: rgba(0,229,160,0.12);
+  background: rgba(0,229,160,.1);
   border-color: var(--accent);
   color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(0,229,160,0.15);
 }
 
-  .score-ball {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+.gen-btn {
+  padding: 11px 26px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+  align-self: flex-end;
+  letter-spacing: -.01em;
+}
+.gen-btn:hover { opacity: .9; transform: translateY(-1px); }
+.gen-btn:active { transform: translateY(0); }
 
+.gen-results { display: flex; flex-direction: column; gap: 10px; }
+.gen-game {
   background: var(--bg3);
   border: 1px solid var(--border);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-family:'Space Grotesk',sans-serif;
-  font-weight:600;
-  font-size:14px;
-
-  cursor:pointer;
-  transition:all .2s;
+  border-radius: var(--r);
+  padding: 14px 16px;
+  animation: fadeIn .25s ease;
+}
+.gen-game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+}
+.gen-balls { display: flex; flex-wrap: wrap; gap: 5px; }
+.gen-ball {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #000;
+  letter-spacing: -.02em;
 }
 
-.score-ball:hover {
-  border-color: var(--accent);
-  transform: scale(1.08);
+.copy-btn {
+  padding: 5px 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .2s;
 }
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
 
+/* =========================================================
+   SCORE SECTION
+========================================================= */
+.score-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.score-ball {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px;
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: -.02em;
+}
+.score-ball:hover { border-color: var(--accent); transform: scale(1.06); }
 .score-ball.active {
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#000;
-  border:none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #000; border: none;
+  box-shadow: 0 0 12px rgba(0,229,160,.3);
 }
 
-.score-summary {
-  background: linear-gradient(
-    135deg,
-    rgba(0,229,160,.12),
-    rgba(0,144,255,.12)
-  );
+.score-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 
-  border:1px solid var(--border);
-
-  border-radius:16px;
-
-  padding:24px;
-
-  margin-bottom:20px;
+.score-preview {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px;
+  min-height: 80px;
+}
+.preview-balls { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.preview-ball {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 11px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #000;
 }
 
-.score-main {
-  display:flex;
-  align-items:center;
-  gap:24px;
-  flex-wrap:wrap;
+/* Score result */
+.score-result { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; margin-top: 20px; }
+
+.score-ring-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
 }
-
-.score-circle {
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  background:conic-gradient(
-    var(--accent) calc(var(--score)*1%),
-    var(--bg3) 0
-  );
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  position:relative;
+.score-ring {
+  width: 110px; height: 110px;
+  position: relative;
+  flex-shrink: 0;
 }
-
-.score-circle::before {
-  content:'';
-  position:absolute;
-  inset:10px;
-  border-radius:50%;
-  background:var(--card-bg);
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring-val {
+  position: absolute;
+  inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
+.score-ring-num { font-size: 30px; font-weight: 900; letter-spacing: -.04em; }
+.score-ring-lbl { font-size: 9px; font-family: var(--mono); color: var(--text2); text-transform: uppercase; letter-spacing: .08em; }
 
-.score-number {
-  position:relative;
-  z-index:2;
-  font-family:'Syne',sans-serif;
-  font-size:34px;
-  font-weight:800;
-}
-
-.score-label {
-  font-size:13px;
-  color:var(--text2);
-  margin-top:4px;
-}
-
-.score-list {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  margin-top:20px;
-}
-
+.score-items { display: flex; flex-direction: column; gap: 8px; }
 .score-item {
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.score-item-bar-wrap { flex: 1; height: 4px; background: var(--bg4); border-radius: 99px; overflow: hidden; }
+.score-item-bar { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(.22,1,.36,1); }
+.score-item-name { font-size: 12px; font-weight: 600; width: 90px; flex-shrink: 0; }
+.score-item-detail { font-size: 11px; color: var(--text2); width: 80px; text-align: right; font-family: var(--mono); flex-shrink: 0; }
+
+.historical-stats {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  margin-top: 14px;
+}
+.hist-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.hist-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 8px;
+  text-align: center;
+}
+.hist-pts { font-family: var(--mono); font-size: 10px; color: var(--text2); }
+.hist-pct { font-size: 15px; font-weight: 800; letter-spacing: -.03em; margin-top: 2px; }
+
+/* =========================================================
+   LAST DRAWS TABLE
+========================================================= */
+.draws-scroll { overflow-x: auto; }
+.draws-table { border-collapse: collapse; width: 100%; min-width: 650px; font-size: 12px; }
+.draws-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+}
+.draws-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.draws-table tr:last-child td { border-bottom: none; }
+.draws-table tr:hover td { background: var(--bg3); }
+
+.draw-balls-row { display: flex; flex-wrap: wrap; gap: 3px; }
+.draw-ball {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 9px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
 }
 
-.score-item-top {
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
-  gap:12px;
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 960px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .col2, .col3 { grid-template-columns: 1fr; }
+  .score-layout { grid-template-columns: 1fr; }
 }
-
-.score-item-title {
-  font-size:13px;
-  font-weight:600;
-}
-
-.score-item-value {
-  font-family:'DM Mono',monospace;
-  font-size:12px;
-  color:var(--text2);
-}
-
-
-/* Responsive */
-@media(max-width: 900px) {
-  .summary-row { grid-template-columns: repeat(2,1fr); }
-  .two-col { grid-template-columns: 1fr; }
-  .three-col { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
   .main { padding: 16px; }
-}
-@media(max-width: 500px) {
-  .summary-row { grid-template-columns: 1fr 1fr; }
-  .heatmap-grid { grid-template-columns: repeat(5,1fr); }
+  .header { padding: 0 16px; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .hist-grid { grid-template-columns: repeat(3, 1fr); }
 }
 </style>
- 
 </head>
 <body>
 
+<!-- HEADER -->
 <header class="header">
   <div class="logo">
-    <div class="logo-icon">ES</div>
-    <div class="logo-text">ESTRATÉGIA DA <span>SORTE</span></div>
+    <div class="logo-mark">ES</div>
+    <div>
+      <div class="logo-name">ESTRATÉGIA DA <em>SORTE</em></div>
+      <div class="logo-sub">Dashboard · Lotofácil</div>
+    </div>
   </div>
   <div class="header-right">
-    <div class="status-badge">
+    <div class="status-pill">
       <span class="status-dot loading" id="statusDot"></span>
-      <span id="statusText">Carregando dados...</span>
+      <span id="statusText">Carregando...</span>
     </div>
-    <button class="theme-btn" id="themeBtn" title="Alternar tema">🌙</button>
+    <button class="icon-btn" id="themeBtn" title="Alternar tema">🌙</button>
   </div>
 </header>
 
@@ -705,14 +813,14 @@ box-shadow: var(--shadow);
   <!-- LOADING -->
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
-    <div class="loading-text" id="loadingMsg">Buscando concursos da API da Caixa...</div>
-    <div class="loading-progress"><div class="loading-bar" id="loadingBar"></div></div>
+    <div class="loading-text" id="loadingMsg">Buscando dados da Lotofácil…</div>
+    <div class="progress-track"><div class="progress-fill" id="loadingBar"></div></div>
   </div>
 
   <!-- ERROR -->
   <div class="error-screen" id="errorScreen">
     <div class="error-icon">⚠️</div>
-    <div class="error-title">Não foi possível carregar os dados</div>
+    <div class="error-title">Não foi possível carregar</div>
     <div class="error-msg" id="errorMsg"></div>
     <button class="retry-btn" onclick="initDashboard()">Tentar novamente</button>
   </div>
@@ -720,216 +828,173 @@ box-shadow: var(--shadow);
   <!-- DASHBOARD -->
   <div class="dashboard" id="dashboard">
 
-    <div class="disclaimer">
-      <span class="disclaimer-icon">⚠️</span>
+    <!-- BANNER -->
+    <div class="banner">
+      <span>⚠️</span>
       <span><strong>Aviso importante:</strong> Este dashboard é uma ferramenta de análise estatística histórica. Cada sorteio é um evento independente — padrões passados <strong>não aumentam matematicamente suas chances</strong>. A probabilidade base é fixa. Use com consciência.</span>
     </div>
 
     <!-- SUMMARY -->
-    <div class="summary-row">
-      <div class="summary-card">
-        <span class="summary-label">Total de Concursos</span>
-        <span class="summary-value" id="sumTotal" style="color:var(--accent)">—</span>
-        <span class="summary-sub" id="sumRange">—</span>
+    <div class="summary-grid">
+      <div class="s-card">
+        <div class="label">Total de Concursos</div>
+        <div class="s-value" id="sumTotal" style="color:var(--accent)">—</div>
+        <div class="s-sub" id="sumRange">—</div>
       </div>
-      <div class="summary-card">
-        <span class="summary-label">Dezena Mais Sorteada</span>
-        <span class="summary-value" id="sumHot" style="color:var(--hot)">—</span>
-        <span class="summary-sub" id="sumHotCount">—</span>
+      <div class="s-card">
+        <div class="label">Dezena Mais Sorteada</div>
+        <div class="s-value" id="sumHot" style="color:var(--hot)">—</div>
+        <div class="s-sub" id="sumHotCount">—</div>
       </div>
-      <div class="summary-card">
-        <span class="summary-label">Dezena Menos Sorteada</span>
-        <span class="summary-value" id="sumCold" style="color:var(--cold)">—</span>
-        <span class="summary-sub" id="sumColdCount">—</span>
+      <div class="s-card">
+        <div class="label">Dezena Menos Sorteada</div>
+        <div class="s-value" id="sumCold" style="color:var(--cold)">—</div>
+        <div class="s-sub" id="sumColdCount">—</div>
       </div>
-      <div class="summary-card">
-        <span class="summary-label">Último Concurso</span>
-        <span class="summary-value" id="sumLast" style="color:var(--accent4)">—</span>
-        <span class="summary-sub" id="sumLastDate">—</span>
+      <div class="s-card">
+        <div class="label">Último Concurso</div>
+        <div class="s-value" id="sumLast" style="color:var(--accent4)">—</div>
+        <div class="s-sub" id="sumLastDate">—</div>
       </div>
     </div>
-    
-<!-- SCORE ANALÍTICO -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-title">
-      <span class="dot" style="background:var(--accent3)"></span>
-      Score Analítico
+
+    <!-- SCORE ANALÍTICO -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-dot" style="background:var(--accent3)"></span>
+          Score Analítico
+        </div>
+      </div>
+      <div class="card">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.7">
+          Monte um jogo e veja como ele se posiciona estatisticamente dentro dos padrões históricos da Lotofácil. Selecione de 15 a 20 dezenas.
+        </p>
+
+        <div class="score-layout">
+          <!-- Esquerda: grid de seleção -->
+          <div>
+            <div class="score-grid" id="scoreGrid"></div>
+            <div class="score-actions">
+              <button class="gen-btn" onclick="runAnalyticalScore()">Analisar Jogo</button>
+              <button class="copy-btn" onclick="clearScoreGame()">Limpar</button>
+            </div>
+          </div>
+
+          <!-- Direita: preview + resultado -->
+          <div>
+            <div class="score-preview" id="scoreSide">
+              <div class="label">Seu jogo</div>
+              <div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>
+            </div>
+            <div id="scoreResults"></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="gen-card">
-
-    <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7">
-      Monte um jogo e veja como ele se posiciona estatisticamente
-      dentro dos padrões históricos da Lotofácil.
-    </div>
-
-<div class="score-layout">
-
-  <div>
-
-    <div id="scoreGrid" class="score-grid"></div>
-
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
-      <button class="gen-btn" onclick="runAnalyticalScore()">
-        Analisar Jogo
-      </button>
-
-      <button class="copy-btn" onclick="clearScoreGame()">
-        Limpar
-      </button>
-    </div>
-
-  </div>
-
-  <div>
-    <div id="scoreSide"></div>
-
-    <!-- 🔥 RESULTADO AGORA AO LADO -->
-    <div id="scoreResults" style="margin-top:20px"></div>
-    
-  </div>
-
-</div>
-    
-   
-    <!-- RANKING + PARITY -->
-    <div class="two-col section">
-      <!-- TOP/BOTTOM RANKING -->
+    <!-- RANKING -->
+    <div class="col2 section">
       <div>
-        <div class="section-header">
-          <div class="section-title"><span class="dot" style="background:var(--hot)"></span>Top 10 — Mais Sorteadas</div>
+        <div class="section-head">
+          <div class="section-title"><span class="section-dot" style="background:var(--hot)"></span>Top 10 — Mais Sorteadas</div>
         </div>
-        <div class="rank-card">
-          <div class="rank-list" id="rankTop"></div>
-        </div>
+        <div class="card"><div class="rank-list" id="rankTop"></div></div>
       </div>
       <div>
-        <div class="section-header">
-          <div class="section-title"><span class="dot" style="background:var(--cold)"></span>Top 10 — Menos Sorteadas</div>
+        <div class="section-head">
+          <div class="section-title"><span class="section-dot" style="background:var(--cold)"></span>Top 10 — Menos Sorteadas</div>
         </div>
-        <div class="rank-card">
-          <div class="rank-list" id="rankBottom"></div>
+        <div class="card"><div class="rank-list" id="rankBottom"></div></div>
+      </div>
+    </div>
+
+    <!-- REPETIÇÃO + SOMA -->
+    <div class="col2 section">
+      <div>
+        <div class="section-head">
+          <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Repetição entre Concursos</div>
+        </div>
+        <div class="card">
+          <div id="repeatSummary" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px"></div>
+          <div class="bar-group" id="repeatBars"></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-head">
+          <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Soma das Dezenas</div>
+        </div>
+        <div class="card">
+          <div id="sumAnalysis" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px"></div>
+          <div class="bar-group" id="sumBars"></div>
         </div>
       </div>
     </div>
 
-    <!-- PARITY + DELAY -->
-    <div class="two-col section">
-      <!-- REPETIÇÃO -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-title">
-      <span class="dot" style="background:var(--accent3)"></span>
-      Repetição entre Concursos
-    </div>
-  </div>
-
-  <div class="parity-card">
-
-    <div id="repeatSummary"
-      style="
-        margin-bottom:20px;
-        font-size:13px;
-        color:var(--text2);
-        line-height:1.7;
-      ">
-    </div>
-
-    <div class="parity-bars" id="repeatBars"></div>
-
-  </div>
-</div>
-  
-      <!-- SOMA DAS DEZENAS -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-title">
-      <span class="dot" style="background:var(--accent4)"></span>
-      Soma das Dezenas
-    </div>
-  </div>
-
-  <div class="parity-card">
-
-    <div id="sumAnalysis"
-      style="
-        margin-bottom:20px;
-        font-size:13px;
-        color:var(--text2);
-        line-height:1.7;
-      ">
-    </div>
-
-    <div class="parity-bars" id="sumBars"></div>
-
-  </div>
-</div>
-      <!-- PARITY -->
+    <!-- PARIDADE + ATRASO -->
+    <div class="col2 section">
       <div>
-        <div class="section-header">
-          <div class="section-title"><span class="dot" style="background:var(--accent2)"></span>Distribuição Par / Ímpar</div>
+        <div class="section-head">
+          <div class="section-title"><span class="section-dot" style="background:var(--accent2)"></span>Distribuição Par / Ímpar</div>
         </div>
-        <div class="parity-card">
-          <div id="parityStats" style="font-size:13px;color:var(--text2);margin-bottom:12px"></div>
-          <div class="parity-bars" id="parityBars"></div>
+        <div class="card">
+          <div id="parityStats" style="font-size:13px;color:var(--text2);margin-bottom:14px"></div>
+          <div class="bar-group" id="parityBars"></div>
         </div>
       </div>
-      <!-- DELAY -->
       <div>
-        <div class="section-header">
-          <div class="section-title"><span class="dot" style="background:var(--accent4)"></span>Atraso — Dezenas Frias</div>
+        <div class="section-head">
+          <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Atraso — Dezenas Frias</div>
         </div>
-        <div class="parity-card">
-          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde o último sorteio da dezena. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div>
+        <div class="card">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:14px">Concursos desde o último sorteio da dezena. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div>
           <div class="delay-grid" id="delayGrid"></div>
         </div>
       </div>
     </div>
 
-    <!-- CYCLE ANALYSIS -->
+    <!-- CICLO -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-title"><span class="dot" style="background:var(--accent3)"></span>Análise de Ciclo das Dezenas</div>
+      <div class="section-head">
+        <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Análise de Ciclo das Dezenas</div>
       </div>
-      <div class="cycle-card">
-        <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7">
-          A teoria do ciclo afirma que a cada <strong>N concursos</strong>, todas as 25 dezenas aparecem ao menos uma vez. Abaixo, veja os grupos de concursos e quais dezenas <span style="color:var(--hot)">não apareceram</span> em cada janela.
-        </div>
+      <div class="card">
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:18px">
+          A cada <strong>N concursos</strong>, verifique quais dezenas <span style="color:var(--hot)">não apareceram</span> em cada janela.
+        </p>
         <div class="cycle-controls">
-          <div class="cycle-input">
-            <label style="font-size:12px;color:var(--text2)">Tamanho do ciclo:</label>
+          <div class="cycle-field">
+            <span>Tamanho do ciclo:</span>
             <input type="number" id="cycleSize" value="4" min="2" max="20" onchange="renderCycle()">
-            <span style="font-size:12px;color:var(--text2)">concursos</span>
+            <span>concursos</span>
           </div>
-          <div class="cycle-input">
-            <label style="font-size:12px;color:var(--text2)">Exibir últimos:</label>
+          <div class="cycle-field">
+            <span>Exibir últimos:</span>
             <input type="number" id="cycleCount" value="10" min="2" max="50" onchange="renderCycle()">
-            <span style="font-size:12px;color:var(--text2)">ciclos</span>
+            <span>ciclos</span>
           </div>
         </div>
         <div class="cycle-groups" id="cycleGroups"></div>
       </div>
     </div>
 
-    <!-- GENERATOR -->
+    <!-- GERADOR -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-title"><span class="dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div>
+      <div class="section-head">
+        <div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div>
       </div>
-      <div class="gen-card">
+      <div class="card">
         <div class="gen-controls">
           <div class="gen-control">
-            <label>Qtd de jogos</label>
+            <div class="label">Qtd de jogos</div>
             <input class="gen-input" type="number" id="genQty" value="5" min="1" max="50">
           </div>
           <div class="gen-control">
-            <label>Núm. por jogo</label>
+            <div class="label">Núm. por jogo</div>
             <input class="gen-input" type="number" id="genNums" value="15" min="15" max="20">
           </div>
           <div class="gen-control">
-            <label>Filtro de paridade</label>
+            <div class="label">Filtro de paridade</div>
             <select class="gen-select" id="genParity">
               <option value="any">Qualquer</option>
               <option value="more_odd">Mais ímpares (8+)</option>
@@ -938,39 +1003,17 @@ box-shadow: var(--shadow);
             </select>
           </div>
           <div class="gen-control">
-          <label>Priorizar dezenas</label>
-
-  <div class="multi-filters" id="genFreq">
-
-    <label class="multi-tag">
-      <input type="checkbox" value="hot">
-      <span>Quentes</span>
-    </label>
-
-    <label class="multi-tag">
-      <input type="checkbox" value="cold">
-      <span>Frias</span>
-    </label>
-
-    <label class="multi-tag">
-      <input type="checkbox" value="delayed">
-      <span>Atrasadas</span>
-    </label>
-
-    <label class="multi-tag">
-      <input type="checkbox" value="mixed">
-      <span>Mix</span>
-    </label>
-
-    <label class="multi-tag">
-      <input type="checkbox" value="cycle_missing">
-      <span>Ciclo Atual</span>
-    </label>
-
-  </div>
+            <div class="label">Priorizar dezenas</div>
+            <div class="multi-filters" id="genFreq">
+              <label class="multi-tag"><input type="checkbox" value="hot"><span>Quentes</span></label>
+              <label class="multi-tag"><input type="checkbox" value="cold"><span>Frias</span></label>
+              <label class="multi-tag"><input type="checkbox" value="delayed"><span>Atrasadas</span></label>
+              <label class="multi-tag"><input type="checkbox" value="mixed"><span>Mix</span></label>
+              <label class="multi-tag"><input type="checkbox" value="cycle_missing"><span>Ciclo Atual</span></label>
+            </div>
           </div>
           <div class="gen-control">
-            <label>Mín. consecutivos</label>
+            <div class="label">Mín. consecutivos</div>
             <select class="gen-select" id="genConsec">
               <option value="any">Qualquer</option>
               <option value="0">Nenhum par</option>
@@ -986,12 +1029,12 @@ box-shadow: var(--shadow);
       </div>
     </div>
 
-    <!-- LAST DRAWS -->
+    <!-- ÚLTIMOS CONCURSOS -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-title"><span class="dot" style="background:var(--accent2)"></span>Últimos 20 Concursos</div>
+      <div class="section-head">
+        <div class="section-title"><span class="section-dot" style="background:var(--accent2)"></span>Últimos 20 Concursos</div>
       </div>
-      <div class="rank-card">
+      <div class="card">
         <div class="draws-scroll">
           <table class="draws-table">
             <thead>
@@ -1013,721 +1056,90 @@ box-shadow: var(--shadow);
 </main>
 
 <script>
+/* ============================================================
+   STATE
+============================================================ */
+let allDraws = [];
+let freq     = {};
+let delay    = {};
 let analyticalGame = [];
-  let selectedSimulation = [];
-function renderScoreGrid() {
 
-  const grid = document.getElementById('scoreGrid');
-
-  if (!grid) return;
-
-  grid.innerHTML = '';
-
-  for (let i = 1; i <= 25; i++) {
-
-    const div = document.createElement('div');
-
-    div.className = 'score-ball';
-
-    div.textContent = String(i).padStart(2,'0');
-
-    div.onclick = () => toggleScoreNumber(i, div);
-
-    grid.appendChild(div);
-  }
-
-}
-function toggleScoreNumber(num, el) {
-
-  const idx = analyticalGame.indexOf(num);
-
-  if (idx >= 0) {
-
-    analyticalGame.splice(idx, 1);
-    el.classList.remove('active');
-
-  } else {
-
-    if (analyticalGame.length >= 20) return;
-
-    analyticalGame.push(num);
-    el.classList.add('active');
-  }
-
-  // 🔥 ESSA LINHA FALTAVA
-  updateScorePreview(analyticalGame);
-}
-  function clearScoreGame() {
-
-  analyticalGame = [];
-
-  document
-    .querySelectorAll('.score-ball')
-    .forEach(el => el.classList.remove('active'));
-
-  document.getElementById('scoreResults').innerHTML = '';
-
-  // 🔥 limpar preview também
-  updateScorePreview([]);
-}
- function updateScorePreview(game) {
-  const side = document.getElementById('scoreSide');
-
-  if (!side) return; // 🔥 evita erro silencioso
-
-  if (game.length === 0) {
-    side.innerHTML = `
-      <div style="color:var(--text2);font-size:13px">
-        Selecione dezenas para montar seu jogo
-      </div>
-    `;
-    return;
-  }
-
-  side.innerHTML = `
-    <div style="font-size:12px;color:var(--text3);margin-bottom:8px">
-      Seu jogo
-    </div>
-
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
-      ${[...game].sort((a,b)=>a-b).map(n => `
-        <div class="gen-ball">
-          ${String(n).padStart(2,'0')}
-        </div>
-      `).join('')}
-    </div>
-
-    <div style="font-size:12px;color:var(--text2)">
-      ${game.length} dezenas selecionadas
-    </div>
-  `;
-}
-
-  function runAnalyticalScore() {
-
-  if (analyticalGame.length < 15) {
-
-    alert('Selecione ao menos 15 dezenas.');
-
-    return;
-  }
-
-  const game = [...analyticalGame].sort((a,b)=>a-b);
-
-  // =========================
-  // PARIDADE
-  // =========================
-
-  const evens = game.filter(n => n % 2 === 0).length;
-  const odds = game.length - evens;
-
-  let parityScore = 100;
-
-  if (
-    (evens === 7 && odds === 8) ||
-    (evens === 8 && odds === 7)
-  ) {
-    parityScore = 100;
-  } else if (
-    (evens === 6 && odds === 9) ||
-    (evens === 9 && odds === 6)
-  ) {
-    parityScore = 75;
-  } else {
-    parityScore = 40;
-  }
-
-  // =========================
-  // SOMA
-  // =========================
-
-  const sum = game.reduce((a,b)=>a+b,0);
-
-  let sumScore = 100;
-
-  if (sum >= 180 && sum <= 220) {
-    sumScore = 100;
-  } else if (sum >= 160 && sum <= 240) {
-    sumScore = 70;
-  } else {
-    sumScore = 35;
-  }
-
-  // =========================
-  // CONSECUTIVOS
-  // =========================
-
-  let consecutivePairs = 0;
-
-  for (let i = 0; i < game.length - 1; i++) {
-
-    if (game[i+1] - game[i] === 1) {
-      consecutivePairs++;
-    }
-  }
-
-  let consecScore = 100;
-
-  if (consecutivePairs >= 2 && consecutivePairs <= 4) {
-    consecScore = 100;
-  } else if (consecutivePairs <= 5) {
-    consecScore = 70;
-  } else {
-    consecScore = 40;
-  }
-
-  // =========================
-  // REPETIDAS
-  // =========================
-
-  const lastDraw = allDraws[allDraws.length - 1];
-
-  const repeated = game.filter(n =>
-    lastDraw.dezenas.includes(n)
-  ).length;
-
-  let repeatScore = 100;
-
-  if (repeated >= 8 && repeated <= 10) {
-    repeatScore = 100;
-  } else if (repeated >= 6 && repeated <= 12) {
-    repeatScore = 70;
-  } else {
-    repeatScore = 40;
-  }
-
-  // =========================
-  // QUENTES
-  // =========================
-
-  const sortedFreq = Object
-    .entries(freq)
-    .sort((a,b)=>b[1]-a[1]);
-
-  const hot = sortedFreq
-    .slice(0,12)
-    .map(([n]) => +n);
-
-  const hotCount = game.filter(n => hot.includes(n)).length;
-
-  let hotScore = 100;
-
-  if (hotCount >= 5 && hotCount <= 9) {
-    hotScore = 100;
-  } else if (hotCount >= 3) {
-    hotScore = 70;
-  } else {
-    hotScore = 40;
-  }
-
-  // =========================
-  // SCORE FINAL
-  // =========================
-
-  const finalScore = Math.round(
-    (
-      parityScore +
-      sumScore +
-      consecScore +
-      repeatScore +
-      hotScore
-    ) / 5
-  );
-
-  const historical = calculateHistoricalHits(game);
-  let level = 'Fraco';
-
-  if (finalScore >= 85) level = 'Excelente';
-  else if (finalScore >= 70) level = 'Forte';
-  else if (finalScore >= 55) level = 'Médio';
-
-  // =========================
-  // RENDER
-  // =========================
-
-  const results = document.getElementById('scoreResults');
-
-  results.innerHTML = `
-
-  <div class="score-result-main">
-  
-  <!-- BLOCO PRINCIPAL -->
-  <div class="score-highlight">
-
-    <div style="font-size:13px;color:var(--text2);margin-bottom:12px">
-      Incidência histórica deste padrão de jogo
-    </div>
-
-    <div class="sim-stats" style="margin-bottom:16px">
-      <div>11 pts: ${historical.p11}%</div>
-      <div>12 pts: ${historical.p12}%</div>
-      <div>13 pts: ${historical.p13}%</div>
-      <div>14 pts: ${historical.p14}%</div>
-      <div>15 pts: ${historical.p15}%</div>
-    </div>
-
-    <div class="score-main">
-
-      <div class="score-circle" style="--score:${finalScore}">
-        <div class="score-number">${finalScore}</div>
-      </div>
-
-      <div>
-        <div style="font-size:28px;font-weight:800;">
-          ${level}
-        </div>
-
-        <div class="score-label">
-          Score Estatístico do Jogo
-        </div>
-
-        <div style="margin-top:10px;font-size:12px;color:var(--text2)">
-          ${game.map(n => String(n).padStart(2,'0')).join(' • ')}
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- BLOCO DETALHES -->
-  <div class="score-details">
-
-${makeScoreItem(
-  'Paridade',
-  `${evens}P / ${odds}I`,
-  parityScore,
-  'Equilíbrio entre pares e ímpares'
-)}
-
-${makeScoreItem(
-  'Soma Total',
-  `${sum}`,
-  sumScore,
-  'Faixa histórica média'
-)}
-
-${makeScoreItem(
-  'Sequências',
-  `${consecutivePairs} pares`,
-  consecScore,
-  'Números consecutivos no jogo'
-)}
-
-${makeScoreItem(
-  'Repetidas',
-  `${repeated} dezenas`,
-  repeatScore,
-  'Comparação com último concurso'
-)}
-
-${makeScoreItem(
-  'Quentes',
-  `${hotCount} dezenas`,
-  hotScore,
-  'Frequência histórica das dezenas'
-)}
-  </div>
-
-</div>
-`;
-}
-
-  function makeScoreItem(title, value, score, desc) {
-
-  let color = 'var(--hot)';
-
-  if (score >= 85) color = 'var(--accent)';
-  else if (score >= 70) color = 'var(--accent4)';
-
-  return `
-
-    <div class="score-item">
-
-      <div class="score-item-top">
-
-        <div>
-          <div class="score-item-title">
-            ${title}
-          </div>
-
-          <div
-            style="
-              font-size:12px;
-              color:var(--text2);
-              margin-top:2px;
-            "
-          >
-            ${desc}
-          </div>
-        </div>
-
-        <div class="score-item-value">
-          ${value}
-        </div>
-
-      </div>
-
-      </div>
-
-  `;
-}
-
-  function calculateHistoricalHits(game) {
-
-  let hits11 = 0;
-  let hits12 = 0;
-  let hits13 = 0;
-  let hits14 = 0;
-  let hits15 = 0;
-
-  for (const draw of allDraws) {
-
-    const hits = draw.dezenas.filter(n =>
-      game.includes(n)
-    ).length;
-
-    if (hits >= 11) hits11++;
-    if (hits >= 12) hits12++;
-    if (hits >= 13) hits13++;
-    if (hits >= 14) hits14++;
-    if (hits >= 15) hits15++;
-  }
-
-  const total = allDraws.length;
-
-  return {
-    p11: ((hits11 / total) * 100).toFixed(2),
-    p12: ((hits12 / total) * 100).toFixed(2),
-    p13: ((hits13 / total) * 100).toFixed(2),
-    p14: ((hits14 / total) * 100).toFixed(3),
-    p15: ((hits15 / total) * 100).toFixed(4),
-  };
-}
-
-   // ============================================================
-// SOMA DAS DEZENAS
-// ============================================================
-function renderSumAnalysis() {
-
-  const ranges = {
-    '120-139': 0,
-    '140-159': 0,
-    '160-179': 0,
-    '180-199': 0,
-    '200-219': 0,
-    '220+': 0
-  };
-
-  const sums = [];
-
-  for (const d of allDraws) {
-
-    const total = d.dezenas.reduce((a,b) => a+b, 0);
-
-    sums.push(total);
-
-    if (total < 140) ranges['120-139']++;
-    else if (total < 160) ranges['140-159']++;
-    else if (total < 180) ranges['160-179']++;
-    else if (total < 200) ranges['180-199']++;
-    else if (total < 220) ranges['200-219']++;
-    else ranges['220+']++;
-  }
-
-  const avg =
-    sums.reduce((a,b)=>a+b,0) / sums.length;
-
-  const lastSum =
-    sums[sums.length - 1];
-
-  const maxCount =
-    Math.max(...Object.values(ranges));
-
-  const mostCommon =
-    Object.entries(ranges)
-      .sort((a,b)=>b[1]-a[1])[0];
-
-  document.getElementById('sumAnalysis').innerHTML = `
-    Último concurso teve soma
-    <strong style="color:var(--accent4)">
-      ${lastSum}
-    </strong>.<br>
-
-    Média histórica:
-    <strong style="color:var(--accent)">
-      ${avg.toFixed(1)}
-    </strong>.<br>
-
-    Faixa mais comum:
-    <strong style="color:var(--accent2)">
-      ${mostCommon[0]}
-    </strong>.
-  `;
-
-  const bars = document.getElementById('sumBars');
-
-  bars.innerHTML = '';
-
-  Object.entries(ranges).forEach(([label, count]) => {
-
-    const pct =
-      (count / allDraws.length * 100).toFixed(1);
-
-    const width =
-      (count / maxCount * 100).toFixed(0);
-
-    const row = document.createElement('div');
-
-    row.className = 'parity-row';
-
-    row.innerHTML = `
-      <div class="parity-label">
-        <strong>${label}</strong>
-        <span>${count}x (${pct}%)</span>
-      </div>
-
-      <div class="parity-track">
-        <div
-          class="parity-fill"
-          style="
-            width:${width}%;
-            background:
-              linear-gradient(
-                90deg,
-                var(--accent4),
-                var(--accent3)
-              );
-          ">
-        </div>
-      </div>
-    `;
-
-    bars.appendChild(row);
-  });
-}
-  // ============================================================
-// REPETIÇÃO ENTRE CONCURSOS
-// ============================================================
-function renderRepeatStats() {
-
-  const repeatMap = {};
-
-  for (let i = 1; i < allDraws.length; i++) {
-
-    const prev = allDraws[i - 1].dezenas;
-    const current = allDraws[i].dezenas;
-
-    const repeated = current.filter(n => prev.includes(n)).length;
-
-    repeatMap[repeated] = (repeatMap[repeated] || 0) + 1;
-  }
-
-  const entries = Object.entries(repeatMap)
-    .map(([k,v]) => ({
-      repeated: Number(k),
-      count: v
-    }))
-    .sort((a,b) => a.repeated - b.repeated);
-
-  const total = entries.reduce((s,e) => s + e.count, 0);
-
-  const lastDraw = allDraws[allDraws.length - 1];
-  const prevDraw = allDraws[allDraws.length - 2];
-
-  const lastRepeated = lastDraw.dezenas.filter(
-    n => prevDraw.dezenas.includes(n)
-  ).length;
-
-  const avg =
-    entries.reduce((s,e) => s + (e.repeated * e.count), 0)
-    / total;
-
-  const maxCount = Math.max(...entries.map(e => e.count));
-
-  document.getElementById('repeatSummary').innerHTML = `
-    Último concurso repetiu
-    <strong style="color:var(--accent)">
-      ${lastRepeated} dezenas
-    </strong>
-    do anterior.<br>
-
-    Média histórica:
-    <strong style="color:var(--accent2)">
-      ${avg.toFixed(1)} dezenas repetidas
-    </strong>
-    por concurso.
-  `;
-
-  const bars = document.getElementById('repeatBars');
-
-  bars.innerHTML = '';
-
-  entries.forEach((e, i) => {
-
-    const pct = (e.count / total * 100).toFixed(1);
-
-    const width = (e.count / maxCount * 100).toFixed(0);
-
-    const row = document.createElement('div');
-
-    row.className = 'parity-row';
-
-    row.innerHTML = `
-      <div class="parity-label">
-        <strong>${e.repeated} repetidas</strong>
-        <span>${e.count}x (${pct}%)</span>
-      </div>
-
-      <div class="parity-track">
-        <div
-          class="parity-fill"
-          style="
-            width:${width}%;
-            background:
-              linear-gradient(
-                90deg,
-                var(--accent3),
-                var(--accent)
-              );
-          ">
-        </div>
-      </div>
-    `;
-
-    bars.appendChild(row);
-  });
-}
-// ============================================================
-// STATE
-// ============================================================
-let allDraws = [];      // [{concurso, data, dezenas:[...sorted]}, ...]
-let freq = {};          // {num: count}
-let delay = {};         // {num: contests_since_last}
-
-// ============================================================
-// THEME
-// ============================================================
-const themeBtn = document.getElementById('themeBtn');
-themeBtn.addEventListener('click', () => {
+/* ============================================================
+   THEME
+============================================================ */
+document.getElementById('themeBtn').addEventListener('click', () => {
   const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  themeBtn.textContent = isDark ? '🌙' : '☀️';
+  const dark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', dark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = dark ? '🌙' : '☀️';
 });
 
+/* ============================================================
+   INIT
+============================================================ */
 async function initDashboard() {
+  document.getElementById('errorScreen').classList.remove('show');
+  document.getElementById('loadingScreen').style.display = 'flex';
+  document.getElementById('dashboard').classList.remove('show');
 
   try {
-
-    setStatus('loading', 'Carregando planilha...');
+    setStatus('loading', 'Carregando planilha…');
     setBar(20);
 
     const response = await fetch('./lotofacil.csv');
-
-    if (!response.ok) {
-      throw new Error('CSV não encontrado');
-    }
+    if (!response.ok) throw new Error('CSV não encontrado (certifique-se de que lotofacil.csv está na mesma pasta)');
 
     const text = await response.text();
-
     setBar(50);
 
     const rows = text.trim().split('\n');
+    allDraws = rows.slice(1).map(line => {
+      const cols = line.split(',');
+      const dezenas = [cols[2],cols[3],cols[4],cols[5],cols[6],cols[7],cols[8],
+        cols[9],cols[10],cols[11],cols[12],cols[13],cols[14],cols[15],cols[16]]
+        .map(n => Number(n)).filter(n => !isNaN(n)).sort((a,b) => a-b);
+      return { concurso: Number(cols[0]), data: cols[1], dezenas };
+    }).filter(item => item.dezenas.length === 15).sort((a,b) => a.concurso - b.concurso);
 
-    allDraws = rows
-      .slice(1)
-      .map(line => {
+    if (allDraws.length === 0) throw new Error('Nenhum concurso encontrado no arquivo');
 
-        const cols = line.split(',');
-
-        const dezenas = [
-          cols[2],
-          cols[3],
-          cols[4],
-          cols[5],
-          cols[6],
-          cols[7],
-          cols[8],
-          cols[9],
-          cols[10],
-          cols[11],
-          cols[12],
-          cols[13],
-          cols[14],
-          cols[15],
-          cols[16]
-        ]
-        .map(n => Number(n))
-        .filter(n => !isNaN(n))
-        .sort((a,b) => a-b);
-
-        return {
-          concurso: Number(cols[0]),
-          data: cols[1],
-          dezenas
-        };
-
-      })
-      .filter(item => item.dezenas.length === 15)
-      .sort((a,b) => a.concurso - b.concurso);
-
-    if (allDraws.length === 0) {
-      throw new Error('Nenhum concurso encontrado');
-    }
-
+    setBar(80);
+    processData();
     setBar(100);
 
-    processData();
-    console.log('TOTAL:', allDraws.length);
-console.log('ÚLTIMO:', allDraws[allDraws.length - 1].concurso);
-    
     renderAll();
-   
+
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('dashboard').classList.add('show');
-
     setStatus('ok', `${allDraws.length} concursos carregados`);
 
   } catch(e) {
-
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('errorScreen').classList.add('show');
-
     document.getElementById('errorMsg').textContent = e.message;
-
     setStatus('error', 'Erro ao carregar');
-
     console.error(e);
   }
 }
 
 function setStatus(state, text) {
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
-
-  dot.className = 'status-dot ' + state;
-  txt.textContent = text;
+  document.getElementById('statusDot').className = 'status-dot ' + state;
+  document.getElementById('statusText').textContent = text;
 }
-
 function setBar(pct) {
   document.getElementById('loadingBar').style.width = pct + '%';
 }
 
-// ============================================================
-// PROCESS
-// ============================================================
+/* ============================================================
+   PROCESS DATA
+============================================================ */
 function processData() {
-   allDraws.sort((a, b) => a.concurso - b.concurso);
+  allDraws.sort((a,b) => a.concurso - b.concurso);
   freq = {};
   for (let i = 1; i <= 25; i++) freq[i] = 0;
-  for (const d of allDraws) {
-    for (const n of d.dezenas) freq[n] = (freq[n] || 0) + 1;
-  }
+  for (const d of allDraws) for (const n of d.dezenas) freq[n] = (freq[n]||0)+1;
 
-  // delay: how many contests since last appearance
   delay = {};
-  for (let i = 1; i <= 25; i++) delay[i] = allDraws.length; // default = never seen
   const last = [...allDraws].reverse();
   for (let i = 1; i <= 25; i++) {
     const idx = last.findIndex(d => d.dezenas.includes(i));
@@ -1735,9 +1147,9 @@ function processData() {
   }
 }
 
-// ============================================================
-// RENDER ALL
-// ============================================================
+/* ============================================================
+   RENDER ALL
+============================================================ */
 function renderAll() {
   renderSummary();
   renderRanking();
@@ -1750,35 +1162,35 @@ function renderAll() {
   renderLastDraws();
 }
 
-// ============================================================
-// SUMMARY
-// ============================================================
+/* ============================================================
+   SUMMARY
+============================================================ */
 function renderSummary() {
   const sorted = Object.entries(freq).sort((a,b) => b[1]-a[1]);
-  const hotNum = sorted[0][0]; const hotCnt = sorted[0][1];
-  const coldNum = sorted[sorted.length-1][0]; const coldCnt = sorted[sorted.length-1][1];
-  const first = allDraws[0]; const last = allDraws[allDraws.length-1];
+  const [hotNum, hotCnt]  = sorted[0];
+  const [coldNum, coldCnt] = sorted[sorted.length-1];
+  const first = allDraws[0];
+  const last  = allDraws[allDraws.length-1];
 
-  document.getElementById('sumTotal').textContent = allDraws.length.toLocaleString('pt-BR');
-  document.getElementById('sumRange').textContent = `Concurso ${first.concurso} → ${last.concurso}`;
-  document.getElementById('sumHot').textContent = String(hotNum).padStart(2,'0');
+  document.getElementById('sumTotal').textContent   = allDraws.length.toLocaleString('pt-BR');
+  document.getElementById('sumRange').textContent   = `Concurso ${first.concurso} → ${last.concurso}`;
+  document.getElementById('sumHot').textContent     = String(hotNum).padStart(2,'0');
   document.getElementById('sumHotCount').textContent = `Saiu ${hotCnt}x (${(hotCnt/allDraws.length*100).toFixed(1)}%)`;
-  document.getElementById('sumCold').textContent = String(coldNum).padStart(2,'0');
+  document.getElementById('sumCold').textContent    = String(coldNum).padStart(2,'0');
   document.getElementById('sumColdCount').textContent = `Saiu ${coldCnt}x (${(coldCnt/allDraws.length*100).toFixed(1)}%)`;
-  document.getElementById('sumLast').textContent = `#${last.concurso}`;
+  document.getElementById('sumLast').textContent    = `#${last.concurso}`;
   document.getElementById('sumLastDate').textContent = formatDate(last.data);
 }
 
-
-// ============================================================
-// RANKING
-// ============================================================
+/* ============================================================
+   RANKING
+============================================================ */
 function renderRanking() {
   const sorted = Object.entries(freq).map(([n,c]) => ({n:+n,c})).sort((a,b) => b.c-a.c);
   const maxC = sorted[0].c;
 
-  function makeList(items, containerId, colorFn) {
-    const el = document.getElementById(containerId);
+  function makeList(items, id, colorFn) {
+    const el = document.getElementById(id);
     el.innerHTML = '';
     items.slice(0,10).forEach((item, i) => {
       const color = colorFn(i);
@@ -1795,296 +1207,397 @@ function renderRanking() {
     });
   }
 
-  makeList(sorted, 'rankTop', i => {
-    const colors = ['#ff4d4d','#ff6b35','#ffd60a','#00e5a0','#0090ff'];
-    return colors[Math.min(i, colors.length-1)];
-  });
-  makeList([...sorted].reverse(), 'rankBottom', i => '#4da6ff');
+  makeList(sorted, 'rankTop', i => ['#ff4455','#ff6b35','#ffd60a','#00e5a0','#3d8eff'][Math.min(i,4)]);
+  makeList([...sorted].reverse(), 'rankBottom', () => '#4da6ff');
 }
 
-// ============================================================
-// PARITY
-// ============================================================
+/* ============================================================
+   PARITY
+============================================================ */
 function renderParity() {
   const pairs = [
-    {label:'7 pares / 8 ímpares', even:7, odd:8},
-    {label:'8 pares / 7 ímpares', even:8, odd:7},
-    {label:'6 pares / 9 ímpares', even:6, odd:9},
-    {label:'9 pares / 6 ímpares', even:9, odd:6},
-    {label:'5 pares / 10 ímpares', even:5, odd:10},
-    {label:'10 pares / 5 ímpares', even:10, odd:5},
-    {label:'Outros', even:-1, odd:-1},
+    {label:'7P / 8I', even:7, odd:8},{label:'8P / 7I', even:8, odd:7},
+    {label:'6P / 9I', even:6, odd:9},{label:'9P / 6I', even:9, odd:6},
+    {label:'5P / 10I', even:5, odd:10},{label:'10P / 5I', even:10, odd:5},{label:'Outros', even:-1, odd:-1}
   ];
-
   const counts = {};
   pairs.forEach(p => counts[p.label] = 0);
-
   for (const d of allDraws) {
     const evens = d.dezenas.filter(n => n%2===0).length;
-    const odds = 15 - evens;
-    const found = pairs.find(p => p.even === evens && p.odd === odds);
-    if (found) counts[found.label]++;
-    else counts['Outros']++;
+    const found = pairs.find(p => p.even===evens && p.odd===(15-evens));
+    if (found) counts[found.label]++; else counts['Outros']++;
   }
-
-  const statsEl = document.getElementById('parityStats');
-  const totalAvgEven = allDraws.reduce((s,d) => s + d.dezenas.filter(n=>n%2===0).length, 0) / allDraws.length;
-  statsEl.innerHTML = `Média histórica: <strong>${totalAvgEven.toFixed(1)} pares</strong> e <strong>${(15-totalAvgEven).toFixed(1)} ímpares</strong> por concurso.`;
+  const avgEven = allDraws.reduce((s,d) => s+d.dezenas.filter(n=>n%2===0).length,0)/allDraws.length;
+  document.getElementById('parityStats').innerHTML =
+    `Média histórica: <strong>${avgEven.toFixed(1)} pares</strong> e <strong>${(15-avgEven).toFixed(1)} ímpares</strong> por concurso.`;
 
   const barsEl = document.getElementById('parityBars');
   barsEl.innerHTML = '';
-  const sortedPairs = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5);
-  const maxCnt = sortedPairs[0][1];
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5);
+  const maxCnt = sorted[0][1];
   const colors = ['var(--accent2)','var(--accent)','var(--accent4)','var(--accent3)','var(--text3)'];
-
-  sortedPairs.forEach(([label, cnt], i) => {
-    const pct = (cnt / maxCnt * 100).toFixed(0);
-    const pctOfAll = (cnt / allDraws.length * 100).toFixed(1);
+  sorted.forEach(([label, cnt], i) => {
+    const pct = (cnt/maxCnt*100).toFixed(0);
     const row = document.createElement('div');
-    row.className = 'parity-row';
+    row.className = 'bar-row';
     row.innerHTML = `
-      <div class="parity-label">
-        <strong>${label}</strong>
-        <span>${cnt}x (${pctOfAll}%)</span>
-      </div>
-      <div class="parity-track">
-        <div class="parity-fill" style="width:${pct}%;background:${colors[i]}"></div>
-      </div>
+      <div class="bar-label"><strong>${label}</strong><span>${cnt}x (${(cnt/allDraws.length*100).toFixed(1)}%)</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
     `;
     barsEl.appendChild(row);
   });
 }
 
-// ============================================================
-// DELAY
-// ============================================================
+/* ============================================================
+   DELAY
+============================================================ */
 function renderDelay() {
-  const avgDelay = Object.values(delay).reduce((a,b)=>a+b,0) / 25;
+  const avgDelay = Object.values(delay).reduce((a,b)=>a+b,0)/25;
   const sorted = Object.entries(delay).map(([n,d]) => ({n:+n,d})).sort((a,b) => b.d-a.d);
-
   const grid = document.getElementById('delayGrid');
   grid.innerHTML = '';
-  sorted.forEach(({n, d}) => {
+  sorted.forEach(({n,d}) => {
+    const cls = d>avgDelay*1.5 ? ' overdue' : d>avgDelay ? ' warning' : '';
+    const color = d>avgDelay*1.5 ? 'var(--hot)' : d>avgDelay ? 'var(--accent4)' : 'var(--text)';
     const cell = document.createElement('div');
-    cell.className = 'delay-cell' + (d > avgDelay * 1.5 ? ' overdue' : d > avgDelay ? ' warning' : '');
-    cell.innerHTML = `
-      <span class="delay-num" style="color:${d > avgDelay*1.5 ? 'var(--hot)' : d > avgDelay ? 'var(--accent4)' : 'var(--text)'}">${String(n).padStart(2,'0')}</span>
-      <span class="delay-ago">${d === 0 ? 'último' : d+'c atrás'}</span>
-    `;
+    cell.className = 'delay-cell'+cls;
+    cell.innerHTML = `<span class="delay-num" style="color:${color}">${String(n).padStart(2,'0')}</span><span class="delay-ago">${d===0?'último':d+'c atrás'}</span>`;
     grid.appendChild(cell);
   });
 }
 
-// ============================================================
-// CYCLE ANALYSIS
-// ============================================================
+/* ============================================================
+   REPEAT STATS
+============================================================ */
+function renderRepeatStats() {
+  const repeatMap = {};
+  for (let i = 1; i < allDraws.length; i++) {
+    const repeated = allDraws[i].dezenas.filter(n => allDraws[i-1].dezenas.includes(n)).length;
+    repeatMap[repeated] = (repeatMap[repeated]||0)+1;
+  }
+  const entries = Object.entries(repeatMap).map(([k,v]) => ({repeated:+k,count:v})).sort((a,b)=>a.repeated-b.repeated);
+  const total = entries.reduce((s,e)=>s+e.count,0);
+  const lastRepeated = allDraws[allDraws.length-1].dezenas.filter(n=>allDraws[allDraws.length-2].dezenas.includes(n)).length;
+  const avg = entries.reduce((s,e)=>s+(e.repeated*e.count),0)/total;
+  const maxCount = Math.max(...entries.map(e=>e.count));
+
+  document.getElementById('repeatSummary').innerHTML =
+    `Último concurso repetiu <strong style="color:var(--accent)">${lastRepeated} dezenas</strong> do anterior.<br>Média histórica: <strong style="color:var(--accent2)">${avg.toFixed(1)} dezenas repetidas</strong> por concurso.`;
+
+  const bars = document.getElementById('repeatBars');
+  bars.innerHTML = '';
+  entries.forEach(e => {
+    const pct = (e.count/total*100).toFixed(1);
+    const w = (e.count/maxCount*100).toFixed(0);
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label"><strong>${e.repeated} repetidas</strong><span>${e.count}x (${pct}%)</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:linear-gradient(90deg,var(--accent3),var(--accent))"></div></div>
+    `;
+    bars.appendChild(row);
+  });
+}
+
+/* ============================================================
+   SUM ANALYSIS
+============================================================ */
+function renderSumAnalysis() {
+  const ranges = {'120–139':0,'140–159':0,'160–179':0,'180–199':0,'200–219':0,'220+':0};
+  const sums = [];
+  for (const d of allDraws) {
+    const s = d.dezenas.reduce((a,b)=>a+b,0);
+    sums.push(s);
+    if (s<140) ranges['120–139']++;
+    else if (s<160) ranges['140–159']++;
+    else if (s<180) ranges['160–179']++;
+    else if (s<200) ranges['180–199']++;
+    else if (s<220) ranges['200–219']++;
+    else ranges['220+']++;
+  }
+  const avg = sums.reduce((a,b)=>a+b,0)/sums.length;
+  const lastSum = sums[sums.length-1];
+  const mostCommon = Object.entries(ranges).sort((a,b)=>b[1]-a[1])[0];
+  const maxCount = Math.max(...Object.values(ranges));
+
+  document.getElementById('sumAnalysis').innerHTML =
+    `Último concurso: soma <strong style="color:var(--accent4)">${lastSum}</strong>. Média histórica: <strong style="color:var(--accent)">${avg.toFixed(1)}</strong>. Faixa mais comum: <strong style="color:var(--accent2)">${mostCommon[0]}</strong>.`;
+
+  const bars = document.getElementById('sumBars');
+  bars.innerHTML = '';
+  Object.entries(ranges).forEach(([label, count]) => {
+    const w = (count/maxCount*100).toFixed(0);
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label"><strong>${label}</strong><span>${count}x (${(count/allDraws.length*100).toFixed(1)}%)</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:linear-gradient(90deg,var(--accent4),var(--accent3))"></div></div>
+    `;
+    bars.appendChild(row);
+  });
+}
+
+/* ============================================================
+   SCORE GRID
+============================================================ */
+function renderScoreGrid() {
+  const grid = document.getElementById('scoreGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  for (let i = 1; i <= 25; i++) {
+    const div = document.createElement('div');
+    div.className = 'score-ball';
+    div.textContent = String(i).padStart(2,'0');
+    div.onclick = () => toggleScoreNumber(i, div);
+    grid.appendChild(div);
+  }
+}
+
+function toggleScoreNumber(num, el) {
+  const idx = analyticalGame.indexOf(num);
+  if (idx >= 0) { analyticalGame.splice(idx,1); el.classList.remove('active'); }
+  else { if (analyticalGame.length >= 20) return; analyticalGame.push(num); el.classList.add('active'); }
+  updateScorePreview(analyticalGame);
+}
+
+function clearScoreGame() {
+  analyticalGame = [];
+  document.querySelectorAll('.score-ball').forEach(el => el.classList.remove('active'));
+  document.getElementById('scoreResults').innerHTML = '';
+  updateScorePreview([]);
+}
+
+function updateScorePreview(game) {
+  const side = document.getElementById('scoreSide');
+  if (!side) return;
+  if (game.length === 0) {
+    side.innerHTML = `<div class="label">Seu jogo</div><div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>`;
+    return;
+  }
+  side.innerHTML = `
+    <div class="label" style="margin-bottom:10px">Seu jogo · ${game.length} dezenas</div>
+    <div class="preview-balls">
+      ${[...game].sort((a,b)=>a-b).map(n=>`<div class="preview-ball">${String(n).padStart(2,'0')}</div>`).join('')}
+    </div>
+  `;
+}
+
+function runAnalyticalScore() {
+  if (analyticalGame.length < 15) { alert('Selecione ao menos 15 dezenas.'); return; }
+  const game = [...analyticalGame].sort((a,b)=>a-b);
+
+  const evens = game.filter(n=>n%2===0).length, odds = game.length-evens;
+  let parityScore = evens===7&&odds===8||evens===8&&odds===7 ? 100 : evens===6||evens===9 ? 75 : 40;
+
+  const sum = game.reduce((a,b)=>a+b,0);
+  let sumScore = sum>=180&&sum<=220 ? 100 : sum>=160&&sum<=240 ? 70 : 35;
+
+  let consecPairs = 0;
+  for (let i=0;i<game.length-1;i++) if(game[i+1]-game[i]===1) consecPairs++;
+  let consecScore = consecPairs>=2&&consecPairs<=4 ? 100 : consecPairs<=5 ? 70 : 40;
+
+  const lastDraw = allDraws[allDraws.length-1];
+  const repeated = game.filter(n=>lastDraw.dezenas.includes(n)).length;
+  let repeatScore = repeated>=8&&repeated<=10 ? 100 : repeated>=6&&repeated<=12 ? 70 : 40;
+
+  const sortedFreq = Object.entries(freq).sort((a,b)=>b[1]-a[1]);
+  const hot = sortedFreq.slice(0,12).map(([n])=>+n);
+  const hotCount = game.filter(n=>hot.includes(n)).length;
+  let hotScore = hotCount>=5&&hotCount<=9 ? 100 : hotCount>=3 ? 70 : 40;
+
+  const finalScore = Math.round((parityScore+sumScore+consecScore+repeatScore+hotScore)/5);
+  const level = finalScore>=85 ? 'Excelente' : finalScore>=70 ? 'Forte' : finalScore>=55 ? 'Médio' : 'Fraco';
+  const levelColor = finalScore>=85 ? 'var(--accent)' : finalScore>=70 ? 'var(--accent4)' : 'var(--hot)';
+
+  const historical = calculateHistoricalHits(game);
+
+  // SVG ring
+  const r=48, cx=55, cy=55, circ=2*Math.PI*r;
+  const dash = (finalScore/100)*circ;
+
+  document.getElementById('scoreResults').innerHTML = `
+    <div class="score-result" style="margin-top:22px">
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--bg4)" stroke-width="9"/>
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${levelColor}"
+              stroke-width="9" stroke-linecap="round"
+              stroke-dasharray="${dash} ${circ}"
+              style="transition:stroke-dasharray 1.2s cubic-bezier(.22,1,.36,1)"/>
+          </svg>
+          <div class="score-ring-val">
+            <div class="score-ring-num" style="color:${levelColor}">${finalScore}</div>
+            <div class="score-ring-lbl">score</div>
+          </div>
+        </div>
+        <div style="font-size:18px;font-weight:800;color:${levelColor};letter-spacing:-.02em">${level}</div>
+        <div style="font-size:11px;color:var(--text2);text-align:center">${game.map(n=>String(n).padStart(2,'0')).join(' · ')}</div>
+      </div>
+
+      <div>
+        <div class="score-items">
+          ${makeScoreItem('Paridade', `${evens}P / ${odds}I`, parityScore)}
+          ${makeScoreItem('Soma', String(sum), sumScore)}
+          ${makeScoreItem('Consecutivos', `${consecPairs} pares`, consecScore)}
+          ${makeScoreItem('Repetidas', `${repeated} dez.`, repeatScore)}
+          ${makeScoreItem('Quentes', `${hotCount} dez.`, hotScore)}
+        </div>
+
+        <div class="historical-stats">
+          <div class="label">Incidência histórica deste padrão</div>
+          <div class="hist-grid">
+            ${[['11',historical.p11],['12',historical.p12],['13',historical.p13],['14',historical.p14],['15',historical.p15]].map(([pts,pct])=>`
+              <div class="hist-item">
+                <div class="hist-pts">${pts} pts</div>
+                <div class="hist-pct" style="color:${+pct>5?'var(--accent)':+pct>1?'var(--accent4)':'var(--text2)'}">${pct}%</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function makeScoreItem(name, detail, score) {
+  const color = score>=85 ? 'var(--accent)' : score>=70 ? 'var(--accent4)' : 'var(--hot)';
+  return `
+    <div class="score-item">
+      <div class="score-item-name">${name}</div>
+      <div class="score-item-bar-wrap">
+        <div class="score-item-bar" style="width:${score}%;background:${color}"></div>
+      </div>
+      <div class="score-item-detail">${detail}</div>
+    </div>
+  `;
+}
+
+function calculateHistoricalHits(game) {
+  let h11=0,h12=0,h13=0,h14=0,h15=0;
+  for (const draw of allDraws) {
+    const hits = draw.dezenas.filter(n=>game.includes(n)).length;
+    if(hits>=11)h11++; if(hits>=12)h12++; if(hits>=13)h13++; if(hits>=14)h14++; if(hits>=15)h15++;
+  }
+  const t = allDraws.length;
+  return {p11:(h11/t*100).toFixed(2),p12:(h12/t*100).toFixed(2),p13:(h13/t*100).toFixed(2),p14:(h14/t*100).toFixed(3),p15:(h15/t*100).toFixed(4)};
+}
+
+/* ============================================================
+   CYCLE ANALYSIS
+============================================================ */
 function renderCycle() {
-  const size = parseInt(document.getElementById('cycleSize').value) || 4;
+  const size  = parseInt(document.getElementById('cycleSize').value)  || 4;
   const count = parseInt(document.getElementById('cycleCount').value) || 10;
-
+  const total = Math.ceil(allDraws.length/size);
+  const start = Math.max(0, total-count);
   const groups = [];
-  const totalGroups = Math.ceil(allDraws.length / size);
-  const startIdx = Math.max(0, totalGroups - count);
 
-  for (let g = startIdx; g < totalGroups; g++) {
-   const start = g * size;
-const end = Math.min((g + 1) * size, allDraws.length);
-
-const slice = allDraws.slice(start, end);
-    const seen = new Set(slice.flatMap(d => d.dezenas));
+  for (let g=start; g<total; g++) {
+    const slice = allDraws.slice(g*size, Math.min((g+1)*size, allDraws.length));
+    const seen = new Set(slice.flatMap(d=>d.dezenas));
     const missing = [];
-    for (let i = 1; i <= 25; i++) if (!seen.has(i)) missing.push(i);
-    groups.push({
-      incomplete: slice.length < size,
-      idx: g+1,
-      from: slice[0]?.concurso,
-      to: slice[slice.length-1]?.concurso,
-      seen: [...seen].sort((a,b)=>a-b),
-      missing
-    });
+    for (let i=1;i<=25;i++) if(!seen.has(i)) missing.push(i);
+    groups.push({ idx:g+1, from:slice[0]?.concurso, to:slice[slice.length-1]?.concurso,
+      seen:[...seen].sort((a,b)=>a-b), missing, incomplete:slice.length<size });
   }
 
   const el = document.getElementById('cycleGroups');
   el.innerHTML = '';
   [...groups].reverse().forEach(g => {
-    const completePct = (g.seen.length / 25 * 100).toFixed(0);
     const div = document.createElement('div');
     div.className = 'cycle-group';
-    const seenBalls = g.seen.map(n =>
-      `<div class="cycle-ball seen">${String(n).padStart(2,'0')}</div>`
-    ).join('');
-    const missBalls = g.missing.map(n =>
-      `<div class="cycle-ball missing">${String(n).padStart(2,'0')}</div>`
-    ).join('');
+    const seenBalls = g.seen.map(n=>`<div class="cycle-ball seen">${String(n).padStart(2,'0')}</div>`).join('');
+    const missBalls = g.missing.map(n=>`<div class="cycle-ball missing">${String(n).padStart(2,'0')}</div>`).join('');
     div.innerHTML = `
       <div class="cycle-group-header">
-        <span class="cycle-group-title">
-  Ciclo #${g.idx}
-  ${g.incomplete ? ' · 🔄 Em andamento' : ''}
-  &nbsp;·&nbsp;
-  Concursos ${g.from}–${g.to}
-</span>
-        <span style="font-size:12px;font-family:'DM Mono',monospace;color:${g.missing.length===0?'var(--accent)':'var(--hot)'}">
-          ${g.seen.length}/25 dezenas (${(g.seen.length/25*100).toFixed(0)}%)
+        <span class="cycle-group-title">Ciclo #${g.idx}${g.incomplete?' · 🔄 Em andamento':''} &nbsp;·&nbsp; Concursos ${g.from}–${g.to}</span>
+        <span style="font-size:11px;font-family:var(--mono);color:${g.missing.length===0?'var(--accent)':'var(--hot)'}">
+          ${g.seen.length}/25 (${(g.seen.length/25*100).toFixed(0)}%)
         </span>
       </div>
       <div class="cycle-group-body">
         <div class="cycle-nums-row">${seenBalls}</div>
-        ${g.missing.length > 0 ? `
-          <div class="cycle-miss-label">❌ Não apareceram neste ciclo:</div>
-          <div class="cycle-nums-row" style="margin-top:8px">${missBalls}</div>
-        ` : `<div class="cycle-miss-label" style="color:var(--accent)">✅ Ciclo completo — todas as 25 dezenas apareceram!</div>`}
+        ${g.missing.length>0
+          ? `<div class="cycle-miss-label" style="margin-top:10px">❌ Não apareceram:</div>
+             <div class="cycle-nums-row" style="margin-top:6px">${missBalls}</div>`
+          : `<div class="cycle-miss-label" style="color:var(--accent);margin-top:8px">✅ Ciclo completo — todas as 25 dezenas apareceram!</div>`
+        }
       </div>
     `;
     el.appendChild(div);
   });
 }
 
-// ============================================================
-// GENERATOR
-// ============================================================
+/* ============================================================
+   GENERATOR
+============================================================ */
 function generateGames() {
-  const qty = Math.min(50, Math.max(1, parseInt(document.getElementById('genQty').value) || 5));
-  const nums = Math.min(20, Math.max(15, parseInt(document.getElementById('genNums').value) || 15));
-  const parity = document.getElementById('genParity').value;
-  const freqFilter = Array.from(
-  document.querySelectorAll('#genFreq input:checked')
-).map(el => el.value);
+  const qty     = Math.min(50, Math.max(1, parseInt(document.getElementById('genQty').value)||5));
+  const nums    = Math.min(20, Math.max(15, parseInt(document.getElementById('genNums').value)||15));
+  const parity  = document.getElementById('genParity').value;
+  const freqFilter = Array.from(document.querySelectorAll('#genFreq input:checked')).map(el=>el.value);
   const consecFilter = document.getElementById('genConsec').value;
 
-  // Build pool based on frequency filter
-  const sorted = Object.entries(freq).map(([n,c]) => ({n:+n,c})).sort((a,b) => b.c-a.c);
+  const sorted = Object.entries(freq).map(([n,c])=>({n:+n,c})).sort((a,b)=>b.c-a.c);
   const hot = sorted.slice(0,12).map(x=>x.n);
   const cold = sorted.slice(13).map(x=>x.n);
   const delayedNums = Object.entries(delay).sort((a,b)=>+b[1]-+a[1]).slice(0,12).map(([n])=>+n);
-  // dezenas faltantes do ciclo atual
-const cycleSize = parseInt(document.getElementById('cycleSize').value) || 4;
-
-const remainder = allDraws.length % cycleSize;
-
-let currentCycleDraws;
-
-if (remainder === 0) {
-  currentCycleDraws = allDraws.slice(-cycleSize);
-} else {
-  currentCycleDraws = allDraws.slice(-remainder);
-}
-
-const seenInCurrentCycle = new Set(
-  currentCycleDraws.flatMap(d => d.dezenas)
-);
-
-const missingCycleNums = [];
-
-for (let i = 1; i <= 25; i++) {
-  if (!seenInCurrentCycle.has(i)) {
-    missingCycleNums.push(i);
-  }
-}
+  const cycleSize = parseInt(document.getElementById('cycleSize').value)||4;
+  const remainder = allDraws.length%cycleSize;
+  const currentSlice = allDraws.slice(remainder===0?-cycleSize:-remainder);
+  const currentSeen = new Set(currentSlice.flatMap(d=>d.dezenas));
+  const cycleMissing = [];
+  for(let i=1;i<=25;i++) if(!currentSeen.has(i)) cycleMissing.push(i);
 
   const games = [];
   let attempts = 0;
-  while (games.length < qty && attempts < 5000) {
+  while (games.length<qty && attempts<5000) {
     attempts++;
-    let pool = Array.from({length:25}, (_,i) => i+1);
+    let weighted = Array.from({length:25},(_,i)=>i+1);
+    if(freqFilter.includes('hot'))          weighted.push(...hot,...hot);
+    if(freqFilter.includes('cold'))         weighted.push(...cold,...cold);
+    if(freqFilter.includes('delayed'))      weighted.push(...delayedNums,...delayedNums);
+    if(freqFilter.includes('mixed'))        weighted.push(...hot.slice(0,6),...cold.slice(0,6));
+    if(freqFilter.includes('cycle_missing'))weighted.push(...cycleMissing,...cycleMissing,...cycleMissing);
 
- // Frequency bias: weighted shuffle
-let weighted = [...pool];
-
-// ciclo atual incompleto
-const currentCycleSize = parseInt(document.getElementById('cycleSize').value) || 4;
-
-const currentSlice = allDraws.slice(-currentCycleSize);
-
-const currentSeen = new Set(
-  currentSlice.flatMap(d => d.dezenas)
-);
-
-const cycleMissing = [];
-
-for (let i = 1; i <= 25; i++) {
-  if (!currentSeen.has(i)) {
-    cycleMissing.push(i);
-  }
-}
-
-// aplicar pesos acumulativos
-if (freqFilter.includes('hot')) {
-  weighted.push(...hot, ...hot);
-}
-
-if (freqFilter.includes('cold')) {
-  weighted.push(...cold, ...cold);
-}
-
-if (freqFilter.includes('delayed')) {
-  weighted.push(...delayedNums, ...delayedNums);
-}
-
-if (freqFilter.includes('mixed')) {
-  weighted.push(...hot.slice(0, 6));
-  weighted.push(...cold.slice(0, 6));
-}
-
-if (freqFilter.includes('cycle_missing')) {
-  weighted.push(
-    ...cycleMissing,
-    ...cycleMissing,
-    ...cycleMissing
-  );
-}
-    // Shuffle
-    for (let i = weighted.length-1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i+1));
-      [weighted[i], weighted[j]] = [weighted[j], weighted[i]];
-    }
-    // Deduplicate and pick nums
-    const seen = new Set();
-    const game = [];
-    for (const n of weighted) {
-      if (!seen.has(n)) { seen.add(n); game.push(n); }
-      if (game.length === nums) break;
-    }
-    if (game.length < nums) continue;
+    for(let i=weighted.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[weighted[i],weighted[j]]=[weighted[j],weighted[i]];}
+    const seen=new Set(); const game=[];
+    for(const n of weighted){if(!seen.has(n)){seen.add(n);game.push(n);}if(game.length===nums)break;}
+    if(game.length<nums) continue;
     game.sort((a,b)=>a-b);
 
-    // Parity filter
-    const evens = game.filter(n=>n%2===0).length;
-    const odds = nums - evens;
-    if (parity === 'more_odd' && odds < 8) continue;
-    if (parity === 'more_even' && evens < 8) continue;
-    if (parity === 'balanced' && (evens < 7 || evens > 8)) continue;
+    const evens=game.filter(n=>n%2===0).length, odds2=nums-evens;
+    if(parity==='more_odd'&&odds2<8) continue;
+    if(parity==='more_even'&&evens<8) continue;
+    if(parity==='balanced'&&(evens<7||evens>8)) continue;
 
-    // Consecutive filter
-    if (consecFilter !== 'any') {
-      let consecPairs = 0;
-      for (let i=0;i<game.length-1;i++) if(game[i+1]-game[i]===1) consecPairs++;
-      if (consecFilter === '0' && consecPairs > 0) continue;
-      if (consecFilter === '1' && consecPairs < 1) continue;
-      if (consecFilter === '2' && consecPairs < 2) continue;
+    if(consecFilter!=='any'){
+      let cp=0; for(let i=0;i<game.length-1;i++) if(game[i+1]-game[i]===1) cp++;
+      if(consecFilter==='0'&&cp>0) continue;
+      if(consecFilter==='1'&&cp<1) continue;
+      if(consecFilter==='2'&&cp<2) continue;
     }
-
     games.push(game);
   }
 
   const el = document.getElementById('genResults');
   el.innerHTML = '';
-  if (games.length === 0) {
-    el.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou todos os filtros combinados. Tente relaxar os critérios.</div>';
+  if(games.length===0){
+    el.innerHTML='<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou todos os filtros. Tente relaxar os critérios.</div>';
     return;
   }
-
-  games.forEach((game, i) => {
-    const evens = game.filter(n=>n%2===0).length;
-    const div = document.createElement('div');
-    div.className = 'gen-game';
-    div.innerHTML = `
+  games.forEach((game,i)=>{
+    const evens=game.filter(n=>n%2===0).length;
+    const div=document.createElement('div');
+    div.className='gen-game';
+    div.innerHTML=`
       <div class="gen-game-header">
         <span>Jogo ${i+1} &nbsp;·&nbsp; ${game.length} dezenas &nbsp;·&nbsp; ${evens}P / ${game.length-evens}I</span>
         <button class="copy-btn" onclick="copyGame(this,'${game.join(',')}')">Copiar</button>
       </div>
       <div class="gen-balls">
-        ${game.map(n => `<div class="gen-ball">${String(n).padStart(2,'0')}</div>`).join('')}
+        ${game.map(n=>`<div class="gen-ball">${String(n).padStart(2,'0')}</div>`).join('')}
       </div>
     `;
     el.appendChild(div);
@@ -2092,30 +1605,28 @@ if (freqFilter.includes('cycle_missing')) {
 }
 
 function copyGame(btn, nums) {
-  navigator.clipboard.writeText(nums.split(',').map(n => n.padStart(2,'0')).join(' - '));
-  btn.textContent = '✓ Copiado';
-  setTimeout(() => btn.textContent = 'Copiar', 1500);
+  navigator.clipboard.writeText(nums.split(',').map(n=>n.padStart(2,'0')).join(' - '));
+  btn.textContent='✓ Copiado';
+  setTimeout(()=>btn.textContent='Copiar',1500);
 }
 
-// ============================================================
-// LAST DRAWS TABLE
-// ============================================================
+/* ============================================================
+   LAST DRAWS
+============================================================ */
 function renderLastDraws() {
   const tbody = document.getElementById('drawsBody');
   tbody.innerHTML = '';
-   const last20 = allDraws.slice(-20).reverse();
+  const last20 = allDraws.slice(-20).reverse();
   for (const d of last20) {
     const evens = d.dezenas.filter(n=>n%2===0).length;
-    const balls = d.dezenas.map(n =>
-      `<div class="draw-ball-sm">${String(n).padStart(2,'0')}</div>`
-    ).join('');
+    const balls = d.dezenas.map(n=>`<div class="draw-ball">${String(n).padStart(2,'0')}</div>`).join('');
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-family:'DM Mono',monospace;font-size:12px">#${d.concurso}</td>
+      <td style="font-family:var(--mono);font-size:11px">#${d.concurso}</td>
       <td style="font-size:12px;color:var(--text2)">${formatDate(d.data)}</td>
       <td><div class="draw-balls-row">${balls}</div></td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent2)">${evens}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent3)">${15-evens}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--accent2)">${evens}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--accent3)">${15-evens}</td>
     `;
     tbody.appendChild(tr);
   }
@@ -2123,17 +1634,13 @@ function renderLastDraws() {
 
 function formatDate(str) {
   if (!str) return '—';
-  // format: dd/mm/yyyy
-  try {
-    const parts = str.split('/');
-    if (parts.length === 3) return str;
-    return new Date(str).toLocaleDateString('pt-BR');
-  } catch { return str; }
+  try { const p=str.split('/'); return p.length===3?str:new Date(str).toLocaleDateString('pt-BR'); }
+  catch { return str; }
 }
 
-// ============================================================
-// INIT
-// ============================================================
+/* ============================================================
+   START
+============================================================ */
 initDashboard();
 </script>
 </body>
