@@ -1057,6 +1057,10 @@ body {
     <div class="banner">
       ⚠️&nbsp; <span><strong>Aviso importante:</strong> Este dashboard é uma ferramenta de análise estatística histórica. Cada sorteio é um evento independente — padrões passados <strong>não aumentam matematicamente suas chances</strong>. Use com consciência.</span>
     </div>
+    <!-- NOTA DO JOGO -->
+    <div class="banner" id="gameNote" style="display:none;border-color:rgba(61,142,255,.2);background:rgba(61,142,255,.06)">
+      ℹ️&nbsp; <span id="gameNoteText"></span>
+    </div>
 
     <!-- SUMMARY -->
     <div class="summary-grid">
@@ -1286,17 +1290,18 @@ const GAMES = {
     name:        'Lotofácil',
     emoji:       '🍀',
     csvFile:     './lotofacil.csv',
-    numCount:    15,          // dezenas por sorteio
-    numMax:      25,          // maior número possível
-    minPick:     15,          // mínimo para análise de score
-    maxPick:     20,
-    // Colunas 0-indexed: [concurso, data, dez1, dez2, ...]
-    colConcurso: 0,
-    colData:     1,
+    numCount:    15,   // dezenas por sorteio
+    numMax:      25,   // maior número possível
+    minPick:     15,   // mínimo para score analítico
+    maxPick:     20,   // máximo para score analítico
+    colConcurso: 0,    // coluna do número do concurso (0-indexed)
+    colData:     1,    // coluna da data
     colNums:     [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+    note:        null,
     ready:       true
   },
   megasena: {
+    // CSV: Concurso, Data do Sorteio, Bola1..Bola6
     name:        'Mega-Sena',
     emoji:       '💰',
     csvFile:     './megasena.csv',
@@ -1307,9 +1312,11 @@ const GAMES = {
     colConcurso: 0,
     colData:     1,
     colNums:     [2,3,4,5,6,7],
-    ready:       false   // troque para true quando tiver o CSV mapeado
+    note:        null,
+    ready:       true
   },
   quina: {
+    // CSV: Concurso, Data Sorteio, Bola1..Bola5
     name:        'Quina',
     emoji:       '5️⃣',
     csvFile:     './quina.csv',
@@ -1320,9 +1327,13 @@ const GAMES = {
     colConcurso: 0,
     colData:     1,
     colNums:     [2,3,4,5,6],
-    ready:       false
+    note:        null,
+    ready:       true
   },
   milionaria: {
+    // CSV: Concurso, Data Sorteio, Bola1..Bola6, Trevo1, Trevo2
+    // Análise cobre apenas as 6 bolas principais (1–50).
+    // Trevos (1–6) são mecânica separada e não entram nas estatísticas.
     name:        '+Milionária',
     emoji:       '🌟',
     csvFile:     './milionaria.csv',
@@ -1332,21 +1343,25 @@ const GAMES = {
     maxPick:     12,
     colConcurso: 0,
     colData:     1,
-    colNums:     [2,3,4,5,6,7],
-    ready:       false
+    colNums:     [2,3,4,5,6,7],   // bolas principais apenas
+    note:        'Análise das 6 bolas principais (1–50). Os Trevos (cols 8–9) são uma mecânica independente e não são considerados nas estatísticas.',
+    ready:       true
   },
   timemania: {
+    // CSV: Concurso, Data Sorteio, Bola1..Bola7, Time Coração
+    // "Time Coração" (col 8) é texto — ignorado na análise numérica.
     name:        'Timemania',
     emoji:       '⚽',
     csvFile:     './timemania.csv',
-    numCount:    10,
+    numCount:    7,
     numMax:      80,
-    minPick:     10,
-    maxPick:     10,
+    minPick:     7,
+    maxPick:     7,
     colConcurso: 0,
     colData:     1,
-    colNums:     [2,3,4,5,6,7,8,9,10,11],
-    ready:       false
+    colNums:     [2,3,4,5,6,7,8], // 7 bolas numéricas; col 9 = Time Coração (ignorada)
+    note:        'Análise das 7 bolas numéricas (1–80). O "Time Coração" não é considerado nas estatísticas.',
+    ready:       true
   }
 };
 
@@ -1503,6 +1518,14 @@ function processData() {
    RENDER ALL
 ============================================================ */
 function renderAll() {
+  const cfg = GAMES[currentGame];
+  const noteEl = document.getElementById('gameNote');
+  if (cfg.note) {
+    document.getElementById('gameNoteText').textContent = cfg.note;
+    noteEl.style.display = 'flex';
+  } else {
+    noteEl.style.display = 'none';
+  }
   renderSummary();
   renderRanking();
   renderScoreGrid();
