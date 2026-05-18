@@ -38,9 +38,9 @@ document
 
       } else {
 
-        alert("Você não possui autorização.");
+       await signOut(auth);
 
-        await signOut(auth);
+       window.location.href = "./acesso.html";
 
       }
 
