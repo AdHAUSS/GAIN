@@ -1657,11 +1657,53 @@ function renderLastDraws(){
     tbody.appendChild(tr);
   }
 }
+<script type="module">
+
+import { auth, db } from "./firebase.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+
+    window.location.href = "./login.html";
+
+    return;
+
+  }
+
+  const userRef = doc(db, "authorizedUsers", user.email);
+
+  const userSnap = await getDoc(userRef);
+
+  if (
+    !userSnap.exists() ||
+    userSnap.data().active !== true
+  ) {
+
+    await signOut(auth);
+
+    window.location.href = "./login.html";
+
+  }
+
+});
 
 /* ============================================================
    START
 ============================================================ */
+
 initDashboard();
+
 </script>
 </body>
 </html>
