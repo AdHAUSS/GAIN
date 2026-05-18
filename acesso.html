@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Acesso Necessário</title>
+
+  <style>
+
+    :root{
+      --bg:#050816;
+      --bg2:#0b1023;
+      --card:#0f172a;
+      --border:rgba(255,255,255,.08);
+
+      --text:#f8fafc;
+      --text2:#94a3b8;
+
+      --accent:#a855f7;
+      --accent2:#7c3aed;
+
+      --shadow:0 10px 40px rgba(0,0,0,.45);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+
+      min-height:100vh;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:24px;
+
+      background:
+      radial-gradient(circle at top left, rgba(168,85,247,.18), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(124,58,237,.14), transparent 30%),
+      linear-gradient(180deg,var(--bg),var(--bg2));
+
+      font-family:Inter,system-ui,sans-serif;
+
+      color:var(--text);
+    }
+
+    .card{
+
+      width:100%;
+      max-width:480px;
+
+      background:rgba(15,23,42,.72);
+
+      border:1px solid var(--border);
+
+      backdrop-filter:blur(18px);
+
+      border-radius:28px;
+
+      padding:42px 34px;
+
+      box-shadow:var(--shadow);
+
+      text-align:center;
+    }
+
+    .icon{
+
+      width:72px;
+      height:72px;
+
+      margin:0 auto 26px;
+
+      border-radius:24px;
+
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      font-size:34px;
+    }
+
+    h1{
+      font-size:30px;
+      line-height:1.1;
+
+      margin-bottom:16px;
+    }
+
+    p{
+      color:var(--text2);
+
+      font-size:15px;
+      line-height:1.7;
+
+      margin-bottom:32px;
+    }
+
+    .btn{
+
+      width:100%;
+      height:58px;
+
+      border:none;
+      border-radius:18px;
+
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+      color:white;
+
+      font-size:15px;
+      font-weight:700;
+
+      cursor:pointer;
+
+      transition:.25s;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 25px rgba(168,85,247,.28);
+    }
+
+    .back{
+
+      display:block;
+
+      margin-top:18px;
+
+      color:var(--text2);
+
+      text-decoration:none;
+
+      font-size:13px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="icon">
+      🔒
+    </div>
+
+    <h1>
+      Seu acesso ainda não está liberado.
+    </h1>
+
+    <p>
+      Para utilizar o painel completo de análises e estratégias,
+      é necessário possuir uma assinatura ativa.
+    </p>
+
+    <button
+      class="btn"
+      onclick="window.location.href='https://pay.kiwify.com.br/SHDymXU'"
+    >
+      ASSINAR ACESSO
+    </button>
+
+    <a href="./login.html" class="back">
+      Voltar para o login
+    </a>
+
+  </div>
+
+</body>
+</html>
