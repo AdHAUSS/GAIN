@@ -34,7 +34,7 @@ document
         userSnap.data().active === true
       ) {
 
-        window.location.href = "./dashboard.html";
+        window.location.href = "./index.html";
 
       } else {
 
