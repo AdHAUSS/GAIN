@@ -133,7 +133,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .cycle-ball.seen{background:var(--game-glow);color:var(--accent);border:1px solid rgba(255,255,255,.1)}
 .cycle-ball.missing{background:rgba(255,68,85,.12);color:var(--hot);border:1px solid rgba(255,68,85,.25)}
 .cycle-miss-label{font-size:11px;color:var(--text2);margin-top:7px}
-/* GENERATOR */
+/* GENERATOR — novo layout com score */
 .gen-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
 .gen-control{display:flex;flex-direction:column;gap:5px}
 .gen-select,.gen-input{padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;outline:none;cursor:pointer;transition:border-color .2s}
@@ -147,16 +147,46 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .gen-btn{padding:10px 22px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);border:none;border-radius:var(--r-sm);font-family:var(--font);font-weight:700;font-size:13px;color:#fff;cursor:pointer;transition:opacity .2s,transform .15s;align-self:flex-end;letter-spacing:-.01em}
 .gen-btn:hover{opacity:.9;transform:translateY(-1px)}
 .gen-btn:active{transform:translateY(0)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .gen-results{display:flex;flex-direction:column;gap:9px}
-.gen-game{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;animation:fadeIn .25s ease}
-.gen-game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-family:var(--mono);font-size:11px;color:var(--text2)}
-.gen-balls{display:flex;flex-wrap:wrap;gap:5px}
+
+/* Novo card de jogo gerado com score */
+.gen-game{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px 15px;animation:fadeIn .25s ease;transition:border-color .2s}
+.gen-game:hover{border-color:var(--border2)}
+.gen-game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.gen-game-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gen-game-label{font-family:var(--mono);font-size:11px;color:var(--text2)}
+/* Badge de score no card gerado */
+.gen-score-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-family:var(--mono);font-size:11px;font-weight:700;border:1px solid}
+.gen-score-badge.excellent{background:rgba(155,89,182,.15);border-color:rgba(155,89,182,.4);color:var(--accent)}
+.gen-score-badge.strong{background:rgba(255,214,10,.1);border-color:rgba(255,214,10,.35);color:var(--accent4)}
+.gen-score-badge.medium{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3);color:var(--accent3)}
+.gen-score-badge.weak{background:rgba(255,68,85,.1);border-color:rgba(255,68,85,.3);color:var(--hot)}
+/* Barra de score no card */
+.gen-score-bar-wrap{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:8px;margin-bottom:2px}
+.gen-score-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+/* Mini breakdown de score */
+.gen-score-breakdown{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.gen-score-dim{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--text3)}
+.gen-score-dim-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.gen-balls{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .gen-ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;letter-spacing:-.02em}
-.copy-btn{padding:4px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all .2s}
+.copy-btn{padding:4px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
-/* =============================================
-   SCORE — layout responsivo corrigido
-   ============================================= */
+
+/* Indicador de progresso do gerador */
+.gen-progress{display:none;align-items:center;gap:12px;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text2)}
+.gen-progress.show{display:flex}
+.gen-progress-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.gen-progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .1s linear}
+.gen-progress-text{font-family:var(--mono);font-size:11px;white-space:nowrap}
+
+/* Resumo do resultado do gerador */
+.gen-summary{display:none;align-items:center;gap:10px;padding:10px 14px;background:rgba(155,89,182,.06);border:1px solid rgba(155,89,182,.2);border-radius:var(--r-sm);font-size:12px;color:var(--text2);margin-bottom:8px}
+.gen-summary.show{display:flex}
+.gen-summary strong{color:var(--accent)}
+
+/* SCORE */
 .score-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
 .score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
 .score-ball{aspect-ratio:1;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;letter-spacing:-.02em}
@@ -166,7 +196,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .score-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:74px}
 .preview-balls{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
 .preview-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff}
-/* Score result — coluna única no mobile */
 .score-result{display:flex;flex-direction:column;gap:18px;margin-top:18px}
 .score-result-top{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
 .score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;flex-shrink:0}
@@ -204,7 +233,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .trevo-pct{font-size:10px;color:var(--text3);font-family:var(--mono)}
 .trevo-bar-wrap{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:6px}
 .trevo-bar{height:100%;border-radius:99px}
-/* Score trevo selector */
 .score-trevo-section{margin-top:16px;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)}
 .score-trevo-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .trevo-sel-btn{width:48px;height:48px;border-radius:10px;background:var(--bg4);border:2px solid var(--border);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:4px}
@@ -245,9 +273,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .tab-pill.active{background:var(--game-glow);border-color:var(--accent);color:var(--accent)}
 .tab-content{display:none}
 .tab-content.active{display:block;animation:fadeIn .25s ease}
-/* =============================================
-   RESPONSIVE
-   ============================================= */
+/* RESPONSIVE */
 @media(max-width:960px){
   .summary-grid{grid-template-columns:repeat(2,1fr)}
   .col2,.col3{grid-template-columns:1fr}
@@ -260,15 +286,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .game-nav{padding:0 14px 10px}
   .summary-grid{grid-template-columns:1fr 1fr}
   .hist-grid{grid-template-columns:repeat(3,1fr)}
-  /* Score result: anel em cima, itens embaixo */
   .score-result-top{flex-direction:column;align-items:flex-start}
   .score-ring-wrap{flex-direction:row;gap:16px;align-items:center}
   .score-ring-info{display:flex;flex-direction:column;gap:4px}
-  /* Score items largura total */
   .score-items{width:100%}
   .score-item-name{width:80px}
   .score-item-detail{width:60px}
-  /* Card padding menor no mobile */
   .card{padding:14px}
 }
 </style>
@@ -320,6 +343,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="s-card"><div class="label">Dezena Menos Sorteada</div><div class="s-value" id="sumCold" style="color:var(--cold)">—</div><div class="s-sub" id="sumColdCount">—</div></div>
       <div class="s-card"><div class="label">Último Concurso</div><div class="s-value" id="sumLast" style="color:var(--accent4)">—</div><div class="s-sub" id="sumLastDate">—</div></div>
     </div>
+
     <!-- SCORE -->
     <div class="section">
       <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Score Analítico</div></div>
@@ -355,21 +379,31 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         </div>
       </div>
     </div>
-       <!-- GENERATOR -->
+
+    <!-- GENERATOR — movido para logo após o Score -->
     <div class="section">
       <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div></div>
       <div class="card">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7">
+          Os filtros definem as restrições. Dentro delas, o gerador avalia <strong style="color:var(--text)">centenas de candidatos</strong> e retorna apenas os jogos com o <strong style="color:var(--accent)">maior score analítico</strong>.
+        </p>
         <div class="gen-controls">
-          <div class="gen-control"><div class="label">Qtd de jogos</div><input class="gen-input" type="number" id="genQty" value="5" min="1" max="50"></div>
+          <div class="gen-control"><div class="label">Qtd de jogos</div><input class="gen-input" type="number" id="genQty" value="5" min="1" max="20"></div>
           <div class="gen-control"><div class="label">Núm. por jogo</div><input class="gen-input" type="number" id="genNums" value="15" min="15" max="20"></div>
           <div class="gen-control"><div class="label">Filtro de paridade</div><select class="gen-select" id="genParity"><option value="any">Qualquer</option><option value="more_odd">Mais ímpares</option><option value="more_even">Mais pares</option><option value="balanced">Equilibrado</option></select></div>
           <div class="gen-control"><div class="label">Priorizar dezenas</div><div class="multi-filters" id="genFreq"><label class="multi-tag"><input type="checkbox" value="hot"><span>Quentes</span></label><label class="multi-tag"><input type="checkbox" value="cold"><span>Frias</span></label><label class="multi-tag"><input type="checkbox" value="delayed"><span>Atrasadas</span></label><label class="multi-tag"><input type="checkbox" value="cycle_missing"><span>Ciclo Atual</span></label></div></div>
           <div class="gen-control"><div class="label">Mín. consecutivos</div><select class="gen-select" id="genConsec"><option value="any">Qualquer</option><option value="0">Nenhum par</option><option value="1">Ao menos 1 par</option><option value="2">Ao menos 2 pares</option></select></div>
-          <div class="gen-control" style="align-self:flex-end"><button class="gen-btn" onclick="generateGames()">⚡ Gerar Jogos</button></div>
+          <div class="gen-control" style="align-self:flex-end"><button class="gen-btn" id="genBtn" onclick="generateGames()">⚡ Gerar Jogos</button></div>
         </div>
+        <div class="gen-progress" id="genProgress">
+          <div class="gen-progress-bar-wrap"><div class="gen-progress-bar" id="genProgressBar"></div></div>
+          <span class="gen-progress-text" id="genProgressText">Avaliando candidatos…</span>
+        </div>
+        <div class="gen-summary" id="genSummary"></div>
         <div class="gen-results" id="genResults"></div>
       </div>
     </div>
+
     <!-- RANKING -->
     <div class="col2 section">
       <div>
@@ -433,11 +467,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </main>
 <script>
-/* SVG trevo contorno + número */
+/* =============================================
+   HELPERS
+   ============================================= */
 function trevoSVG(num,color,size){
-  size=size||32;
-  var sw=Math.max(1.5,size*0.055);
-  var fs=Math.round(size*0.34);
+  size=size||32;var sw=Math.max(1.5,size*0.055);var fs=Math.round(size*0.34);
   return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display:block"><g fill="none" stroke="'+color+'" stroke-width="'+sw+'" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="16" cy="10" rx="5.2" ry="6.2"/><ellipse cx="16" cy="22" rx="5.2" ry="6.2"/><ellipse cx="10" cy="16" rx="6.2" ry="5.2"/><ellipse cx="22" cy="16" rx="6.2" ry="5.2"/><line x1="16" y1="26" x2="16" y2="30"/><line x1="13" y1="30" x2="19" y2="30"/></g><text x="16" y="17.5" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,Outfit,sans-serif" font-size="'+fs+'" font-weight="800" fill="'+color+'" stroke="none">'+num+'</text></svg>';
 }
 const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
@@ -494,42 +528,29 @@ function parseCSV(text,cfg){
   var rows=text.trim().split('\n').slice(1);
   allDraws=[];teamFreq={};trevoFreq={1:0,2:0,3:0,4:0,5:0,6:0};
   for(var i=0;i<rows.length;i++){
-    var line=rows[i];
-    var raw=line.startsWith('"')?line.slice(1,-1):line;
-    var cols=raw.split(',');
+    var line=rows[i];var raw=line.startsWith('"')?line.slice(1,-1):line;var cols=raw.split(',');
     var dezenas=cfg.colNums.map(function(j){return Number(cols[j])}).filter(function(n){return !isNaN(n)&&n>0}).sort(function(a,b){return a-b});
     if(dezenas.length!==cfg.numCount)continue;
     var entry={concurso:Number(cols[cfg.colConcurso]),data:cols[cfg.colData],dezenas:dezenas};
-    if(cfg.extraType==='trevos'){
-      var t1=Number(cols[cfg.colTrevo1]),t2=Number(cols[cfg.colTrevo2]);
-      entry.trevos=[t1,t2].filter(function(n){return n>=1&&n<=6});
-      if(entry.trevos.length===2){trevoFreq[t1]=(trevoFreq[t1]||0)+1;trevoFreq[t2]=(trevoFreq[t2]||0)+1;}
-    }
-    if(cfg.extraType==='time'){
-      var rt=(cols[cfg.colTime]||'').trim().replace(/\r/g,'');
-      entry.time=rt;
-      if(rt)teamFreq[rt]=(teamFreq[rt]||0)+1;
-    }
+    if(cfg.extraType==='trevos'){var t1=Number(cols[cfg.colTrevo1]),t2=Number(cols[cfg.colTrevo2]);entry.trevos=[t1,t2].filter(function(n){return n>=1&&n<=6});if(entry.trevos.length===2){trevoFreq[t1]=(trevoFreq[t1]||0)+1;trevoFreq[t2]=(trevoFreq[t2]||0)+1;}}
+    if(cfg.extraType==='time'){var rt=(cols[cfg.colTime]||'').trim().replace(/\r/g,'');entry.time=rt;if(rt)teamFreq[rt]=(teamFreq[rt]||0)+1;}
     allDraws.push(entry);
   }
   allDraws.sort(function(a,b){return a.concurso-b.concurso});
-  allTeams=Object.entries(teamFreq).sort(function(a,b){return b[1]-a[1]}).map(function(x){return {name:x[0],count:x[1]}});
+  allTeams=Object.entries(teamFreq).sort(function(a,b){return b[1]-a[1]}).map(function(x){return{name:x[0],count:x[1]}});
   if(allDraws.length===0)throw new Error('Nenhum concurso válido encontrado.');
 }
 function processData(){
   var cfg=GAMES[currentGame];freq={};
   for(var i=1;i<=cfg.numMax;i++)freq[i]=0;
   for(var i=0;i<allDraws.length;i++)for(var j=0;j<allDraws[i].dezenas.length;j++)freq[allDraws[i].dezenas[j]]=(freq[allDraws[i].dezenas[j]]||0)+1;
-  delay={};
-  var rev=allDraws.slice().reverse();
-  for(var i=1;i<=cfg.numMax;i++){
-    var idx=rev.findIndex(function(d){return d.dezenas.includes(i)});
-    delay[i]=idx===-1?allDraws.length:idx;
-  }
+  delay={};var rev=allDraws.slice().reverse();
+  for(var i=1;i<=cfg.numMax;i++){var idx=rev.findIndex(function(d){return d.dezenas.includes(i)});delay[i]=idx===-1?allDraws.length:idx;}
 }
 function setStatus(s,t){document.getElementById('statusDot').className='status-dot '+s;document.getElementById('statusText').textContent=t}
 function setBar(p){document.getElementById('loadingBar').style.width=p+'%'}
 function formatDate(s){if(!s)return'—';try{var p=s.trim().split('/');return p.length===3?s.trim():new Date(s).toLocaleDateString('pt-BR')}catch(e){return s}}
+
 function renderAll(){
   var cfg=GAMES[currentGame];
   var noteEl=document.getElementById('gameNote');
@@ -537,7 +558,12 @@ function renderAll(){
   renderSummary();renderRanking();renderScoreGrid();renderParity();renderDelay();renderRepeatStats();renderSumAnalysis();renderCycle();renderSpecialSection();renderPatterns();renderLastDraws();
   var gn=document.getElementById('genNums');gn.min=cfg.minPick;gn.max=cfg.maxPick;gn.value=cfg.numCount;
   document.getElementById('scoreDesc').textContent='Monte um jogo e veja como ele se posiciona estatisticamente. Selecione de '+cfg.minPick+' a '+cfg.maxPick+' dezenas.';
+  // Limpa resultados anteriores do gerador ao trocar de jogo
+  document.getElementById('genResults').innerHTML='';
+  document.getElementById('genSummary').classList.remove('show');
+  document.getElementById('genProgress').classList.remove('show');
 }
+
 function renderSummary(){
   var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).sort(function(a,b){return b[1]-a[1]});
   var hot=sorted[0],cold=sorted[sorted.length-1];
@@ -552,7 +578,7 @@ function renderSummary(){
   document.getElementById('sumLastDate').textContent=formatDate(last.data);
 }
 function renderRanking(){
-  var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return {n:+x[0],c:x[1]}}).sort(function(a,b){return b.c-a.c});
+  var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],c:x[1]}}).sort(function(a,b){return b.c-a.c});
   var maxC=sorted[0].c;
   function makeList(items,id,colorFn){
     var el=document.getElementById(id);el.innerHTML='';
@@ -567,8 +593,7 @@ function renderRanking(){
   makeList(sorted.slice().reverse(),'rankBottom',function(){return'#4da6ff'});
 }
 function renderSpecialSection(){
-  var cfg=GAMES[currentGame];
-  var sec=document.getElementById('specialSection');
+  var cfg=GAMES[currentGame];var sec=document.getElementById('specialSection');
   if(!cfg.hasExtras){sec.style.display='none';return}
   sec.style.display='block';
   if(cfg.extraType==='trevos'){document.getElementById('specialSectionName').textContent='Estatísticas dos Trevos';renderTrevosSection();}
@@ -623,8 +648,7 @@ function switchSpecialTab(btn,tabId){
   var card=document.getElementById('specialSectionCard');
   card.querySelectorAll('.tab-pill').forEach(function(p){p.classList.remove('active')});
   card.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active')});
-  btn.classList.add('active');
-  var el=document.getElementById(tabId);if(el)el.classList.add('active');
+  btn.classList.add('active');var el=document.getElementById(tabId);if(el)el.classList.add('active');
 }
 function renderParity(){
   var cfg=GAMES[currentGame];var nc=cfg.numCount;
@@ -688,7 +712,10 @@ function renderTrendPatterns(){
   rising.sort(function(a,b){return b.delta-a.delta});falling.sort(function(a,b){return a.delta-b.delta});
   return'<div class="patterns-grid"><div class="pattern-card"><div class="pattern-card-title">Em Alta (últimos 50)</div><div class="pattern-insight">'+rising.slice(0,8).map(function(x){return'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(29,185,84,.15);border-radius:99px;font-weight:700;color:#1db954;font-size:12px">↑'+String(x.n).padStart(2,'0')+'<span style="font-size:10px;opacity:.7">+'+(x.delta*100).toFixed(1)+'%</span></span>';}).join('')+'</div></div><div class="pattern-card"><div class="pattern-card-title">Em Queda (últimos 50)</div><div class="pattern-insight">'+falling.slice(0,8).map(function(x){return'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(255,68,85,.12);border-radius:99px;font-weight:700;color:var(--hot);font-size:12px">↓'+String(x.n).padStart(2,'0')+'<span style="font-size:10px;opacity:.7">'+(x.delta*100).toFixed(1)+'%</span></span>';}).join('')+'</div></div><div class="pattern-card"><div class="pattern-card-title">Consistentes</div><div class="pattern-insight">'+Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],delta:Math.abs((fl50[+x[0]]||0)/50-x[1]/total)}}).filter(function(x){return x.delta<=0.015}).slice(0,8).map(function(x){return'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(255,255,255,.06);border-radius:99px;font-weight:700;color:var(--text2);font-size:12px">≈'+String(x.n).padStart(2,'0')+'</span>';}).join('')+'</div></div></div>';
 }
-/* SCORE GRID */
+
+/* =============================================
+   SCORE GRID
+   ============================================= */
 function renderScoreGrid(){
   var cfg=GAMES[currentGame];analyticalGame=[];selectedTrevos=[];selectedTeam=null;
   var grid=document.getElementById('scoreGrid');grid.innerHTML='';
@@ -697,11 +724,8 @@ function renderScoreGrid(){
     (function(num){var div=document.createElement('div');div.className='score-ball';div.textContent=String(num).padStart(2,'0');div.dataset.num=num;div.onclick=function(){toggleScoreNumber(num,div)};grid.appendChild(div);})(i);
   }
   var ts=document.getElementById('scoreTrevoSection');var tm=document.getElementById('scoreTeamSection');
-  if(cfg.extraType==='trevos'){
-    ts.style.display='block';tm.style.display='none';
-    var btns=document.getElementById('scoreTrevoBtns');btns.innerHTML='';
-    for(var t=1;t<=6;t++){(function(t){var btn=document.createElement('button');btn.className='trevo-sel-btn';btn.innerHTML=trevoSVG(t,TREVO_COLORS[t-1],28);btn.dataset.trevo=t;btn.onclick=function(){toggleTrevo(t,btn)};btns.appendChild(btn);})(t);}
-  }else if(cfg.extraType==='time'){ts.style.display='none';tm.style.display='block';buildTeamDropdown();}
+  if(cfg.extraType==='trevos'){ts.style.display='block';tm.style.display='none';var btns=document.getElementById('scoreTrevoBtns');btns.innerHTML='';for(var t=1;t<=6;t++){(function(t){var btn=document.createElement('button');btn.className='trevo-sel-btn';btn.innerHTML=trevoSVG(t,TREVO_COLORS[t-1],28);btn.dataset.trevo=t;btn.onclick=function(){toggleTrevo(t,btn)};btns.appendChild(btn);})(t);}}
+  else if(cfg.extraType==='time'){ts.style.display='none';tm.style.display='block';buildTeamDropdown();}
   else{ts.style.display='none';tm.style.display='none';}
   document.getElementById('scoreResults').innerHTML='';updateScorePreview([]);
 }
@@ -722,67 +746,94 @@ function updateScorePreview(game){
   if(game.length===0){side.innerHTML='<div class="label">Seu jogo</div><div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>';return;}
   side.innerHTML='<div class="label" style="margin-bottom:9px">Seu jogo · '+game.length+' dezenas</div><div class="preview-balls">'+game.slice().sort(function(a,b){return a-b}).map(function(n){return'<div class="preview-ball">'+String(n).padStart(2,'0')+'</div>'}).join('')+'</div>'+extras;
 }
-/* SCORE ANALÍTICO */
+
+/* =============================================
+   SCORE ANALÍTICO — função pura reutilizável
+   ============================================= */
+function calcScorePure(game){
+  var cfg=GAMES[currentGame];var nc=cfg.numCount;
+  var sorted=game.slice().sort(function(a,b){return a-b});
+  // Paridade
+  var evens=sorted.filter(function(n){return n%2===0}).length;
+  var halfNc=nc/2;
+  var parityScore=(evens===Math.floor(halfNc)||evens===Math.ceil(halfNc))?100:Math.abs(evens-halfNc)<=2?75:40;
+  // Soma
+  var sum=sorted.reduce(function(a,b){return a+b},0);
+  var expSum=nc*((1+cfg.numMax)/2);var dev=Math.abs(sum-expSum)/expSum;
+  var sumScore=dev<0.05?100:dev<0.12?75:dev<0.20?55:35;
+  // Consecutivos
+  var consecPairs=0;for(var i=0;i<sorted.length-1;i++)if(sorted[i+1]-sorted[i]===1)consecPairs++;
+  var consecScore=consecPairs>=2&&consecPairs<=4?100:consecPairs<=5?70:40;
+  // Repetidas do último concurso
+  var lastDraw=allDraws[allDraws.length-1];
+  var repeated=sorted.filter(function(n){return lastDraw.dezenas.includes(n)}).length;
+  var repRatio=repeated/nc;
+  var repeatScore=repRatio>=0.4&&repRatio<=0.7?100:repRatio>=0.25?70:40;
+  // Dezenas quentes
+  var sf=Object.entries(freq).filter(function(x){return x[1]>0}).sort(function(a,b){return b[1]-a[1]});
+  var hotList=sf.slice(0,Math.ceil(cfg.numMax*0.48)).map(function(x){return+x[0]});
+  var hotCount=sorted.filter(function(n){return hotList.includes(n)}).length;
+  var hotRatio=hotCount/sorted.length;
+  var hotScore=hotRatio>=0.45&&hotRatio<=0.65?100:hotRatio>=0.3?70:40;
+  // Distribuição por quadrantes (bônus)
+  var qSize=Math.ceil(cfg.numMax/4);
+  var q1=sorted.filter(function(n){return n<=qSize}).length;
+  var q2=sorted.filter(function(n){return n>qSize&&n<=qSize*2}).length;
+  var q3=sorted.filter(function(n){return n>qSize*2&&n<=qSize*3}).length;
+  var q4=sorted.filter(function(n){return n>qSize*3}).length;
+  var minQ=Math.min(q1,q2,q3,q4);
+  var spreadScore=minQ>=1?100:75;
+  var weights=[parityScore,sumScore,consecScore,repeatScore,hotScore,spreadScore];
+  var finalScore=Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length);
+  return{
+    score:finalScore,
+    dims:{paridade:parityScore,soma:sumScore,consecutivos:consecScore,repetidas:repeatScore,quentes:hotScore,distribuicao:spreadScore},
+    evens:evens,odds:sorted.length-evens,sum:sum,consecPairs:consecPairs,repeated:repeated,hotCount:hotCount
+  };
+}
+
+/* Score analítico — renderização completa (botão Analisar) */
 function runAnalyticalScore(){
   var cfg=GAMES[currentGame];
   if(analyticalGame.length<cfg.minPick){alert('Selecione ao menos '+cfg.minPick+' dezenas.');return;}
   if(cfg.extraType==='trevos'&&selectedTrevos.length!==2){alert('Selecione exatamente 2 Trevos.');return;}
   var game=analyticalGame.slice().sort(function(a,b){return a-b});var nc=cfg.numCount;
-  var evens=game.filter(function(n){return n%2===0}).length,odds=game.length-evens;
-  var halfNc=nc/2;var parityScore=(evens===Math.floor(halfNc)||evens===Math.ceil(halfNc))?100:Math.abs(evens-halfNc)<=2?75:40;
-  var sum=game.reduce(function(a,b){return a+b},0);var expSum=nc*((1+cfg.numMax)/2);var dev=Math.abs(sum-expSum)/expSum;
-  var sumScore=dev<0.05?100:dev<0.12?75:dev<0.20?55:35;
-  var consecPairs=0;for(var i=0;i<game.length-1;i++)if(game[i+1]-game[i]===1)consecPairs++;
-  var consecScore=consecPairs>=2&&consecPairs<=4?100:consecPairs<=5?70:40;
-  var lastDraw=allDraws[allDraws.length-1];var repeated=game.filter(function(n){return lastDraw.dezenas.includes(n)}).length;var repRatio=repeated/nc;
-  var repeatScore=repRatio>=0.4&&repRatio<=0.7?100:repRatio>=0.25?70:40;
-  var sf=Object.entries(freq).filter(function(x){return x[1]>0}).sort(function(a,b){return b[1]-a[1]});
-  var hotList=sf.slice(0,Math.ceil(cfg.numMax*0.48)).map(function(x){return+x[0]});
-  var hotCount=game.filter(function(n){return hotList.includes(n)}).length;var hotRatio=hotCount/game.length;
-  var hotScore=hotRatio>=0.45&&hotRatio<=0.65?100:hotRatio>=0.3?70:40;
-  var weights=[parityScore,sumScore,consecScore,repeatScore,hotScore];
-  var wLabels=['Paridade','Soma','Consecutivos','Repetidas','Quentes'];
-  var trevoScore=null,trevoDetail='';
+  var res=calcScorePure(game);
+  var finalScore=res.score;var evens=res.evens;var odds=res.odds;var sum=res.sum;var consecPairs=res.consecPairs;var repeated=res.repeated;var hotCount=res.hotCount;
+  var weights=[res.dims.paridade,res.dims.soma,res.dims.consecutivos,res.dims.repetidas,res.dims.quentes,res.dims.distribuicao];
+  var wLabels=['Paridade','Soma','Consecutivos','Repetidas','Quentes','Distribuição'];
+  var wDetails=[evens+'P/'+odds+'I',String(sum),consecPairs+'par',repeated+'dez.',hotCount+'dez.',''];
+  // Trevos
   if(cfg.extraType==='trevos'&&selectedTrevos.length===2){
-    var t1=selectedTrevos[0],t2=selectedTrevos[1];var tot2=allDraws.filter(function(d){return d.trevos&&d.trevos.length===2}).length;
+    var t1=selectedTrevos[0],t2=selectedTrevos[1];
+    var tot2=allDraws.filter(function(d){return d.trevos&&d.trevos.length===2}).length;
     var f1=(trevoFreq[t1]||0)/(tot2*2),f2=(trevoFreq[t2]||0)/(tot2*2);
     var pk=[t1,t2].sort(function(a,b){return a-b}).join('-');var pf={};
     for(var i=0;i<allDraws.length;i++){var d=allDraws[i];if(!d.trevos||d.trevos.length!==2)continue;var k=d.trevos.slice().sort(function(a,b){return a-b}).join('-');pf[k]=(pf[k]||0)+1;}
     var pc=pf[pk]||0;var pp=pc/tot2;var rd=allDraws.slice().reverse().findIndex(function(d){return d.trevos&&d.trevos.slice().sort(function(a,b){return a-b}).join('-')===pk});
     var apd=tot2/Object.keys(pf).length;
-    trevoScore=Math.min(100,Math.max(20,Math.round(((f1+f2)/2)*100*6*0.5+(pp*100*8)*0.3+((rd>apd?60:90)*0.2))));
-    trevoDetail='T'+t1+'+T'+t2+' ('+pc+'x)';
-    weights.push(trevoScore);wLabels.push('Trevos');
+    var trevoScore=Math.min(100,Math.max(20,Math.round(((f1+f2)/2)*100*6*0.5+(pp*100*8)*0.3+((rd>apd?60:90)*0.2))));
+    weights.push(trevoScore);wLabels.push('Trevos');wDetails.push('T'+t1+'+T'+t2+' ('+pc+'x)');
+    finalScore=Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length);
   }
-  var teamScore=null,teamDetail='';
   if(cfg.extraType==='time'&&selectedTeam){
     var tott=allDraws.filter(function(d){return d.time}).length;var tc=teamFreq[selectedTeam]||0;var tr=tc/tott;
     var tdv=allDraws.slice().reverse().findIndex(function(d){return d.time===selectedTeam});var atd=tott/allTeams.length;
     var fs=Math.min(100,tr*100*allTeams.length*0.5);var db=tdv>atd*1.5?15:tdv>atd?5:0;
-    teamScore=Math.min(100,Math.round(fs+db));teamDetail=selectedTeam;
-    weights.push(teamScore);wLabels.push('Time');
+    var teamScore=Math.min(100,Math.round(fs+db));
+    weights.push(teamScore);wLabels.push('Time');wDetails.push((selectedTeam||'').split('/')[0]);
+    finalScore=Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length);
   }
-  var finalScore=Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length);
   var level=finalScore>=85?'Excelente':finalScore>=70?'Forte':finalScore>=55?'Médio':'Fraco';
   var lc=finalScore>=85?'var(--accent)':finalScore>=70?'var(--accent4)':'var(--hot)';
   var r=48,cx=55,cy=55,circ=2*Math.PI*r,dash=(finalScore/100)*circ;
   var histPts=[];var base=nc-4;for(var p=base;p<=nc;p++)histPts.push(p);
   var historical=calculateHistoricalHits(game,nc);
   var itemsHTML=weights.map(function(sc,i){
-    var det='';
-    if(wLabels[i]==='Paridade')det=evens+'P/'+odds+'I';
-    else if(wLabels[i]==='Soma')det=String(sum);
-    else if(wLabels[i]==='Consecutivos')det=consecPairs+'par';
-    else if(wLabels[i]==='Repetidas')det=repeated+'dez.';
-    else if(wLabels[i]==='Quentes')det=hotCount+'dez.';
-    else if(wLabels[i]==='Trevos')det=trevoDetail;
-    else if(wLabels[i]==='Time')det=(selectedTeam||'').split('/')[0];
-    return makeScoreItem(wLabels[i],det,sc);
+    return makeScoreItem(wLabels[i],wDetails[i]||'',sc);
   }).join('');
   var trevoRingHTML='';
-  if(trevoScore!==null&&selectedTrevos.length===2)trevoRingHTML='<div style="display:flex;gap:6px;margin-top:4px;justify-content:center">'+selectedTrevos.map(function(t){return trevoSVG(t,TREVO_COLORS[t-1],22)}).join('')+'</div>';
-  /* Layout responsivo: .score-result-top contém anel + score-items lado a lado no desktop,
-     em coluna no mobile graças ao CSS */
+  if(cfg.extraType==='trevos'&&selectedTrevos.length===2)trevoRingHTML='<div style="display:flex;gap:6px;margin-top:4px;justify-content:center">'+selectedTrevos.map(function(t){return trevoSVG(t,TREVO_COLORS[t-1],22)}).join('')+'</div>';
   document.getElementById('scoreResults').innerHTML=
     '<div class="score-result">'
     +'<div class="score-result-top">'
@@ -790,10 +841,10 @@ function runAnalyticalScore(){
     +'<div style="font-size:16px;font-weight:800;color:'+lc+';letter-spacing:-.02em">'+level+'</div>'
     +'<div style="font-size:10px;color:var(--text2);text-align:center;max-width:140px">'+game.map(function(n){return String(n).padStart(2,'0')}).join(' · ')+'</div>'
     +trevoRingHTML
-    +(teamScore!==null?'<div style="font-size:11px;color:var(--accent);margin-top:4px">⚽ '+(selectedTeam||'').split('/')[0]+'</div>':'')
-    +'</div>'/* /score-ring-wrap */
+    +(cfg.extraType==='time'&&selectedTeam?'<div style="font-size:11px;color:var(--accent);margin-top:4px">⚽ '+(selectedTeam||'').split('/')[0]+'</div>':'')
+    +'</div>'
     +'<div class="score-items">'+itemsHTML+'</div>'
-    +'</div>'/* /score-result-top */
+    +'</div>'
     +'<div class="historical-stats"><div class="label">Incidência histórica deste padrão</div><div class="hist-grid">'+histPts.map(function(p){return'<div class="hist-item"><div class="hist-pts">'+p+' pts</div><div class="hist-pct" style="color:'+(+historical[p]>5?'var(--accent)':+historical[p]>1?'var(--accent4)':'var(--text2)')+'">'+historical[p]+'%</div></div>';}).join('')+'</div></div>'
     +'</div>';
 }
@@ -808,7 +859,160 @@ function calculateHistoricalHits(game,nc){
   for(var p=base;p<=nc;p++)result[p]=(counts[p]/t*100).toFixed(p>=nc-1?4:p>=nc-2?3:2);
   return result;
 }
-/* CYCLE */
+
+/* =============================================
+   GERADOR INTELIGENTE POR SCORE
+   Estratégia: torneio com N_CANDIDATES candidatos
+   por jogo solicitado, retorna os de maior score.
+   ============================================= */
+var N_CANDIDATES_PER_GAME=200; // candidatos avaliados por jogo desejado
+
+function scoreLevelInfo(score){
+  if(score>=85)return{cls:'excellent',label:'Excelente'};
+  if(score>=70)return{cls:'strong',label:'Forte'};
+  if(score>=55)return{cls:'medium',label:'Médio'};
+  return{cls:'weak',label:'Fraco'};
+}
+
+function generateGames(){
+  var cfg=GAMES[currentGame];
+  var qty=Math.min(20,Math.max(1,parseInt(document.getElementById('genQty').value)||5));
+  var nums=Math.min(cfg.maxPick,Math.max(cfg.minPick,parseInt(document.getElementById('genNums').value)||cfg.numCount));
+  var parity=document.getElementById('genParity').value;
+  var ff=Array.from(document.querySelectorAll('#genFreq input:checked')).map(function(el){return el.value});
+  var cf=document.getElementById('genConsec').value;
+
+  // Preparar pools de prioridade
+  var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],c:x[1]}}).sort(function(a,b){return b.c-a.c});
+  var hotList=sorted.slice(0,Math.ceil(cfg.numMax*0.48)).map(function(x){return x.n});
+  var coldList=sorted.slice(Math.floor(cfg.numMax*0.52)).map(function(x){return x.n});
+  var dn=Object.entries(delay).sort(function(a,b){return+b[1]-+a[1]}).slice(0,15).map(function(x){return+x[0]});
+  var cs=parseInt(document.getElementById('cycleSize').value)||4;
+  var rem=allDraws.length%cs;
+  var csl=allDraws.slice(rem===0?-cs:-rem);
+  var csn=new Set(csl.reduce(function(a,d){return a.concat(d.dezenas)},[],[]));
+  var cm=[];for(var i=1;i<=cfg.numMax;i++)if(!csn.has(i))cm.push(i);
+
+  var totalCandidates=qty*N_CANDIDATES_PER_GAME;
+
+  // UI: mostrar progresso, desabilitar botão
+  var btn=document.getElementById('genBtn');
+  btn.disabled=true;
+  var prog=document.getElementById('genProgress');
+  var progBar=document.getElementById('genProgressBar');
+  var progText=document.getElementById('genProgressText');
+  prog.classList.add('show');
+  progBar.style.width='0%';
+  progText.textContent='Gerando candidatos…';
+  document.getElementById('genResults').innerHTML='';
+  document.getElementById('genSummary').classList.remove('show');
+
+  // Gera candidatos em chunks assíncronos para não travar a UI
+  var allCandidates=[];
+  var attempts=0;
+  var maxAttempts=totalCandidates*8;
+
+  function generateChunk(done){
+    var chunkSize=100;var count=0;
+    while(allCandidates.length<totalCandidates&&attempts<maxAttempts&&count<chunkSize){
+      attempts++;count++;
+      var pool=Array.from({length:cfg.numMax},function(_,i){return i+1});
+      // Pesos: repetir dezenas priorizadas para aumentar probabilidade de seleção
+      if(ff.includes('hot'))pool=pool.concat(hotList,hotList);
+      if(ff.includes('cold'))pool=pool.concat(coldList,coldList);
+      if(ff.includes('delayed'))pool=pool.concat(dn,dn);
+      if(ff.includes('cycle_missing')&&cm.length>0)pool=pool.concat(cm,cm,cm);
+      // Embaralhar
+      for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;}
+      // Selecionar sem repetição
+      var seen=new Set(),game=[];
+      for(var k=0;k<pool.length;k++){if(!seen.has(pool[k])){seen.add(pool[k]);game.push(pool[k]);}if(game.length===nums)break;}
+      if(game.length<nums)continue;
+      game.sort(function(a,b){return a-b});
+      // Filtros do usuário
+      var ev=game.filter(function(n){return n%2===0}).length;var nc2=nums;
+      if(parity==='more_odd'&&ev>Math.floor(nc2/2)-1)continue;
+      if(parity==='more_even'&&ev<Math.ceil(nc2/2)+1)continue;
+      if(parity==='balanced'&&Math.abs(ev-nc2/2)>1)continue;
+      if(cf!=='any'){
+        var cp=0;for(var i=0;i<game.length-1;i++)if(game[i+1]-game[i]===1)cp++;
+        if(cf==='0'&&cp>0)continue;
+        if(cf==='1'&&cp<1)continue;
+        if(cf==='2'&&cp<2)continue;
+      }
+      // Calcular score e guardar
+      var res=calcScorePure(game);
+      allCandidates.push({game:game,score:res.score,dims:res.dims,evens:res.evens,odds:res.odds,sum:res.sum,consecPairs:res.consecPairs});
+    }
+    // Atualizar barra de progresso
+    var pct=Math.min(100,Math.round(allCandidates.length/totalCandidates*100));
+    progBar.style.width=pct+'%';
+    progText.textContent='Avaliando… '+allCandidates.length+'/'+totalCandidates+' candidatos';
+    if(allCandidates.length>=totalCandidates||attempts>=maxAttempts){done();}
+    else{setTimeout(function(){generateChunk(done)},0);}
+  }
+
+  generateChunk(function(){
+    prog.classList.remove('show');
+    btn.disabled=false;
+
+    if(allCandidates.length===0){
+      document.getElementById('genResults').innerHTML='<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou os filtros. Tente relaxar os critérios.</div>';
+      return;
+    }
+
+    // Ordenar por score desc, pegar os melhores N únicos
+    allCandidates.sort(function(a,b){return b.score-a.score});
+    // Deduplicar jogos idênticos
+    var seen=new Set();var best=[];
+    for(var i=0;i<allCandidates.length&&best.length<qty;i++){
+      var key=allCandidates[i].game.join(',');
+      if(!seen.has(key)){seen.add(key);best.push(allCandidates[i]);}
+    }
+
+    // Estatísticas do resultado
+    var avgScore=Math.round(best.reduce(function(a,b){return a+b.score},0)/best.length);
+    var sumEl=document.getElementById('genSummary');
+    sumEl.innerHTML='⚡ <strong>'+best.length+' jogos gerados</strong> · Score médio: <strong>'+avgScore+'</strong> · Melhor: <strong>'+best[0].score+'</strong> · Avaliados: <strong>'+allCandidates.length+'</strong> candidatos';
+    sumEl.classList.add('show');
+
+    // Renderizar cards
+    var el=document.getElementById('genResults');el.innerHTML='';
+    best.forEach(function(item,i){
+      var info=scoreLevelInfo(item.score);
+      var scoreColor=item.score>=85?'var(--accent)':item.score>=70?'var(--accent4)':'var(--hot)';
+      var dims=item.dims;
+      var dimKeys=Object.keys(dims);
+      var breakdownHTML=dimKeys.map(function(k){
+        var v=dims[k];var dc=v>=85?'var(--accent)':v>=70?'var(--accent4)':'var(--hot)';
+        return'<span class="gen-score-dim"><span class="gen-score-dim-dot" style="background:'+dc+'"></span>'+k+' '+v+'</span>';
+      }).join('');
+      var div=document.createElement('div');
+      div.className='gen-game';
+      div.innerHTML=
+        '<div class="gen-game-header">'
+        +'<div class="gen-game-meta">'
+        +'<span class="gen-game-label">Jogo '+(i+1)+' · '+item.game.length+' dez. · '+item.evens+'P/'+item.odds+'I · soma '+item.sum+'</span>'
+        +'<span class="gen-score-badge '+info.cls+'">'+item.score+' · '+info.label+'</span>'
+        +'</div>'
+        +'<button class="copy-btn" onclick="copyGame(this,\''+item.game.join(',')+'\')" >Copiar</button>'
+        +'</div>'
+        +'<div class="gen-score-bar-wrap"><div class="gen-score-bar" style="width:'+item.score+'%;background:'+scoreColor+'"></div></div>'
+        +'<div class="gen-score-breakdown">'+breakdownHTML+'</div>'
+        +'<div class="gen-balls">'+item.game.map(function(n){return'<div class="gen-ball">'+String(n).padStart(2,'0')+'</div>'}).join('')+'</div>';
+      el.appendChild(div);
+    });
+  });
+}
+
+function copyGame(btn,nums){
+  navigator.clipboard.writeText(nums.split(',').map(function(n){return n.padStart(2,'0')}).join(' - '));
+  btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar'},1500);
+}
+
+/* =============================================
+   CYCLE
+   ============================================= */
 function renderCycle(){
   var size=parseInt(document.getElementById('cycleSize').value)||4;var count=parseInt(document.getElementById('cycleCount').value)||10;var cfg=GAMES[currentGame];
   var total=Math.ceil(allDraws.length/size);var start=Math.max(0,total-count);var groups=[];
@@ -822,32 +1026,10 @@ function renderCycle(){
     el.appendChild(div);
   });
 }
-/* GENERATOR */
-function generateGames(){
-  var cfg=GAMES[currentGame];var qty=Math.min(50,Math.max(1,parseInt(document.getElementById('genQty').value)||5));var nums=Math.min(cfg.maxPick,Math.max(cfg.minPick,parseInt(document.getElementById('genNums').value)||cfg.numCount));
-  var parity=document.getElementById('genParity').value;var ff=Array.from(document.querySelectorAll('#genFreq input:checked')).map(function(el){return el.value});var cf=document.getElementById('genConsec').value;
-  var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],c:x[1]}}).sort(function(a,b){return b.c-a.c});
-  var hotList=sorted.slice(0,Math.ceil(cfg.numMax*0.48)).map(function(x){return x.n});var coldList=sorted.slice(Math.floor(cfg.numMax*0.52)).map(function(x){return x.n});
-  var dn=Object.entries(delay).sort(function(a,b){return+b[1]-+a[1]}).slice(0,15).map(function(x){return+x[0]});
-  var cs=parseInt(document.getElementById('cycleSize').value)||4;var rem=allDraws.length%cs;var csl=allDraws.slice(rem===0?-cs:-rem);var csn=new Set(csl.reduce(function(a,d){return a.concat(d.dezenas)},[],[]));var cm=[];for(var i=1;i<=cfg.numMax;i++)if(!csn.has(i))cm.push(i);
-  var games=[];var attempts=0;
-  while(games.length<qty&&attempts<5000){
-    attempts++;var pool=Array.from({length:cfg.numMax},function(_,i){return i+1});
-    if(ff.includes('hot'))pool=pool.concat(hotList,hotList);if(ff.includes('cold'))pool=pool.concat(coldList,coldList);if(ff.includes('delayed'))pool=pool.concat(dn,dn);if(ff.includes('cycle_missing'))pool=pool.concat(cm,cm,cm);
-    for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;}
-    var seen=new Set(),game=[];for(var k=0;k<pool.length;k++){if(!seen.has(pool[k])){seen.add(pool[k]);game.push(pool[k]);}if(game.length===nums)break;}
-    if(game.length<nums)continue;game.sort(function(a,b){return a-b});
-    var ev=game.filter(function(n){return n%2===0}).length;var nc=nums;
-    if(parity==='more_odd'&&ev>Math.floor(nc/2)-1)continue;if(parity==='more_even'&&ev<Math.ceil(nc/2)+1)continue;if(parity==='balanced'&&Math.abs(ev-nc/2)>1)continue;
-    if(cf!=='any'){var cp=0;for(var i=0;i<game.length-1;i++)if(game[i+1]-game[i]===1)cp++;if(cf==='0'&&cp>0)continue;if(cf==='1'&&cp<1)continue;if(cf==='2'&&cp<2)continue;}
-    games.push(game);
-  }
-  var el=document.getElementById('genResults');el.innerHTML='';
-  if(games.length===0){el.innerHTML='<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou todos os filtros.</div>';return;}
-  games.forEach(function(game,i){var ev=game.filter(function(n){return n%2===0}).length;var div=document.createElement('div');div.className='gen-game';div.innerHTML='<div class="gen-game-header"><span>Jogo '+(i+1)+' · '+game.length+' dezenas · '+ev+'P/'+(game.length-ev)+'I</span><button class="copy-btn" onclick="copyGame(this,\''+game.join(',')+'\')" >Copiar</button></div><div class="gen-balls">'+game.map(function(n){return'<div class="gen-ball">'+String(n).padStart(2,'0')+'</div>'}).join('')+'</div>';el.appendChild(div);});
-}
-function copyGame(btn,nums){navigator.clipboard.writeText(nums.split(',').map(function(n){return n.padStart(2,'0')}).join(' - '));btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar'},1500);}
-/* LAST DRAWS */
+
+/* =============================================
+   LAST DRAWS
+   ============================================= */
 function renderLastDraws(){
   var cfg=GAMES[currentGame];var head=document.getElementById('drawsHead');
   var hh='<th>Concurso</th><th>Data</th><th>Dezenas</th><th>Pares</th><th>Ímpares</th>';
@@ -866,52 +1048,23 @@ function renderLastDraws(){
   }
 }
 </script>
-  
+
 <script type="module">
-
 import { auth, db } from "./firebase.js";
-
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 onAuthStateChanged(auth, async (user) => {
-
-  if (!user) {
-
-    window.location.href = "./login.html";
-
-    return;
-
-  }
-
+  if (!user) { window.location.href = "./login.html"; return; }
   const userRef = doc(db, "authorizedUsers", user.email);
-
   const userSnap = await getDoc(userRef);
-
-  if (
-    !userSnap.exists() ||
-    userSnap.data().active !== true
-  ) {
-
+  if (!userSnap.exists() || userSnap.data().active !== true) {
     await signOut(auth);
-
     window.location.href = "./login.html";
-
     return;
-
   }
-
   initDashboard();
-
 });
-
 </script>
 </body>
 </html>
