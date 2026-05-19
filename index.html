@@ -197,7 +197,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .copy-btn{padding:4px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all .2s}
 .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
 /* SCORE */
-.score-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+.score-layout{
+  display:grid;
+
+  grid-template-columns:
+    360px
+    minmax(0,1fr);
+
+  gap:34px;
+
+  align-items:start;
+}
 .score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
 .score-ball{
   width:40px;
@@ -241,7 +251,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     0 0 18px var(--game-glow);
 }
 .score-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.score-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:74px}
+.score-preview{
+  background:var(--bg3);
+  border:1px solid var(--border);
+
+  border-radius:var(--r);
+
+  padding:12px 16px;
+
+  min-height:auto;
+
+  margin-bottom:16px;
+}
 .preview-balls{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
 .preview-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff}
 .score-result{
@@ -253,31 +274,31 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   margin-top:24px;
 }
 .score-ring-wrap{
+  margin-top:28px;
+
   display:flex;
   flex-direction:column;
 
   align-items:center;
-  justify-content:flex-start;
+  justify-content:center;
 
-  gap:14px;
-
-  padding-top:34px;
-
-  width:100%;
+  gap:12px;
 }
 .score-ring{
-  width:110px;
-  height:110px;
+  width:150px;
+  height:150px;
 
   position:relative;
-  margin-top:8px;
-
-  flex-shrink:0;
 }
 .score-ring svg{transform:rotate(-90deg)}
 .score-ring-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-ring-num{font-size:30px;font-weight:900;letter-spacing:-.04em}
-.score-ring-lbl{font-size:9px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.score-ring-num{
+  font-size:42px;
+  font-weight:900;
+}
+.score-ring-lbl{
+  font-size:11px;
+}
 .score-items{display:flex;flex-direction:column;gap:7px;padding-top:10px}
 .score-item{
   background:var(--bg3);
@@ -292,6 +313,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   gap:16px;
 
   min-height:64px;
+}
+  .score-level{
+  font-size:36px;
+  font-weight:900;
+
+  letter-spacing:-.04em;
 }
 .score-item-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
 .score-item-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1)}
@@ -463,44 +490,70 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
 
     <!-- SCORE ANALÍTICO -->
-    <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Score Analítico</div>
+   <div class="score-layout">
+
+  <!-- COLUNA ESQUERDA -->
+  <div>
+
+    <div class="score-grid" id="scoreGrid"></div>
+
+    <!-- Trevos -->
+    <div class="score-trevo-section" id="scoreTrevoSection" style="display:none">
+      <div class="label">Selecione os Trevos (escolha 2)</div>
+      <div class="score-trevo-btns" id="scoreTrevoBtns"></div>
+    </div>
+
+    <!-- Time -->
+    <div class="score-team-section" id="scoreTeamSection" style="display:none">
+      <div class="label">Selecione o Time do Coração</div>
+
+      <div class="team-search-wrap">
+        <input
+          class="team-search-input"
+          id="teamSearchInput"
+          placeholder="🔍 Buscar time..."
+          autocomplete="off"
+          oninput="filterTeams()"
+          onfocus="openTeamDropdown()"
+          onclick="openTeamDropdown()"
+        >
+
+        <div class="team-dropdown" id="teamDropdown"></div>
       </div>
-      <div class="card">
-        <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7" id="scoreDesc">Monte um jogo e veja como ele se posiciona estatisticamente.</p>
-        <div class="score-layout">
-          <div>
-            <div class="score-grid" id="scoreGrid"></div>
-            <!-- Trevos (Milionária) -->
-            <div class="score-trevo-section" id="scoreTrevoSection" style="display:none">
-              <div class="label">Selecione os Trevos (escolha 2)</div>
-              <div class="score-trevo-btns" id="scoreTrevoBtns"></div>
-            </div>
-            <!-- Time (Timemania) -->
-            <div class="score-team-section" id="scoreTeamSection" style="display:none">
-              <div class="label">Selecione o Time do Coração</div>
-              <div class="team-search-wrap">
-                <input class="team-search-input" id="teamSearchInput" placeholder="🔍 Buscar time..." autocomplete="off" oninput="filterTeams()" onfocus="openTeamDropdown()" onclick="openTeamDropdown()">
-                <div class="team-dropdown" id="teamDropdown"></div>
-              </div>
-              <div id="selectedTeamBadge"></div>
-            </div>
-            <div class="score-actions">
-              <button class="gen-btn" onclick="runAnalyticalScore()">Analisar Jogo</button>
-              <button class="copy-btn" onclick="clearScoreGame()">Limpar</button>
-            </div>
-          </div>
-          <div>
-            <div class="score-preview" id="scoreSide">
-              <div class="label">Seu jogo</div>
-              <div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>
-            </div>
-            <div id="scoreResults"></div>
-          </div>
-        </div>
+
+      <div id="selectedTeamBadge"></div>
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="score-actions">
+      <button class="gen-btn" onclick="runAnalyticalScore()">
+        Analisar Jogo
+      </button>
+
+      <button class="copy-btn" onclick="clearScoreGame()">
+        Limpar
+      </button>
+    </div>
+
+    <!-- SCORE AGORA FICA AQUI -->
+    <div id="scoreResults"></div>
+
+  </div>
+
+  <!-- COLUNA DIREITA -->
+  <div>
+
+    <div class="score-preview" id="scoreSide">
+      <div class="label">Seu jogo</div>
+
+      <div style="font-size:13px;color:var(--text2);margin-top:8px">
+        Selecione dezenas para montar seu jogo
       </div>
     </div>
+
+  </div>
+
+</div>
 
     <!-- RANKING -->
     <div class="col2 section">
