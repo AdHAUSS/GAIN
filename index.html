@@ -1,3 +1,6 @@
+Lotofacil dashboard · HTML
+Copiar
+
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="dark" data-game="lotofacil">
 <head>
@@ -99,8 +102,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .s-sub{font-size:12px;color:var(--text2)}
 /* SECTIONS */
 .section{margin-bottom:24px}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.section-title{font-size:22px;font-weight:800;display:flex;align-items:center;gap:9px;letter-spacing:-.03em}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
 .section-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 /* CARD */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm)}
@@ -162,167 +165,32 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .gen-results{display:flex;flex-direction:column;gap:9px}
 .gen-game{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;animation:fadeIn .25s ease}
 .gen-game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-family:var(--mono);font-size:11px;color:var(--text2)}
-..gen-balls{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.gen-ball{
-  width:36px;
-  height:36px;
-
-  border-radius:50%;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-weight:800;
-  font-size:13px;
-
-  background:linear-gradient(
-    135deg,
-    var(--accent2),
-    var(--accent)
-  );
-
-  color:#fff;
-  letter-spacing:-.02em;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 4px 10px rgba(0,0,0,.22);
-}
+.gen-balls{display:flex;flex-wrap:wrap;gap:5px}
+.gen-ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;letter-spacing:-.02em}
 .copy-btn{padding:4px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all .2s}
 .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
 /* SCORE */
-.score-layout{
-  display:grid;
-
-  grid-template-columns:
-    360px
-    minmax(0,1fr);
-
-  gap:34px;
-
-  align-items:start;
-}
+.score-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
 .score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.score-ball{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:var(--bg3);
-  border:1px solid var(--border);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-weight:800;
-  font-size:14px;
-
-  cursor:pointer;
-  transition:all .2s;
-  letter-spacing:-.02em;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    0 4px 10px rgba(0,0,0,.25);
-}
-
-.score-ball:hover{
-  border-color:var(--accent);
-  transform:scale(1.08);
-}
-
-.score-ball.active{
-  background:linear-gradient(
-    135deg,
-    var(--accent),
-    var(--accent2)
-  );
-
-  color:#fff;
-  border:none;
-
-  box-shadow:
-    0 0 18px var(--game-glow);
-}
+.score-ball{aspect-ratio:1;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;letter-spacing:-.02em}
+.score-ball:hover{border-color:var(--accent);transform:scale(1.06)}
+.score-ball.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;box-shadow:0 0 12px var(--game-glow)}
 .score-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.score-preview{
-  background:var(--bg3);
-  border:1px solid var(--border);
-
-  border-radius:var(--r);
-
-  padding:12px 16px;
-
-  min-height:auto;
-
-  margin-bottom:16px;
-}
+.score-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:74px}
 .preview-balls{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
 .preview-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff}
-.score-result{
-  display:grid;
-  grid-template-columns:220px 1fr;
-  gap:28px;
-
-  align-items:start;
-  margin-top:24px;
-}
-.score-ring-wrap{
-  margin-top:28px;
-
-  display:flex;
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:12px;
-}
-.score-ring{
-  width:150px;
-  height:150px;
-
-  position:relative;
-}
+.score-result{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;margin-top:18px}
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:7px}
+.score-ring{width:104px;height:104px;position:relative;flex-shrink:0}
 .score-ring svg{transform:rotate(-90deg)}
 .score-ring-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-ring-num{
-  font-size:42px;
-  font-weight:900;
-}
-.score-ring-lbl{
-  font-size:11px;
-}
-.score-items{display:flex;flex-direction:column;gap:7px;padding-top:10px}
-.score-item{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:var(--r-sm);
-
-  padding:14px 14px;
-
-  display:flex;
-  align-items:center;
-
-  gap:16px;
-
-  min-height:64px;
-}
-  .score-level{
-  font-size:36px;
-  font-weight:900;
-
-  letter-spacing:-.04em;
-}
+.score-ring-num{font-size:28px;font-weight:900;letter-spacing:-.04em}
+.score-ring-lbl{font-size:9px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.score-items{display:flex;flex-direction:column;gap:7px}
+.score-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;display:flex;align-items:center;gap:12px}
 .score-item-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
 .score-item-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1)}
-.score-item-name{font-size:12px;font-weight:600;width:110px;flex-shrink:0}
+.score-item-name{font-size:12px;font-weight:600;width:90px;flex-shrink:0}
 .score-item-detail{font-size:11px;color:var(--text2);width:78px;text-align:right;font-family:var(--mono);flex-shrink:0}
 .historical-stats{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-top:12px}
 .hist-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:9px}
@@ -339,29 +207,52 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .draw-balls-row{display:flex;flex-wrap:wrap;gap:3px}
 .draw-ball{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:8px;background:var(--bg3);border:1px solid var(--border)}
 .draw-ball.highlight{background:var(--game-glow);border-color:var(--accent);color:var(--accent)}
-
+ 
 /* ========= TREVOS ========= */
 .trevos-section{margin-top:16px}
 .trevo-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .trevo-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:80px;transition:border-color .2s,transform .2s;cursor:default}
 .trevo-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.trevo-icon{font-size:24px;display:block;margin-bottom:4px;line-height:1}
-/* SVG trevo vazado */
-.trevo-svg-wrap{display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+ 
+/* Ícone SVG de trevo — contorno */
+.trevo-icon-svg{display:block;margin:0 auto 4px;width:36px;height:36px}
+ 
 .trevo-num{font-size:11px;font-weight:700;color:var(--text2);font-family:var(--mono)}
 .trevo-count{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-.03em}
 .trevo-pct{font-size:10px;color:var(--text3);font-family:var(--mono)}
 .trevo-bar-wrap{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:6px}
 .trevo-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-
+ 
 /* Score trevo selector */
 .score-trevo-section{margin-top:16px;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)}
 .score-trevo-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.trevo-sel-btn{width:44px;height:44px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:var(--text2);font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px}
-.trevo-sel-btn:hover{border-color:var(--accent)}
-.trevo-sel-btn.active{border-color:var(--accent);background:var(--game-glow);box-shadow:0 0 10px var(--game-glow)}
-.trevo-sel-btn .trevo-sel-num{font-size:8px;font-family:var(--mono);font-weight:700;color:var(--text3);line-height:1}
-
+.trevo-sel-btn{
+  width:54px;height:54px;border-radius:12px;
+  background:var(--bg4);border:2px solid var(--border);
+  color:var(--text2);cursor:pointer;
+  transition:all .2s;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:2px;
+  position:relative;
+}
+.trevo-sel-btn:hover{border-color:var(--accent);background:var(--bg3)}
+.trevo-sel-btn.active{
+  border-color:var(--accent);
+  background:var(--game-glow);
+  box-shadow:0 0 10px var(--game-glow);
+}
+/* número dentro do ícone SVG no botão seletor */
+.trevo-sel-btn .trevo-svg-wrap{position:relative;width:32px;height:32px}
+.trevo-sel-btn .trevo-svg-wrap svg{width:32px;height:32px}
+.trevo-sel-btn .trevo-svg-num{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:800;
+  color:var(--accent);
+  line-height:1;
+}
+.trevo-sel-btn.active .trevo-svg-num{color:#fff}
+ 
 /* ========= TIMES ========= */
 .team-section{margin-top:16px}
 .team-rank-list{display:flex;flex-direction:column;gap:4px;max-height:340px;overflow-y:auto}
@@ -372,8 +263,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .team-bar-wrap{width:80px;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden;flex-shrink:0}
 .team-bar{height:100%;border-radius:99px}
 .team-count{font-family:var(--mono);font-size:11px;color:var(--text2);width:34px;text-align:right;flex-shrink:0}
-
-/* Score team selector - dropdown invisível */
+ 
+/* Score team selector */
 .score-team-section{margin-top:16px;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)}
 .team-search-wrap{position:relative;margin-top:10px}
 .team-search-input{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;outline:none;transition:border-color .2s}
@@ -386,7 +277,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .team-option-count{font-size:10px;font-family:var(--mono);color:var(--text3)}
 .selected-team-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--game-glow);border:1px solid var(--accent);color:var(--accent);font-size:12px;font-weight:700;margin-top:8px}
 .selected-team-badge button{background:none;border:none;color:var(--accent);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
-
+ 
 /* ========= PADRÕES ========= */
 .patterns-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
 .pattern-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px}
@@ -394,22 +285,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .pattern-insight{font-size:13px;color:var(--text2);line-height:1.65}
 .pattern-insight strong{color:var(--text)}
 .pattern-insight .accent{color:var(--accent)}
-
-/* Tabs inside sections */
+ 
+/* Tabs */
 .tab-group{display:flex;gap:4px;margin-bottom:16px}
 .tab-pill{padding:6px 14px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--mono);transition:all .2s}
 .tab-pill:hover{background:var(--bg3)}
 .tab-pill.active{background:var(--game-glow);border-color:var(--accent);color:var(--accent)}
 .tab-content{display:none}
 .tab-content.active{display:block;animation:fadeIn .25s ease}
-
+ 
 /* RESPONSIVE */
 @media(max-width:960px){.summary-grid{grid-template-columns:repeat(2,1fr)}.col2,.col3{grid-template-columns:1fr}.score-layout{grid-template-columns:1fr}.patterns-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.main{padding:14px}.header-top{padding:0 14px}.game-nav{padding:0 14px 10px}.summary-grid{grid-template-columns:1fr 1fr}.hist-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
-
+ 
 <header class="header">
   <div class="header-top">
     <div class="logo">
@@ -445,7 +336,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </button>
   </nav>
 </header>
-
+ 
 <main class="main">
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
@@ -458,254 +349,106 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div class="error-msg" id="errorMsg"></div>
     <button class="retry-btn" onclick="initDashboard()">Tentar novamente</button>
   </div>
-
-  <!-- DASHBOARD -->
+ 
   <div class="dashboard" id="dashboard">
-
     <div class="banner">⚠️&nbsp;<span><strong>Aviso:</strong> Ferramenta de análise estatística histórica. Cada sorteio é independente — padrões passados <strong>não aumentam matematicamente suas chances</strong>.</span></div>
     <div class="banner" id="gameNote" style="display:none;border-color:rgba(61,142,255,.2);background:rgba(61,142,255,.06)">ℹ️&nbsp;<span id="gameNoteText"></span></div>
-
+ 
     <!-- SUMMARY -->
     <div class="summary-grid">
-      <div class="s-card">
-        <div class="label">Total de Concursos</div>
-        <div class="s-value" id="sumTotal" style="color:var(--accent)">—</div>
-        <div class="s-sub" id="sumRange">—</div>
-      </div>
-      <div class="s-card">
-        <div class="label">Dezena Mais Sorteada</div>
-        <div class="s-value" id="sumHot" style="color:var(--hot)">—</div>
-        <div class="s-sub" id="sumHotCount">—</div>
-      </div>
-      <div class="s-card">
-        <div class="label">Dezena Menos Sorteada</div>
-        <div class="s-value" id="sumCold" style="color:var(--cold)">—</div>
-        <div class="s-sub" id="sumColdCount">—</div>
-      </div>
-      <div class="s-card">
-        <div class="label">Último Concurso</div>
-        <div class="s-value" id="sumLast" style="color:var(--accent4)">—</div>
-        <div class="s-sub" id="sumLastDate">—</div>
+      <div class="s-card"><div class="label">Total de Concursos</div><div class="s-value" id="sumTotal" style="color:var(--accent)">—</div><div class="s-sub" id="sumRange">—</div></div>
+      <div class="s-card"><div class="label">Dezena Mais Sorteada</div><div class="s-value" id="sumHot" style="color:var(--hot)">—</div><div class="s-sub" id="sumHotCount">—</div></div>
+      <div class="s-card"><div class="label">Dezena Menos Sorteada</div><div class="s-value" id="sumCold" style="color:var(--cold)">—</div><div class="s-sub" id="sumColdCount">—</div></div>
+      <div class="s-card"><div class="label">Último Concurso</div><div class="s-value" id="sumLast" style="color:var(--accent4)">—</div><div class="s-sub" id="sumLastDate">—</div></div>
+    </div>
+ 
+    <!-- SCORE -->
+    <div class="section">
+      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Score Analítico</div></div>
+      <div class="card">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7" id="scoreDesc">Monte um jogo e veja como ele se posiciona estatisticamente.</p>
+        <div class="score-layout">
+          <div>
+            <div class="score-grid" id="scoreGrid"></div>
+            <div class="score-trevo-section" id="scoreTrevoSection" style="display:none">
+              <div class="label">Selecione os Trevos (escolha 2)</div>
+              <div class="score-trevo-btns" id="scoreTrevoBtns"></div>
+            </div>
+            <div class="score-team-section" id="scoreTeamSection" style="display:none">
+              <div class="label">Selecione o Time do Coração</div>
+              <div class="team-search-wrap">
+                <input class="team-search-input" id="teamSearchInput" placeholder="🔍 Buscar time..." autocomplete="off" oninput="filterTeams()" onfocus="openTeamDropdown()" onclick="openTeamDropdown()">
+                <div class="team-dropdown" id="teamDropdown"></div>
+              </div>
+              <div id="selectedTeamBadge"></div>
+            </div>
+            <div class="score-actions">
+              <button class="gen-btn" onclick="runAnalyticalScore()">Analisar Jogo</button>
+              <button class="copy-btn" onclick="clearScoreGame()">Limpar</button>
+            </div>
+          </div>
+          <div>
+            <div class="score-preview" id="scoreSide"><div class="label">Seu jogo</div><div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div></div>
+            <div id="scoreResults"></div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- SCORE ANALÍTICO -->
-  <!-- SCORE ANALÍTICO -->
-<div class="section">
-
-  <div class="section-head">
-    <div class="section-title">
-      <span class="section-dot" style="background:var(--accent3)"></span>
-      Score Analítico
-    </div>
-  </div>
-
-  <div class="card">
-
-    <p
-      style="
-        font-size:13px;
-        color:var(--text2);
-        margin-bottom:18px;
-        line-height:1.7
-      "
-      id="scoreDesc"
-    >
-      Monte um jogo e veja como ele se posiciona estatisticamente.
-    </p>
-
-    <div class="score-layout">
-
-      <!-- COLUNA ESQUERDA -->
-      <div>
-
-        <div class="score-grid" id="scoreGrid"></div>
-
-        <!-- Trevos -->
-        <div
-          class="score-trevo-section"
-          id="scoreTrevoSection"
-          style="display:none"
-        >
-          <div class="label">
-            Selecione os Trevos (escolha 2)
-          </div>
-
-          <div
-            class="score-trevo-btns"
-            id="scoreTrevoBtns"
-          ></div>
-        </div>
-
-        <!-- Time -->
-        <div
-          class="score-team-section"
-          id="scoreTeamSection"
-          style="display:none"
-        >
-
-          <div class="label">
-            Selecione o Time do Coração
-          </div>
-
-          <div class="team-search-wrap">
-
-            <input
-              class="team-search-input"
-              id="teamSearchInput"
-              placeholder="🔍 Buscar time..."
-              autocomplete="off"
-              oninput="filterTeams()"
-              onfocus="openTeamDropdown()"
-              onclick="openTeamDropdown()"
-            >
-
-            <div
-              class="team-dropdown"
-              id="teamDropdown"
-            ></div>
-
-          </div>
-
-          <div id="selectedTeamBadge"></div>
-
-        </div>
-
-        <div class="score-actions">
-
-          <button
-            class="gen-btn"
-            onclick="runAnalyticalScore()"
-          >
-            Analisar Jogo
-          </button>
-
-          <button
-            class="copy-btn"
-            onclick="clearScoreGame()"
-          >
-            Limpar
-          </button>
-
-        </div>
-
-      </div>
-
-      <!-- COLUNA DIREITA -->
-      <div>
-
-        <div class="score-preview" id="scoreSide">
-
-          <div class="label">Seu jogo</div>
-
-          <div
-            style="
-              font-size:13px;
-              color:var(--text2);
-              margin-top:8px
-            "
-          >
-            Selecione dezenas para montar seu jogo
-          </div>
-
-        </div>
-
-        <div id="scoreResults"></div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
+ 
     <!-- RANKING -->
     <div class="col2 section">
       <div>
-        <div class="section-head">
-          <div class="section-title"><span class="section-dot" style="background:var(--hot)"></span>Top 10 — Mais Sorteadas</div>
-        </div>
+        <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--hot)"></span>Top 10 — Mais Sorteadas</div></div>
         <div class="card"><div class="rank-list" id="rankTop"></div></div>
       </div>
       <div>
-        <div class="section-head">
-          <div class="section-title"><span class="section-dot" style="background:var(--cold)"></span>Top 10 — Menos Sorteadas</div>
-        </div>
+        <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--cold)"></span>Top 10 — Menos Sorteadas</div></div>
         <div class="card"><div class="rank-list" id="rankBottom"></div></div>
       </div>
     </div>
-
-    <!-- TREVOS / TIMES — seção especial -->
+ 
+    <!-- SEÇÃO ESPECIAL (trevos / times) -->
     <div class="section" id="specialSection" style="display:none">
-      <div class="section-head">
-        <div class="section-title" id="specialSectionTitle">
-          <span class="section-dot" style="background:var(--accent)"></span>
-          <span id="specialSectionName">—</span>
-        </div>
-      </div>
+      <div class="section-head"><div class="section-title" id="specialSectionTitle"><span class="section-dot" style="background:var(--accent)"></span><span id="specialSectionName">—</span></div></div>
       <div class="card" id="specialSectionCard"></div>
     </div>
-
+ 
     <!-- REPEAT + SUM -->
     <div class="col2 section">
       <div>
-        <div class="section-head">
-          <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Repetição entre Concursos</div>
-        </div>
-        <div class="card">
-          <div id="repeatSummary" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px"></div>
-          <div class="bar-group" id="repeatBars"></div>
-        </div>
+        <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Repetição entre Concursos</div></div>
+        <div class="card"><div id="repeatSummary" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px"></div><div class="bar-group" id="repeatBars"></div></div>
       </div>
       <div>
-        <div class="section-head">
-          <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Soma das Dezenas</div>
-        </div>
-        <div class="card">
-          <div id="sumAnalysis" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px"></div>
-          <div class="bar-group" id="sumBars"></div>
-        </div>
+        <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Soma das Dezenas</div></div>
+        <div class="card"><div id="sumAnalysis" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px"></div><div class="bar-group" id="sumBars"></div></div>
       </div>
     </div>
-
+ 
     <!-- PARITY + DELAY -->
     <div class="col2 section">
       <div>
-        <div class="section-head">
-          <div class="section-title"><span class="section-dot" style="background:var(--accent2)"></span>Distribuição Par / Ímpar</div>
-        </div>
-        <div class="card">
-          <div id="parityStats" style="font-size:13px;color:var(--text2);margin-bottom:12px"></div>
-          <div class="bar-group" id="parityBars"></div>
-        </div>
+        <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent2)"></span>Distribuição Par / Ímpar</div></div>
+        <div class="card"><div id="parityStats" style="font-size:13px;color:var(--text2);margin-bottom:12px"></div><div class="bar-group" id="parityBars"></div></div>
       </div>
       <div>
-        <div class="section-head">
-          <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Atraso — Dezenas Frias</div>
-        </div>
-        <div class="card">
-          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde o último sorteio. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div>
-          <div class="delay-grid" id="delayGrid"></div>
-        </div>
+        <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Atraso — Dezenas Frias</div></div>
+        <div class="card"><div style="font-size:12px;color:var(--text2);margin-bottom:12px">Concursos desde o último sorteio. <span style="color:var(--hot)">Vermelho</span> = acima da média.</div><div class="delay-grid" id="delayGrid"></div></div>
       </div>
     </div>
-
-    <!-- PADRÕES AVANÇADOS -->
+ 
+    <!-- TENDÊNCIA (era "Análise de Padrões Completa") -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Tendência</div>
-      </div>
+      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent4)"></span>Tendência</div></div>
       <div class="card">
         <div class="tab-group" id="patternTabs"></div>
         <div id="patternContent"></div>
       </div>
     </div>
-
+ 
     <!-- CYCLE -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Análise de Ciclo das Dezenas</div>
-      </div>
+      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent3)"></span>Análise de Ciclo das Dezenas</div></div>
       <div class="card">
         <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">A cada <strong>N concursos</strong>, verifique quais dezenas <span style="color:var(--hot)">não apareceram</span> em cada janela.</p>
         <div class="cycle-controls">
@@ -715,18 +458,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <div class="cycle-groups" id="cycleGroups"></div>
       </div>
     </div>
-
+ 
     <!-- GENERATOR -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div>
-      </div>
+      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div></div>
       <div class="card">
         <div class="gen-controls">
           <div class="gen-control"><div class="label">Qtd de jogos</div><input class="gen-input" type="number" id="genQty" value="5" min="1" max="50"></div>
           <div class="gen-control"><div class="label">Núm. por jogo</div><input class="gen-input" type="number" id="genNums" value="15" min="15" max="20"></div>
-          <div class="gen-control">
-            <div class="label">Filtro de paridade</div>
+          <div class="gen-control"><div class="label">Filtro de paridade</div>
             <select class="gen-select" id="genParity">
               <option value="any">Qualquer</option>
               <option value="more_odd">Mais ímpares</option>
@@ -734,8 +474,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
               <option value="balanced">Equilibrado</option>
             </select>
           </div>
-          <div class="gen-control">
-            <div class="label">Priorizar dezenas</div>
+          <div class="gen-control"><div class="label">Priorizar dezenas</div>
             <div class="multi-filters" id="genFreq">
               <label class="multi-tag"><input type="checkbox" value="hot"><span>Quentes</span></label>
               <label class="multi-tag"><input type="checkbox" value="cold"><span>Frias</span></label>
@@ -743,8 +482,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
               <label class="multi-tag"><input type="checkbox" value="cycle_missing"><span>Ciclo Atual</span></label>
             </div>
           </div>
-          <div class="gen-control">
-            <div class="label">Mín. consecutivos</div>
+          <div class="gen-control"><div class="label">Mín. consecutivos</div>
             <select class="gen-select" id="genConsec">
               <option value="any">Qualquer</option>
               <option value="0">Nenhum par</option>
@@ -752,19 +490,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
               <option value="2">Ao menos 2 pares</option>
             </select>
           </div>
-          <div class="gen-control" style="align-self:flex-end">
-            <button class="gen-btn" onclick="generateGames()">⚡ Gerar Jogos</button>
-          </div>
+          <div class="gen-control" style="align-self:flex-end"><button class="gen-btn" onclick="generateGames()">⚡ Gerar Jogos</button></div>
         </div>
         <div class="gen-results" id="genResults"></div>
       </div>
     </div>
-
+ 
     <!-- LAST DRAWS -->
     <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="section-dot" style="background:var(--accent2)"></span>Últimos 20 Concursos</div>
-      </div>
+      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent2)"></span>Últimos 20 Concursos</div></div>
       <div class="card">
         <div class="draws-scroll">
           <table class="draws-table">
@@ -774,52 +508,35 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         </div>
       </div>
     </div>
-
-  </div><!-- /dashboard -->
+  </div>
 </main>
-
+ 
 <script>
 /* ============================================================
-   HELPER — SVG trevo vazado com número dentro
+   SVG TREVO — contorno vazado com número dentro
 ============================================================ */
-const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
-
-function trevoSVG(num, size=48, color=null){
-  const c=color||TREVO_COLORS[(num-1)%6];
-  // Trevo de 4 folhas: 4 círculos dispostos em cruz + caule
-  const r=10, cx=24, cy=24;
-  return `<svg width="${size}" height="${size}" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="display:block">
-    <!-- folha cima -->
-    <circle cx="24" cy="14" r="10" fill="none" stroke="${c}" stroke-width="2.2"/>
-    <!-- folha baixo -->
-    <circle cx="24" cy="34" r="10" fill="none" stroke="${c}" stroke-width="2.2"/>
-    <!-- folha esq -->
-    <circle cx="14" cy="24" r="10" fill="none" stroke="${c}" stroke-width="2.2"/>
-    <!-- folha dir -->
-    <circle cx="34" cy="24" r="10" fill="none" stroke="${c}" stroke-width="2.2"/>
-    <!-- centro branco para cobrir cruzamentos -->
-    <circle cx="24" cy="24" r="7" fill="var(--bg3,#161923)"/>
-    <!-- caule -->
-    <line x1="24" y1="44" x2="24" y2="36" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="20" y1="44" x2="28" y2="44" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
-    <!-- número centralizado -->
-    <text x="24" y="28.5" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700" fill="${c}">${num}</text>
+function trevoSVG(num, color='currentColor', size=36) {
+  // Trevo de 4 folhas em path SVG (outline)
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 18C20 18 19 14 15 12C11 10 8 12 8 16C8 20 12 21 16 21C12 21 9 23 9 27C9 31 12 33 16 31C18 30 20 27 20 27C20 27 22 30 24 31C28 33 31 31 31 27C31 23 28 21 24 21C28 21 32 20 32 16C32 12 29 10 25 12C21 14 20 18 20 18Z
+      M20 27 L20 37" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="20" y="24" text-anchor="middle" dominant-baseline="middle"
+      font-family="'JetBrains Mono',monospace" font-weight="800" font-size="12"
+      fill="${color}">${num}</text>
   </svg>`;
 }
-
-function trevoSVGSmall(num, size=28, color=null){
-  const c=color||TREVO_COLORS[(num-1)%6];
-  return `<svg width="${size}" height="${size}" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle">
-    <circle cx="24" cy="14" r="10" fill="none" stroke="${c}" stroke-width="2.5"/>
-    <circle cx="24" cy="34" r="10" fill="none" stroke="${c}" stroke-width="2.5"/>
-    <circle cx="14" cy="24" r="10" fill="none" stroke="${c}" stroke-width="2.5"/>
-    <circle cx="34" cy="24" r="10" fill="none" stroke="${c}" stroke-width="2.5"/>
-    <circle cx="24" cy="24" r="7" fill="var(--bg3,#161923)"/>
-    <line x1="24" y1="44" x2="24" y2="36" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="20" y1="44" x2="28" y2="44" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>
-    <text x="24" y="28.5" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="13" font-weight="800" fill="${c}">${num}</text>
+ 
+/* Versão para os cards de frequência (maior, cor customizada) */
+function trevoCardSVG(num, color) {
+  return `<svg class="trevo-icon-svg" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 18C20 18 19 14 15 12C11 10 8 12 8 16C8 20 12 21 16 21C12 21 9 23 9 27C9 31 12 33 16 31C18 30 20 27 20 27C20 27 22 30 24 31C28 33 31 31 31 27C31 23 28 21 24 21C28 21 32 20 32 16C32 12 29 10 25 12C21 14 20 18 20 18Z" stroke="${color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="20" y1="27" x2="20" y2="40" stroke="${color}" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="20" y="24" text-anchor="middle" dominant-baseline="middle"
+      font-family="'JetBrains Mono',monospace" font-weight="800" font-size="13"
+      fill="${color}">${num}</text>
   </svg>`;
 }
+ 
 /* ============================================================
    CONFIGS
 ============================================================ */
@@ -830,19 +547,19 @@ const GAMES = {
   milionaria:{name:'+Milionária',emoji:'🌟',csvFile:'./milionaria.csv',numCount:6,numMax:50,minPick:6,maxPick:12,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],colTrevo1:8,colTrevo2:9,note:'Análise inclui as 6 bolas principais (1–50) e os 2 Trevos (1–6). Os trevos têm mecânica independente mas afetam o score analítico.',ready:true,hasExtras:true,extraType:'trevos'},
   timemania:{name:'Timemania',emoji:'⚽',csvFile:'./timemania.csv',numCount:7,numMax:80,minPick:7,maxPick:7,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8],colTime:9,note:'Análise inclui as 7 bolas numéricas (1–80) e o Time do Coração. O time afeta o score analítico.',ready:true,hasExtras:true,extraType:'time'}
 };
-
+ 
 /* STATE */
 let currentGame='lotofacil', allDraws=[], freq={}, delay={}, analyticalGame=[], selectedTrevos=[], selectedTeam=null, teamFreq={}, trevoFreq={}, allTeams=[];
-
+ 
 /* ============================================================
-   THEME & SWITCHER
+   THEME
 ============================================================ */
 document.getElementById('themeBtn').addEventListener('click',()=>{
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
   document.documentElement.setAttribute('data-theme',dark?'light':'dark');
   document.getElementById('themeBtn').textContent=dark?'☀️':'🌙';
 });
-
+ 
 function switchGame(gameKey,tabEl){
   if(gameKey===currentGame)return;
   document.querySelectorAll('.game-tab').forEach(t=>t.classList.remove('active'));
@@ -854,7 +571,7 @@ function switchGame(gameKey,tabEl){
   document.getElementById('errorScreen').classList.remove('show');
   initDashboard();
 }
-
+ 
 /* ============================================================
    INIT
 ============================================================ */
@@ -884,27 +601,21 @@ async function initDashboard(){
     console.error(e);
   }
 }
-
+ 
 function parseCSV(text,cfg){
   const rows=text.trim().split('\n').slice(1);
   allDraws=[];teamFreq={};trevoFreq={1:0,2:0,3:0,4:0,5:0,6:0};
   for(const line of rows){
-    // handle quoted lines (lotofacil)
     const raw=line.startsWith('"')?line.slice(1,-1):line;
     const cols=raw.split(',');
     const dezenas=cfg.colNums.map(i=>Number(cols[i])).filter(n=>!isNaN(n)&&n>0).sort((a,b)=>a-b);
     if(dezenas.length!==cfg.numCount) continue;
     const entry={concurso:Number(cols[cfg.colConcurso]),data:cols[cfg.colData],dezenas};
-    // trevos
     if(cfg.extraType==='trevos'){
       const t1=Number(cols[cfg.colTrevo1]),t2=Number(cols[cfg.colTrevo2]);
       entry.trevos=[t1,t2].filter(n=>n>=1&&n<=6);
-      if(entry.trevos.length===2){
-        trevoFreq[t1]=(trevoFreq[t1]||0)+1;
-        trevoFreq[t2]=(trevoFreq[t2]||0)+1;
-      }
+      if(entry.trevos.length===2){trevoFreq[t1]=(trevoFreq[t1]||0)+1;trevoFreq[t2]=(trevoFreq[t2]||0)+1;}
     }
-    // time
     if(cfg.extraType==='time'){
       const raw_time=(cols[cfg.colTime]||'').trim().replace(/\r/g,'');
       entry.time=raw_time;
@@ -916,7 +627,7 @@ function parseCSV(text,cfg){
   allTeams=Object.entries(teamFreq).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
   if(allDraws.length===0) throw new Error('Nenhum concurso válido encontrado.');
 }
-
+ 
 function processData(){
   const cfg=GAMES[currentGame];
   freq={};
@@ -929,11 +640,11 @@ function processData(){
     delay[i]=idx===-1?allDraws.length:idx;
   }
 }
-
+ 
 function setStatus(s,t){document.getElementById('statusDot').className='status-dot '+s;document.getElementById('statusText').textContent=t}
 function setBar(p){document.getElementById('loadingBar').style.width=p+'%'}
 function formatDate(s){if(!s)return'—';try{const p=s.trim().split('/');return p.length===3?s.trim():new Date(s).toLocaleDateString('pt-BR')}catch{return s}}
-
+ 
 /* ============================================================
    RENDER ALL
 ============================================================ */
@@ -953,12 +664,11 @@ function renderAll(){
   renderSpecialSection();
   renderPatterns();
   renderLastDraws();
-  // Reset gen nums
   const genNums=document.getElementById('genNums');
   genNums.min=cfg.minPick;genNums.max=cfg.maxPick;genNums.value=cfg.numCount;
   document.getElementById('scoreDesc').textContent=`Monte um jogo e veja como ele se posiciona estatisticamente. Selecione de ${cfg.minPick} a ${cfg.maxPick} dezenas.`;
 }
-
+ 
 /* ============================================================
    SUMMARY
 ============================================================ */
@@ -975,7 +685,7 @@ function renderSummary(){
   document.getElementById('sumLast').textContent=`#${last.concurso}`;
   document.getElementById('sumLastDate').textContent=formatDate(last.data);
 }
-
+ 
 /* ============================================================
    RANKING
 ============================================================ */
@@ -994,7 +704,7 @@ function renderRanking(){
   makeList(sorted,'rankTop',i=>['#ff4455','#ff6b35','#ffd60a','var(--accent)','#4da6ff'][Math.min(i,4)]);
   makeList([...sorted].reverse(),'rankBottom',()=>'#4da6ff');
 }
-
+ 
 /* ============================================================
    SPECIAL SECTION — TREVOS ou TIMES
 ============================================================ */
@@ -1003,7 +713,6 @@ function renderSpecialSection(){
   const sec=document.getElementById('specialSection');
   if(!cfg.hasExtras){sec.style.display='none';return;}
   sec.style.display='block';
-
   if(cfg.extraType==='trevos'){
     document.getElementById('specialSectionName').textContent='Estatísticas dos Trevos';
     renderTrevosSection();
@@ -1012,16 +721,14 @@ function renderSpecialSection(){
     renderTimesSection();
   }
 }
-
+ 
 /* ---- TREVOS ---- */
 function renderTrevosSection(){
   const card=document.getElementById('specialSectionCard');
   const total=allDraws.filter(d=>d.trevos&&d.trevos.length===2).length;
   const maxC=Math.max(...Object.values(trevoFreq));
-  const TREVO_ICONS=['🍀','🍀','🍀','🍀','🍀','🍀'];
   const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
-
-  // Par de trevos mais frequente
+ 
   const pairFreq={};
   for(const d of allDraws){
     if(!d.trevos||d.trevos.length!==2)continue;
@@ -1029,15 +736,14 @@ function renderTrevosSection(){
     pairFreq[key]=(pairFreq[key]||0)+1;
   }
   const sortedPairs=Object.entries(pairFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
-  // Atraso dos trevos
+ 
   const trevoDelay={};
   const revDraws=[...allDraws].reverse();
   for(let t=1;t<=6;t++){
     const idx=revDraws.findIndex(d=>d.trevos&&d.trevos.includes(t));
     trevoDelay[t]=idx===-1?allDraws.length:idx;
   }
-
+ 
   card.innerHTML=`
     <div class="tab-group">
       <button class="tab-pill active" onclick="switchSpecialTab(this,'trevo-freq')">Frequência</button>
@@ -1050,7 +756,7 @@ function renderTrevosSection(){
         ${[1,2,3,4,5,6].map(t=>{
           const cnt=trevoFreq[t]||0;const pct=(cnt/(total*2)*100).toFixed(1);const w=(cnt/maxC*100).toFixed(0);
           return `<div class="trevo-card">
-            <span class="trevo-icon" style="filter:hue-rotate(${t*40}deg)">🍀</span>
+            ${trevoCardSVG(t, TREVO_COLORS[t-1])}
             <div class="trevo-num">Trevo ${t}</div>
             <div class="trevo-count" style="color:${TREVO_COLORS[t-1]}">${cnt}</div>
             <div class="trevo-pct">${pct}%</div>
@@ -1059,7 +765,7 @@ function renderTrevosSection(){
         }).join('')}
       </div>
       <div style="margin-top:14px;font-size:12px;color:var(--text2)">
-        Total de sorteios analisados: <strong style="color:var(--text)">${total}</strong> · 
+        Total de sorteios analisados: <strong style="color:var(--text)">${total}</strong> ·
         Total de trevos sorteados: <strong style="color:var(--text)">${total*2}</strong> ·
         Mais frequente: <strong style="color:var(--accent)">Trevo ${Object.entries(trevoFreq).sort((a,b)=>b[1]-a[1])[0][0]}</strong>
       </div>
@@ -1070,7 +776,7 @@ function renderTrevosSection(){
         ${sortedPairs.map(([pair,cnt])=>{
           const [t1,t2]=pair.split('-');const pct=(cnt/total*100).toFixed(1);
           return `<div class="bar-row">
-            <div class="bar-label"><strong>🍀${t1} + 🍀${t2}</strong><span>${cnt}x (${pct}%)</span></div>
+            <div class="bar-label"><strong>Trevo ${t1} + Trevo ${t2}</strong><span>${cnt}x (${pct}%)</span></div>
             <div class="bar-track"><div class="bar-fill" style="width:${(cnt/sortedPairs[0][1]*100).toFixed(0)}%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div>
           </div>`;
         }).join('')}
@@ -1084,7 +790,7 @@ function renderTrevosSection(){
           const d=trevoDelay[t];const avgD=Object.values(trevoDelay).reduce((a,b)=>a+b,0)/6;
           const color=d>avgD*1.5?'var(--hot)':d>avgD?'var(--accent4)':'var(--accent)';
           return `<div class="trevo-card" style="${d>avgD*1.5?'border-color:rgba(255,68,85,.5);background:rgba(255,68,85,.06)':''}">
-            <span class="trevo-icon" style="filter:hue-rotate(${t*40}deg)">🍀</span>
+            ${trevoCardSVG(t, color)}
             <div class="trevo-num">Trevo ${t}</div>
             <div class="trevo-count" style="color:${color}">${d}</div>
             <div class="trevo-pct">${d===0?'último sorteio':`${d} conc. atrás`}</div>
@@ -1097,15 +803,14 @@ function renderTrevosSection(){
     </div>
   `;
 }
-
+ 
 function renderTrevoPatterns(total){
-  // Trevo baixo (1-3) vs alto (4-6)
-  let baixo=0,alto=0,umBaixo=0,umAlto=0,doisBaixo=0,doisAlto=0;
+  let baixo=0,alto=0,umMisto=0,doisBaixo=0,doisAlto=0;
   for(const d of allDraws){
     if(!d.trevos||d.trevos.length!==2)continue;
     const b=d.trevos.filter(t=>t<=3).length,a=d.trevos.filter(t=>t>=4).length;
     baixo+=b;alto+=a;
-    if(b===1&&a===1)umBaixo++;
+    if(b===1&&a===1)umMisto++;
     else if(b===2)doisBaixo++;
     else doisAlto++;
   }
@@ -1126,27 +831,25 @@ function renderTrevoPatterns(total){
       <div class="pattern-card">
         <div class="pattern-card-title">Combinação dos 2 Trevos</div>
         <div class="pattern-insight">
-          1 baixo + 1 alto: <strong class="accent">${umBaixo}x (${(umBaixo/draws*100).toFixed(1)}%)</strong><br>
+          1 baixo + 1 alto: <strong class="accent">${umMisto}x (${(umMisto/draws*100).toFixed(1)}%)</strong><br>
           2 baixos: <strong>${doisBaixo}x (${(doisBaixo/draws*100).toFixed(1)}%)</strong><br>
           2 altos: <strong>${doisAlto}x (${(doisAlto/draws*100).toFixed(1)}%)</strong>
         </div>
       </div>
       <div class="pattern-card">
         <div class="pattern-card-title">Último Sorteio</div>
-        ${(()=>{const last=allDraws[allDraws.length-1];return`<div class="pattern-insight">Trevos: <strong class="accent" style="font-size:20px">🍀${last.trevos?.[0]||'?'} 🍀${last.trevos?.[1]||'?'}</strong><br>Concurso #${last.concurso} · ${formatDate(last.data)}</div>`})()}
+        ${(()=>{const last=allDraws[allDraws.length-1];return`<div class="pattern-insight">Trevos: <strong class="accent" style="font-size:18px">${trevoCardSVG(last.trevos?.[0]||'?','var(--accent)')}&nbsp;${trevoCardSVG(last.trevos?.[1]||'?','var(--accent2)')}</strong><br><span style="font-size:12px">Concurso #${last.concurso} · ${formatDate(last.data)}</span></div>`})()}
       </div>
     </div>
   `;
 }
-
-/* ---- TIMES ---- */
+ 
+/* ---- TIMES — sem aba "Por Estado" ---- */
 function renderTimesSection(){
   const card=document.getElementById('specialSectionCard');
   const total=allDraws.filter(d=>d.time).length;
-  const top10=allTeams.slice(0,10);
-  const maxC=top10[0]?.count||1;
-
-  // Atraso dos times
+  const maxC=allTeams[0]?.count||1;
+ 
   const topTeamsSorted=[...allTeams].slice(0,20);
   const teamDelay={};
   const revDraws=[...allDraws].reverse();
@@ -1154,18 +857,8 @@ function renderTimesSection(){
     const idx=revDraws.findIndex(d=>d.time===name);
     teamDelay[name]=idx===-1?allDraws.length:idx;
   }
-  const avgTeamDelay=Object.values(teamDelay).reduce((a,b)=>a+b,0)/Object.keys(teamDelay).length||1;
-
-  // UF stats
-  const ufFreq={};
-  for(const d of allDraws){
-    if(!d.time)continue;
-    const uf=d.time.includes('/')?d.time.split('/').pop().trim():'??';
-    ufFreq[uf]=(ufFreq[uf]||0)+1;
-  }
-  const sortedUF=Object.entries(ufFreq).sort((a,b)=>b[1]-a[1]);
-  const maxUF=sortedUF[0]?.[1]||1;
-
+  const avgTeamDelay=Object.values(teamDelay).reduce((a,b)=>a+b,0)/Math.max(Object.keys(teamDelay).length,1);
+ 
   card.innerHTML=`
     <div class="tab-group">
       <button class="tab-pill active" onclick="switchSpecialTab(this,'team-ranking')">Ranking</button>
@@ -1207,26 +900,20 @@ function renderTimesSection(){
     </div>
   `;
 }
-
+ 
 function renderTeamPatterns(total){
-  // Consecutive same team
   let sameTeam=0;
-  for(let i=1;i<allDraws.length;i++){
-    if(allDraws[i].time&&allDraws[i].time===allDraws[i-1].time)sameTeam++;
-  }
+  for(let i=1;i<allDraws.length;i++){if(allDraws[i].time&&allDraws[i].time===allDraws[i-1].time)sameTeam++;}
   const last=allDraws[allDraws.length-1];
   const lastTeamCount=teamFreq[last.time]||0;
-
-  // Times that appeared only once
   const oneHit=allTeams.filter(t=>t.count===1).length;
   const topTeam=allTeams[0];
-
   return `
     <div class="patterns-grid" style="grid-template-columns:1fr 1fr 1fr">
       <div class="pattern-card">
         <div class="pattern-card-title">Último Time Sorteado</div>
         <div class="pattern-insight">
-          <strong class="accent" style="font-size:16px">⚽ ${last.time||'—'}</strong><br>
+          <strong class="accent" style="font-size:15px">⚽ ${last.time||'—'}</strong><br>
           Concurso #${last.concurso} · ${formatDate(last.data)}<br>
           <span style="color:var(--text3)">Apareceu ${lastTeamCount}x no total</span>
         </div>
@@ -1234,7 +921,7 @@ function renderTeamPatterns(total){
       <div class="pattern-card">
         <div class="pattern-card-title">Time Mais Sorteado (All-Time)</div>
         <div class="pattern-insight">
-          <strong class="accent" style="font-size:16px">⚽ ${topTeam?.name||'—'}</strong><br>
+          <strong class="accent" style="font-size:15px">⚽ ${topTeam?.name||'—'}</strong><br>
           ${topTeam?.count||0}x sorteado<br>
           <span style="color:var(--text3)">${((topTeam?.count||0)/total*100).toFixed(1)}% dos concursos</span>
         </div>
@@ -1250,7 +937,7 @@ function renderTeamPatterns(total){
     </div>
   `;
 }
-
+ 
 function switchSpecialTab(btn,tabId){
   const card=document.getElementById('specialSectionCard');
   card.querySelectorAll('.tab-pill').forEach(p=>p.classList.remove('active'));
@@ -1258,7 +945,7 @@ function switchSpecialTab(btn,tabId){
   btn.classList.add('active');
   const el=document.getElementById(tabId);if(el)el.classList.add('active');
 }
-
+ 
 /* ============================================================
    PARITY
 ============================================================ */
@@ -1285,7 +972,7 @@ function renderParity(){
     barsEl.appendChild(row);
   });
 }
-
+ 
 /* ============================================================
    DELAY
 ============================================================ */
@@ -1302,7 +989,7 @@ function renderDelay(){
     grid.appendChild(cell);
   });
 }
-
+ 
 /* ============================================================
    REPEAT
 ============================================================ */
