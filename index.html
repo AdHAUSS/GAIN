@@ -490,71 +490,135 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
 
     <!-- SCORE ANALÍTICO -->
-   <div class="score-layout">
+  <!-- SCORE ANALÍTICO -->
+<div class="section">
 
-  <!-- COLUNA ESQUERDA -->
-  <div>
-
-    <div class="score-grid" id="scoreGrid"></div>
-
-    <!-- Trevos -->
-    <div class="score-trevo-section" id="scoreTrevoSection" style="display:none">
-      <div class="label">Selecione os Trevos (escolha 2)</div>
-      <div class="score-trevo-btns" id="scoreTrevoBtns"></div>
+  <div class="section-head">
+    <div class="section-title">
+      <span class="section-dot" style="background:var(--accent3)"></span>
+      Score Analítico
     </div>
-
-    <!-- Time -->
-    <div class="score-team-section" id="scoreTeamSection" style="display:none">
-      <div class="label">Selecione o Time do Coração</div>
-
-      <div class="team-search-wrap">
-        <input
-          class="team-search-input"
-          id="teamSearchInput"
-          placeholder="🔍 Buscar time..."
-          autocomplete="off"
-          oninput="filterTeams()"
-          onfocus="openTeamDropdown()"
-          onclick="openTeamDropdown()"
-        >
-
-        <div class="team-dropdown" id="teamDropdown"></div>
-      </div>
-
-      <div id="selectedTeamBadge"></div>
-    </div>
-
-    <!-- BOTÕES -->
-    <div class="score-actions">
-      <button class="gen-btn" onclick="runAnalyticalScore()">
-        Analisar Jogo
-      </button>
-
-      <button class="copy-btn" onclick="clearScoreGame()">
-        Limpar
-      </button>
-    </div>
-
-    <!-- SCORE AGORA FICA AQUI -->
-    <div id="scoreResults"></div>
-
   </div>
 
-  <!-- COLUNA DIREITA -->
-  <div>
+  <div class="card">
 
-    <div class="score-preview" id="scoreSide">
-      <div class="label">Seu jogo</div>
+    <p
+      style="
+        font-size:13px;
+        color:var(--text2);
+        margin-bottom:18px;
+        line-height:1.7
+      "
+      id="scoreDesc"
+    >
+      Monte um jogo e veja como ele se posiciona estatisticamente.
+    </p>
 
-      <div style="font-size:13px;color:var(--text2);margin-top:8px">
-        Selecione dezenas para montar seu jogo
+    <div class="score-layout">
+
+      <!-- COLUNA ESQUERDA -->
+      <div>
+
+        <div class="score-grid" id="scoreGrid"></div>
+
+        <!-- Trevos -->
+        <div
+          class="score-trevo-section"
+          id="scoreTrevoSection"
+          style="display:none"
+        >
+          <div class="label">
+            Selecione os Trevos (escolha 2)
+          </div>
+
+          <div
+            class="score-trevo-btns"
+            id="scoreTrevoBtns"
+          ></div>
+        </div>
+
+        <!-- Time -->
+        <div
+          class="score-team-section"
+          id="scoreTeamSection"
+          style="display:none"
+        >
+
+          <div class="label">
+            Selecione o Time do Coração
+          </div>
+
+          <div class="team-search-wrap">
+
+            <input
+              class="team-search-input"
+              id="teamSearchInput"
+              placeholder="🔍 Buscar time..."
+              autocomplete="off"
+              oninput="filterTeams()"
+              onfocus="openTeamDropdown()"
+              onclick="openTeamDropdown()"
+            >
+
+            <div
+              class="team-dropdown"
+              id="teamDropdown"
+            ></div>
+
+          </div>
+
+          <div id="selectedTeamBadge"></div>
+
+        </div>
+
+        <div class="score-actions">
+
+          <button
+            class="gen-btn"
+            onclick="runAnalyticalScore()"
+          >
+            Analisar Jogo
+          </button>
+
+          <button
+            class="copy-btn"
+            onclick="clearScoreGame()"
+          >
+            Limpar
+          </button>
+
+        </div>
+
       </div>
+
+      <!-- COLUNA DIREITA -->
+      <div>
+
+        <div class="score-preview" id="scoreSide">
+
+          <div class="label">Seu jogo</div>
+
+          <div
+            style="
+              font-size:13px;
+              color:var(--text2);
+              margin-top:8px
+            "
+          >
+            Selecione dezenas para montar seu jogo
+          </div>
+
+        </div>
+
+        <div id="scoreResults"></div>
+
+      </div>
+
     </div>
 
   </div>
 
 </div>
-
     <!-- RANKING -->
     <div class="col2 section">
       <div>
