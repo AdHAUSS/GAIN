@@ -471,8 +471,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
    HELPERS
    ============================================= */
 function trevoSVG(num,color,size){
-  size=size||32;var sw=Math.max(1.5,size*0.055);var fs=Math.round(size*0.34);
-  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="display:block"><g fill="none" stroke="'+color+'" stroke-width="'+sw+'" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="16" cy="10" rx="5.2" ry="6.2"/><ellipse cx="16" cy="22" rx="5.2" ry="6.2"/><ellipse cx="10" cy="16" rx="6.2" ry="5.2"/><ellipse cx="22" cy="16" rx="6.2" ry="5.2"/><line x1="16" y1="26" x2="16" y2="30"/><line x1="13" y1="30" x2="19" y2="30"/></g><text x="16" y="17.5" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,Outfit,sans-serif" font-size="'+fs+'" font-weight="800" fill="'+color+'" stroke="none">'+num+'</text></svg>';
+ var s = size || 24;
+  // Se você quiser forçar a cor amarela padrão da Milionária para todos, use #FFC107. 
+  // Se quiser manter a cor vinda do seu sistema atual, deixe a variável 'color'.
+  var corTrevo = color || '#FFC107'; 
+  
+  return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle; overflow:visible;">' +
+    // Folha Superior
+    '<path d="M12 9.5C12 7.01 10.2 5 8 5C5.8 5 4 6.8 4 9C4 11.2 6 13 8.5 13C10.5 13 12 11.5 12 9.5Z" fill="'+corTrevo+'"/>' +
+    // Folha Direita
+    '<path d="M14.5 12C16.99 12 19 10.2 19 8C19 5.8 17.2 4 15 4C12.8 4 11 6 11 8.5C11 10.5 12.5 12 14.5 12Z" fill="'+corTrevo+'"/>' +
+    // Folha Inferior
+    '<path d="M12 14.5C12 16.99 13.8 19 16 19C18.2 19 20 17.2 20 15C20 12.8 18 11 15.5 11C13.5 11 12 12.5 12 14.5Z" fill="'+corTrevo+'"/>' +
+    // Folha Esquerda
+    '<path d="M9.5 12C7.01 12 5 13.8 5 16C5 18.2 6.8 20 9 20C11.2 20 13 18 13 15.5C13 13.5 11.5 12 9.5 12Z" fill="'+corTrevo+'"/>' +
+    // Círculo Central (ajusta o contraste para o número não sumir dependendo da cor de fundo)
+    '<circle cx="12" cy="12" r="4.5" fill="var(--bg2, #0e1018)"/>' +
+    // O Número (1 a 6) centralizado em branco
+    '<text x="12" y="15.5" font-family="var(--mono, monospace)" font-size="10px" font-weight="700" fill="#fff" text-anchor="middle">'+num+'</text>' +
+  '</svg>';
 }
 const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
 const GAMES={
