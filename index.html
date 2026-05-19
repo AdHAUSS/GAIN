@@ -244,15 +244,55 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .score-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px;min-height:74px}
 .preview-balls{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
 .preview-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff}
-.score-result{display:grid;grid-template-columns:180px 1fr;gap:34px;align-items:start;margin-top:24px}
-.score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:160px}
-.score-ring{width:90px;height:90px;position:relative;flex-shrink:0}
+.score-result{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:28px;
+
+  align-items:start;
+  margin-top:24px;
+}
+.score-ring-wrap{
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:flex-start;
+
+  gap:14px;
+
+  padding-top:34px;
+
+  width:100%;
+}
+.score-ring{
+  width:110px;
+  height:110px;
+
+  position:relative;
+  margin-top:8px;
+
+  flex-shrink:0;
+}
 .score-ring svg{transform:rotate(-90deg)}
 .score-ring-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-ring-num{font-size:24px;font-weight:900;letter-spacing:-.04em}
+.score-ring-num{font-size:30px;font-weight:900;letter-spacing:-.04em}
 .score-ring-lbl{font-size:9px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
-.score-items{display:flex;flex-direction:column;gap:7px}
-.score-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;display:flex;align-items:center;gap:12px}
+.score-items{display:flex;flex-direction:column;gap:7px;padding-top:10px}
+.score-item{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+
+  padding:14px 14px;
+
+  display:flex;
+  align-items:center;
+
+  gap:16px;
+
+  min-height:64px;
+}
 .score-item-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
 .score-item-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1)}
 .score-item-name{font-size:12px;font-weight:600;width:110px;flex-shrink:0}
