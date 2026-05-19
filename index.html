@@ -355,6 +355,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         </div>
       </div>
     </div>
+       <!-- GENERATOR -->
+    <div class="section">
+      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div></div>
+      <div class="card">
+        <div class="gen-controls">
+          <div class="gen-control"><div class="label">Qtd de jogos</div><input class="gen-input" type="number" id="genQty" value="5" min="1" max="50"></div>
+          <div class="gen-control"><div class="label">Núm. por jogo</div><input class="gen-input" type="number" id="genNums" value="15" min="15" max="20"></div>
+          <div class="gen-control"><div class="label">Filtro de paridade</div><select class="gen-select" id="genParity"><option value="any">Qualquer</option><option value="more_odd">Mais ímpares</option><option value="more_even">Mais pares</option><option value="balanced">Equilibrado</option></select></div>
+          <div class="gen-control"><div class="label">Priorizar dezenas</div><div class="multi-filters" id="genFreq"><label class="multi-tag"><input type="checkbox" value="hot"><span>Quentes</span></label><label class="multi-tag"><input type="checkbox" value="cold"><span>Frias</span></label><label class="multi-tag"><input type="checkbox" value="delayed"><span>Atrasadas</span></label><label class="multi-tag"><input type="checkbox" value="cycle_missing"><span>Ciclo Atual</span></label></div></div>
+          <div class="gen-control"><div class="label">Mín. consecutivos</div><select class="gen-select" id="genConsec"><option value="any">Qualquer</option><option value="0">Nenhum par</option><option value="1">Ao menos 1 par</option><option value="2">Ao menos 2 pares</option></select></div>
+          <div class="gen-control" style="align-self:flex-end"><button class="gen-btn" onclick="generateGames()">⚡ Gerar Jogos</button></div>
+        </div>
+        <div class="gen-results" id="genResults"></div>
+      </div>
+    </div>
     <!-- RANKING -->
     <div class="col2 section">
       <div>
@@ -408,21 +423,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
           <div class="cycle-field"><span>Exibir últimos:</span><input type="number" id="cycleCount" value="10" min="2" max="50" onchange="renderCycle()"><span>ciclos</span></div>
         </div>
         <div class="cycle-groups" id="cycleGroups"></div>
-      </div>
-    </div>
-    <!-- GENERATOR -->
-    <div class="section">
-      <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div></div>
-      <div class="card">
-        <div class="gen-controls">
-          <div class="gen-control"><div class="label">Qtd de jogos</div><input class="gen-input" type="number" id="genQty" value="5" min="1" max="50"></div>
-          <div class="gen-control"><div class="label">Núm. por jogo</div><input class="gen-input" type="number" id="genNums" value="15" min="15" max="20"></div>
-          <div class="gen-control"><div class="label">Filtro de paridade</div><select class="gen-select" id="genParity"><option value="any">Qualquer</option><option value="more_odd">Mais ímpares</option><option value="more_even">Mais pares</option><option value="balanced">Equilibrado</option></select></div>
-          <div class="gen-control"><div class="label">Priorizar dezenas</div><div class="multi-filters" id="genFreq"><label class="multi-tag"><input type="checkbox" value="hot"><span>Quentes</span></label><label class="multi-tag"><input type="checkbox" value="cold"><span>Frias</span></label><label class="multi-tag"><input type="checkbox" value="delayed"><span>Atrasadas</span></label><label class="multi-tag"><input type="checkbox" value="cycle_missing"><span>Ciclo Atual</span></label></div></div>
-          <div class="gen-control"><div class="label">Mín. consecutivos</div><select class="gen-select" id="genConsec"><option value="any">Qualquer</option><option value="0">Nenhum par</option><option value="1">Ao menos 1 par</option><option value="2">Ao menos 2 pares</option></select></div>
-          <div class="gen-control" style="align-self:flex-end"><button class="gen-btn" onclick="generateGames()">⚡ Gerar Jogos</button></div>
-        </div>
-        <div class="gen-results" id="genResults"></div>
       </div>
     </div>
     <!-- LAST DRAWS -->
