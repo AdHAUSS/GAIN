@@ -12,6 +12,7 @@
 [data-game="quina"]{--accent:#0057b8;--accent2:#003d8a;--accent3:#4d94e0;--accent4:#99c4f0;--game-glow:rgba(0,87,184,.2);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(0,87,184,.09) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(0,61,138,.07) 0%,transparent 55%)}
 [data-game="milionaria"]{--accent:#e8560a;--accent2:#c44408;--accent3:#f5935a;--accent4:#ffc59a;--game-glow:rgba(232,86,10,.18);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(232,86,10,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(196,68,8,.06) 0%,transparent 55%)}
 [data-game="timemania"]{--accent:#e82020;--accent2:#c01010;--accent3:#f06060;--accent4:#f5a0a0;--game-glow:rgba(232,32,32,.18);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(232,32,32,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(192,16,16,.06) 0%,transparent 55%)}
+[data-game="lotomania"]{--accent:#f39c12;--accent2:#d68910;--accent3:#f8c471;--accent4:#f5b041;--game-glow:rgba(243,156,18,.18);--game-bg-grad:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(243,156,18,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 5%,rgba(214,137,16,.06) 0%,transparent 55%)}
 [data-theme="light"]{--bg:#f2f4f9;--bg2:#ffffff;--bg3:#e8eaf2;--bg4:#d8dce8;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.14);--text:#12141f;--text2:#5a5f7a;--text3:#aaafcc;--shadow-sm:0 2px 12px rgba(0,0,0,0.08);--shadow:0 8px 32px rgba(0,0,0,0.1);--shadow-lg:0 16px 64px rgba(0,0,0,0.12)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -50,6 +51,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .game-tab[data-target="quina"] .tab-dot{background:#0057b8}
 .game-tab[data-target="milionaria"] .tab-dot{background:#e8560a}
 .game-tab[data-target="timemania"] .tab-dot{background:#e82020}
+.game-tab[data-target="lotomania"] .tab-dot{background:#f39c12}
 .game-tab.active::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:20px;height:2px;border-radius:99px;background:var(--accent);transition:background .4s}
 /* MAIN */
 .main{max-width:1320px;margin:0 auto;padding:32px 28px}
@@ -320,6 +322,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <button class="game-tab" data-target="quina" onclick="switchGame('quina',this)"><span class="tab-dot"></span><span class="tab-name">Quina</span></button>
     <button class="game-tab" data-target="milionaria" onclick="switchGame('milionaria',this)"><span class="tab-dot"></span><span class="tab-name">+Milionária</span></button>
     <button class="game-tab" data-target="timemania" onclick="switchGame('timemania',this)"><span class="tab-dot"></span><span class="tab-name">Timemania</span></button>
+    <button class="game-tab" data-target="lotomania" onclick="switchGame('lotomania',this)"><span class="tab-dot"></span><span class="tab-name">Lotomania</span></button>
   </nav>
 </header>
 <main class="main">
@@ -493,11 +496,12 @@ function trevoSVG(num,color,size){
 }
 const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
 const GAMES={
-  lotofacil:{name:'Lotofácil',csvFile:'./lotofacil.csv',numCount:15,numMax:25,minPick:15,maxPick:20,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],note:null,hasExtras:false},
-  megasena:{name:'Mega-Sena',csvFile:'./megasena.csv',numCount:6,numMax:60,minPick:6,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],note:null,hasExtras:false},
-  quina:{name:'Quina',csvFile:'./quina.csv',numCount:5,numMax:80,minPick:5,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6],note:null,hasExtras:false},
-  milionaria:{name:'+Milionária',csvFile:'./milionaria.csv',numCount:6,numMax:50,minPick:6,maxPick:12,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],colTrevo1:8,colTrevo2:9,note:'Análise inclui as 6 bolas principais (1–50) e os 2 Trevos (1–6).',hasExtras:true,extraType:'trevos'},
-  timemania:{name:'Timemania',csvFile:'./timemania.csv',numCount:7,numMax:80,minPick:7,maxPick:7,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8],colTime:9,note:'Análise inclui as 7 bolas numéricas (1–80) e o Time do Coração.',hasExtras:true,extraType:'time'}
+  lotofacil:{name:'Lotofácil',csvFile:'./lotofacil.csv',numCount:15,numMax:25,minNum:1,minPick:15,maxPick:20,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],note:null,hasExtras:false},
+  megasena:{name:'Mega-Sena',csvFile:'./megasena.csv',numCount:6,numMax:60,minNum:1,minPick:6,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],note:null,hasExtras:false},
+  quina:{name:'Quina',csvFile:'./quina.csv',numCount:5,numMax:80,minNum:1,minPick:5,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6],note:null,hasExtras:false},
+  milionaria:{name:'+Milionária',csvFile:'./milionaria.csv',numCount:6,numMax:50,minNum:1,minPick:6,maxPick:12,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],colTrevo1:8,colTrevo2:9,note:'Análise inclui as 6 bolas principais (1–50) e os 2 Trevos (1–6).',hasExtras:true,extraType:'trevos'},
+  timemania:{name:'Timemania',csvFile:'./timemania.csv',numCount:7,numMax:80,minNum:1,minPick:7,maxPick:7,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8],colTime:9,note:'Análise inclui as 7 bolas numéricas (1–80) e o Time do Coração.',hasExtras:true,extraType:'time'},
+  lotomania:{name:'Lotomania',csvFile:'./lotomania.csv',numCount:20,numMax:99,minNum:0,minPick:50,maxPick:50,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],note:'Você analisa as 20 dezenas sorteadas (de 00 a 99).',hasExtras:false}
 };
 var currentGame='lotofacil',allDraws=[],freq={},delay={},analyticalGame=[],selectedTrevos=[],selectedTeam=null,teamFreq={},trevoFreq={},allTeams=[];
 
@@ -546,7 +550,8 @@ function parseCSV(text,cfg){
   allDraws=[];teamFreq={};trevoFreq={1:0,2:0,3:0,4:0,5:0,6:0};
   for(var i=0;i<rows.length;i++){
     var line=rows[i];var raw=line.startsWith('"')?line.slice(1,-1):line;var cols=raw.split(',');
-    var dezenas=cfg.colNums.map(function(j){return Number(cols[j])}).filter(function(n){return !isNaN(n)&&n>0}).sort(function(a,b){return a-b});
+    var min = cfg.minNum !== undefined ? cfg.minNum : 1;
+    var dezenas=cfg.colNums.map(function(j){return Number(cols[j])}).filter(function(n){return !isNaN(n)&&n>=min}).sort(function(a,b){return a-b});
     if(dezenas.length!==cfg.numCount)continue;
     var entry={concurso:Number(cols[cfg.colConcurso]),data:cols[cfg.colData],dezenas:dezenas};
     if(cfg.extraType==='trevos'){var t1=Number(cols[cfg.colTrevo1]),t2=Number(cols[cfg.colTrevo2]);entry.trevos=[t1,t2].filter(function(n){return n>=1&&n<=6});if(entry.trevos.length===2){trevoFreq[t1]=(trevoFreq[t1]||0)+1;trevoFreq[t2]=(trevoFreq[t2]||0)+1;}}
@@ -559,11 +564,12 @@ function parseCSV(text,cfg){
 }
 function processData(){
   var cfg=GAMES[currentGame];freq={};
-  for(var i=1;i<=cfg.numMax;i++)freq[i]=0;
-  for(var i=0;i<allDraws.length;i++)for(var j=0;j<allDraws[i].dezenas.length;j++)freq[allDraws[i].dezenas[j]]=(freq[allDraws[i].dezenas[j]]||0)+1;
-  delay={};var rev=allDraws.slice().reverse();
-  for(var i=1;i<=cfg.numMax;i++){var idx=rev.findIndex(function(d){return d.dezenas.includes(i)});delay[i]=idx===-1?allDraws.length:idx;}
-}
+ var min = cfg.minNum !== undefined ? cfg.minNum : 1;
+for(var i=min;i<=cfg.numMax;i++)freq[i]=0;
+for(var i=0;i<allDraws.length;i++)for(var j=0;j<allDraws[i].dezenas.length;j++)freq[allDraws[i].dezenas[j]]=(freq[allDraws[i].dezenas[j]]||0)+1;
+delay={};var rev=allDraws.slice().reverse();
+for(var i=min;i<=cfg.numMax;i++){var idx=rev.findIndex(function(d){return d.dezenas.includes(i)});delay[i]=idx===-1?allDraws.length:idx;}
+  
 function setStatus(s,t){document.getElementById('statusDot').className='status-dot '+s;document.getElementById('statusText').textContent=t}
 function setBar(p){document.getElementById('loadingBar').style.width=p+'%'}
 function formatDate(s){if(!s)return'—';try{var p=s.trim().split('/');return p.length===3?s.trim():new Date(s).toLocaleDateString('pt-BR')}catch(e){return s}}
@@ -699,7 +705,7 @@ function renderRepeatStats(){
   entries.forEach(function(e){var row=document.createElement('div');row.className='bar-row';row.innerHTML='<div class="bar-label"><strong>'+e.repeated+' repetidas</strong><span>'+e.count+'x ('+(e.count/total*100).toFixed(1)+'%)</span></div><div class="bar-track"><div class="bar-fill" style="width:'+(e.count/maxCnt*100).toFixed(0)+'%;background:linear-gradient(90deg,var(--accent3),var(--accent))"></div></div>';bars.appendChild(row);});
 }
 function renderSumAnalysis(){
-  var cfg=GAMES[currentGame];var nc=cfg.numCount;var midSum=nc*((1+cfg.numMax)/2);var step=Math.round(midSum*0.08);
+  var cfg=GAMES[currentGame];var nc=cfg.numCount;var min = cfg.minNum !== undefined ? cfg.minNum : 1;var midSum=nc*((min+cfg.numMax)/2);var step=Math.round(midSum*0.08);
   var bands=[];for(var i=-3;i<=3;i++){var lo=Math.round(midSum+i*step),hi=Math.round(midSum+(i+1)*step);bands.push({label:lo+'–'+hi,lo:lo,hi:hi,count:0});}
   var sums=[];
   for(var i=0;i<allDraws.length;i++){var s=allDraws[i].dezenas.reduce(function(a,b){return a+b},0);sums.push(s);var band=bands.find(function(b){return s>=b.lo&&s<b.hi});if(band)band.count++;}
@@ -725,7 +731,8 @@ function renderPatterns(){
 function renderTrendPatterns(){
   var last50=allDraws.slice(-50);var fl50={};for(var i=0;i<last50.length;i++)for(var j=0;j<last50[i].dezenas.length;j++)fl50[last50[i].dezenas[j]]=(fl50[last50[i].dezenas[j]]||0)+1;
   var total=allDraws.length;var rising=[],falling=[];
-  for(var n=1;n<=GAMES[currentGame].numMax;n++){var or=(freq[n]||0)/total;var rr=(fl50[n]||0)/50;var delta=rr-or;if(delta>0.02)rising.push({n:n,delta:delta});else if(delta<-0.02)falling.push({n:n,delta:delta});}
+  var min = GAMES[currentGame].minNum !== undefined ? GAMES[currentGame].minNum : 1;
+  for(var n=min;n<=GAMES[currentGame].numMax;n++){var or=(freq[n]||0)/total;var rr=(fl50[n]||0)/50;var delta=rr-or;if(delta>0.02)rising.push({n:n,delta:delta});else if(delta<-0.02)falling.push({n:n,delta:delta});}
   rising.sort(function(a,b){return b.delta-a.delta});falling.sort(function(a,b){return a.delta-b.delta});
   return'<div class="patterns-grid"><div class="pattern-card"><div class="pattern-card-title">Em Alta (últimos 50)</div><div class="pattern-insight">'+rising.slice(0,8).map(function(x){return'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(29,185,84,.15);border-radius:99px;font-weight:700;color:#1db954;font-size:12px">↑'+String(x.n).padStart(2,'0')+'<span style="font-size:10px;opacity:.7">+'+(x.delta*100).toFixed(1)+'%</span></span>';}).join('')+'</div></div><div class="pattern-card"><div class="pattern-card-title">Em Queda (últimos 50)</div><div class="pattern-insight">'+falling.slice(0,8).map(function(x){return'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(255,68,85,.12);border-radius:99px;font-weight:700;color:var(--hot);font-size:12px">↓'+String(x.n).padStart(2,'0')+'<span style="font-size:10px;opacity:.7">'+(x.delta*100).toFixed(1)+'%</span></span>';}).join('')+'</div></div><div class="pattern-card"><div class="pattern-card-title">Consistentes</div><div class="pattern-insight">'+Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],delta:Math.abs((fl50[+x[0]]||0)/50-x[1]/total)}}).filter(function(x){return x.delta<=0.015}).slice(0,8).map(function(x){return'<span style="display:inline-flex;align-items:center;gap:5px;margin:3px;padding:4px 10px;background:rgba(255,255,255,.06);border-radius:99px;font-weight:700;color:var(--text2);font-size:12px">≈'+String(x.n).padStart(2,'0')+'</span>';}).join('')+'</div></div></div>';
 }
@@ -737,9 +744,10 @@ function renderScoreGrid(){
   var cfg=GAMES[currentGame];analyticalGame=[];selectedTrevos=[];selectedTeam=null;
   var grid=document.getElementById('scoreGrid');grid.innerHTML='';
   var cols=cfg.numMax<=25?5:10;grid.style.gridTemplateColumns='repeat('+cols+',1fr)';
-  for(var i=1;i<=cfg.numMax;i++){
-    (function(num){var div=document.createElement('div');div.className='score-ball';div.textContent=String(num).padStart(2,'0');div.dataset.num=num;div.onclick=function(){toggleScoreNumber(num,div)};grid.appendChild(div);})(i);
-  }
+  var min = cfg.minNum !== undefined ? cfg.minNum : 1;
+  for(var i=min;i<=cfg.numMax;i++){
+  (function(num){var div=document.createElement('div');div.className='score-ball';div.textContent=String(num).padStart(2,'0');div.dataset.num=num;div.onclick=function(){toggleScoreNumber(num,div)};grid.appendChild(div);})(i);
+}
   var ts=document.getElementById('scoreTrevoSection');var tm=document.getElementById('scoreTeamSection');
   if(cfg.extraType==='trevos'){ts.style.display='block';tm.style.display='none';var btns=document.getElementById('scoreTrevoBtns');btns.innerHTML='';for(var t=1;t<=6;t++){(function(t){var btn=document.createElement('button');btn.className='trevo-sel-btn';btn.innerHTML=trevoSVG(t,TREVO_COLORS[t-1],28);btn.dataset.trevo=t;btn.onclick=function(){toggleTrevo(t,btn)};btns.appendChild(btn);})(t);}}
   else if(cfg.extraType==='time'){ts.style.display='none';tm.style.display='block';buildTeamDropdown();}
@@ -776,7 +784,8 @@ function calcScorePure(game){
   var parityScore=(evens===Math.floor(halfNc)||evens===Math.ceil(halfNc))?100:Math.abs(evens-halfNc)<=2?75:40;
   // Soma
   var sum=sorted.reduce(function(a,b){return a+b},0);
-  var expSum=nc*((1+cfg.numMax)/2);var dev=Math.abs(sum-expSum)/expSum;
+  var min = cfg.minNum !== undefined ? cfg.minNum : 1;
+  var expSum=nc*((min+cfg.numMax)/2);var dev=Math.abs(sum-expSum)/expSum;
   var sumScore=dev<0.05?100:dev<0.12?75:dev<0.20?55:35;
   // Consecutivos
   var consecPairs=0;for(var i=0;i<sorted.length-1;i++)if(sorted[i+1]-sorted[i]===1)consecPairs++;
@@ -898,6 +907,7 @@ function generateGames(){
   var parity=document.getElementById('genParity').value;
   var ff=Array.from(document.querySelectorAll('#genFreq input:checked')).map(function(el){return el.value});
   var cf=document.getElementById('genConsec').value;
+  var min = cfg.minNum !== undefined ? cfg.minNum : 1;
 
   // Preparar pools de prioridade
   var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],c:x[1]}}).sort(function(a,b){return b.c-a.c});
@@ -908,7 +918,7 @@ function generateGames(){
   var rem=allDraws.length%cs;
   var csl=allDraws.slice(rem===0?-cs:-rem);
   var csn=new Set(csl.reduce(function(a,d){return a.concat(d.dezenas)},[],[]));
-  var cm=[];for(var i=1;i<=cfg.numMax;i++)if(!csn.has(i))cm.push(i);
+  var cm=[];for(var i=min;i<=cfg.numMax;i++)if(!csn.has(i))cm.push(i);
 
   var totalCandidates=qty*N_CANDIDATES_PER_GAME;
 
@@ -933,7 +943,7 @@ function generateGames(){
     var chunkSize=100;var count=0;
     while(allCandidates.length<totalCandidates&&attempts<maxAttempts&&count<chunkSize){
       attempts++;count++;
-      var pool=Array.from({length:cfg.numMax},function(_,i){return i+1});
+      var pool=Array.from({length:cfg.numMax-min+1},function(_,i){return i+min});
       // Pesos: repetir dezenas priorizadas para aumentar probabilidade de seleção
       if(ff.includes('hot'))pool=pool.concat(hotList,hotList);
       if(ff.includes('cold'))pool=pool.concat(coldList,coldList);
@@ -1033,10 +1043,11 @@ function copyGame(btn,nums){
 function renderCycle(){
   var size=parseInt(document.getElementById('cycleSize').value)||4;var count=parseInt(document.getElementById('cycleCount').value)||10;var cfg=GAMES[currentGame];
   var total=Math.ceil(allDraws.length/size);var start=Math.max(0,total-count);var groups=[];
-  for(var g=start;g<total;g++){var slice=allDraws.slice(g*size,Math.min((g+1)*size,allDraws.length));var seen=new Set(slice.reduce(function(a,d){return a.concat(d.dezenas)},[],[]));var missing=[];for(var i=1;i<=cfg.numMax;i++)if(!seen.has(i))missing.push(i);groups.push({idx:g+1,from:slice[0]&&slice[0].concurso,to:slice[slice.length-1]&&slice[slice.length-1].concurso,seen:Array.from(seen).sort(function(a,b){return a-b}),missing:missing,incomplete:slice.length<size});}
+  for(var g=start;g<total;g++){var slice=allDraws.slice(g*size,Math.min((g+1)*size,allDraws.length));var seen=new Set(slice.reduce(function(a,d){return a.concat(d.dezenas)},[],[]));var missing=[];for(var i=min;i<=cfg.numMax;i++)if(!seen.has(i))missing.push(i);groups.push({idx:g+1,from:slice[0]&&slice[0].concurso,to:slice[slice.length-1]&&slice[slice.length-1].concurso,seen:Array.from(seen).sort(function(a,b){return a-b}),missing:missing,incomplete:slice.length<size});}
   var el=document.getElementById('cycleGroups');el.innerHTML='';
   groups.slice().reverse().forEach(function(g){
     var div=document.createElement('div');div.className='cycle-group';
+    var min = cfg.minNum !== undefined ? cfg.minNum : 1;
     var sb=g.seen.map(function(n){return'<div class="cycle-ball seen">'+String(n).padStart(2,'0')+'</div>'}).join('');
     var mb=g.missing.map(function(n){return'<div class="cycle-ball missing">'+String(n).padStart(2,'0')+'</div>'}).join('');
     div.innerHTML='<div class="cycle-group-header"><span class="cycle-group-title">Ciclo #'+g.idx+(g.incomplete?' · 🔄 Em andamento':'')+' · Concursos '+g.from+'–'+g.to+'</span><span style="font-size:11px;font-family:var(--mono);color:'+(g.missing.length===0?'var(--accent)':'var(--hot)')+'">'+g.seen.length+'/'+cfg.numMax+' ('+(g.seen.length/cfg.numMax*100).toFixed(0)+'%)</span></div><div class="cycle-group-body"><div class="cycle-nums-row">'+sb+'</div>'+(g.missing.length>0?'<div class="cycle-miss-label" style="margin-top:9px">❌ Não apareceram:</div><div class="cycle-nums-row" style="margin-top:5px">'+mb+'</div>':'<div class="cycle-miss-label" style="color:var(--accent);margin-top:7px">✅ Ciclo completo!</div>')+'</div>';
