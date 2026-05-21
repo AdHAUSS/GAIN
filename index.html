@@ -133,7 +133,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .cycle-ball.seen{background:var(--game-glow);color:var(--accent);border:1px solid rgba(255,255,255,.1)}
 .cycle-ball.missing{background:rgba(255,68,85,.12);color:var(--hot);border:1px solid rgba(255,68,85,.25)}
 .cycle-miss-label{font-size:11px;color:var(--text2);margin-top:7px}
-/* GENERATOR — novo layout com score */
+/* GENERATOR */
 .gen-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
 .gen-control{display:flex;flex-direction:column;gap:5px}
 .gen-select,.gen-input{padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;outline:none;cursor:pointer;transition:border-color .2s}
@@ -149,23 +149,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .gen-btn:active{transform:translateY(0)}
 .gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .gen-results{display:flex;flex-direction:column;gap:9px}
-
-/* Novo card de jogo gerado com score */
 .gen-game{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px 15px;animation:fadeIn .25s ease;transition:border-color .2s}
 .gen-game:hover{border-color:var(--border2)}
 .gen-game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
 .gen-game-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .gen-game-label{font-family:var(--mono);font-size:11px;color:var(--text2)}
-/* Badge de score no card gerado */
 .gen-score-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-family:var(--mono);font-size:11px;font-weight:700;border:1px solid}
 .gen-score-badge.excellent{background:rgba(155,89,182,.15);border-color:rgba(155,89,182,.4);color:var(--accent)}
 .gen-score-badge.strong{background:rgba(255,214,10,.1);border-color:rgba(255,214,10,.35);color:var(--accent4)}
 .gen-score-badge.medium{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3);color:var(--accent3)}
 .gen-score-badge.weak{background:rgba(255,68,85,.1);border-color:rgba(255,68,85,.3);color:var(--hot)}
-/* Barra de score no card */
 .gen-score-bar-wrap{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:8px;margin-bottom:2px}
 .gen-score-bar{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1)}
-/* Mini breakdown de score */
 .gen-score-breakdown{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .gen-score-dim{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--text3)}
 .gen-score-dim-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
@@ -173,19 +168,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .gen-ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;letter-spacing:-.02em}
 .copy-btn{padding:4px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .copy-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* Indicador de progresso do gerador */
 .gen-progress{display:none;align-items:center;gap:12px;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text2)}
 .gen-progress.show{display:flex}
 .gen-progress-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
 .gen-progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .1s linear}
 .gen-progress-text{font-family:var(--mono);font-size:11px;white-space:nowrap}
-
-/* Resumo do resultado do gerador */
 .gen-summary{display:none;align-items:center;gap:10px;padding:10px 14px;background:rgba(155,89,182,.06);border:1px solid rgba(155,89,182,.2);border-radius:var(--r-sm);font-size:12px;color:var(--text2);margin-bottom:8px}
 .gen-summary.show{display:flex}
 .gen-summary strong{color:var(--accent)}
-
 /* SCORE */
 .score-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
 .score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
@@ -380,7 +370,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       </div>
     </div>
 
-    <!-- GENERATOR — movido para logo após o Score -->
+    <!-- GENERATOR -->
     <div class="section">
       <div class="section-head"><div class="section-title"><span class="section-dot" style="background:var(--accent)"></span>Gerador de Jogos com Filtros</div></div>
       <div class="card">
@@ -471,34 +461,37 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
    HELPERS
    ============================================= */
 function trevoSVG(num,color,size){
- var s = size || 24;
-  // Se você quiser forçar a cor amarela padrão da Milionária para todos, use #FFC107. 
-  // Se quiser manter a cor vinda do seu sistema atual, deixe a variável 'color'.
-  var corTrevo = color || '#FFC107'; 
-  
-  return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle; overflow:visible;">' +
-    // Folha Superior
-    '<path d="M12 9.5C12 7.01 10.2 5 8 5C5.8 5 4 6.8 4 9C4 11.2 6 13 8.5 13C10.5 13 12 11.5 12 9.5Z" fill="'+corTrevo+'"/>' +
-    // Folha Direita
-    '<path d="M14.5 12C16.99 12 19 10.2 19 8C19 5.8 17.2 4 15 4C12.8 4 11 6 11 8.5C11 10.5 12.5 12 14.5 12Z" fill="'+corTrevo+'"/>' +
-    // Folha Inferior
-    '<path d="M12 14.5C12 16.99 13.8 19 16 19C18.2 19 20 17.2 20 15C20 12.8 18 11 15.5 11C13.5 11 12 12.5 12 14.5Z" fill="'+corTrevo+'"/>' +
-    // Folha Esquerda
-    '<path d="M9.5 12C7.01 12 5 13.8 5 16C5 18.2 6.8 20 9 20C11.2 20 13 18 13 15.5C13 13.5 11.5 12 9.5 12Z" fill="'+corTrevo+'"/>' +
-    // Círculo Central (ajusta o contraste para o número não sumir dependendo da cor de fundo)
-    '<circle cx="12" cy="12" r="4.5" fill="var(--bg2, #0e1018)"/>' +
-    // O Número (1 a 6) centralizado em branco
-    '<text x="12" y="15.5" font-family="var(--mono, monospace)" font-size="10px" font-weight="700" fill="#fff" text-anchor="middle">'+num+'</text>' +
-  '</svg>';
+  var s=size||24;var corTrevo=color||'#FFC107';
+  return'<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;overflow:visible;">'
+    +'<path d="M12 9.5C12 7.01 10.2 5 8 5C5.8 5 4 6.8 4 9C4 11.2 6 13 8.5 13C10.5 13 12 11.5 12 9.5Z" fill="'+corTrevo+'"/>'
+    +'<path d="M14.5 12C16.99 12 19 10.2 19 8C19 5.8 17.2 4 15 4C12.8 4 11 6 11 8.5C11 10.5 12.5 12 14.5 12Z" fill="'+corTrevo+'"/>'
+    +'<path d="M12 14.5C12 16.99 13.8 19 16 19C18.2 19 20 17.2 20 15C20 12.8 18 11 15.5 11C13.5 11 12 12.5 12 14.5Z" fill="'+corTrevo+'"/>'
+    +'<path d="M9.5 12C7.01 12 5 13.8 5 16C5 18.2 6.8 20 9 20C11.2 20 13 18 13 15.5C13 13.5 11.5 12 9.5 12Z" fill="'+corTrevo+'"/>'
+    +'<circle cx="12" cy="12" r="4.5" fill="var(--bg2,#0e1018)"/>'
+    +'<text x="12" y="15.5" font-family="var(--mono,monospace)" font-size="10px" font-weight="700" fill="#fff" text-anchor="middle">'+num+'</text>'
+    +'</svg>';
 }
 const TREVO_COLORS=['#27ae60','#2ecc71','#f39c12','#e74c3c','#9b59b6','#3498db'];
+
+/*
+ * GAMES CONFIG
+ * ─────────────────────────────────────────────
+ * numCount  → dezenas sorteadas (lidas do CSV)
+ * pickCount → dezenas que o apostador escolhe
+ *             (só difere do numCount na Timemania: apostador joga 10, sorteiam 7)
+ * minPick / maxPick → limites da aposta
+ */
 const GAMES={
   lotofacil:{name:'Lotofácil',csvFile:'./lotofacil.csv',numCount:15,numMax:25,minPick:15,maxPick:20,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],note:null,hasExtras:false},
   megasena:{name:'Mega-Sena',csvFile:'./megasena.csv',numCount:6,numMax:60,minPick:6,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],note:null,hasExtras:false},
   quina:{name:'Quina',csvFile:'./quina.csv',numCount:5,numMax:80,minPick:5,maxPick:15,colConcurso:0,colData:1,colNums:[2,3,4,5,6],note:null,hasExtras:false},
   milionaria:{name:'+Milionária',csvFile:'./milionaria.csv',numCount:6,numMax:50,minPick:6,maxPick:12,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7],colTrevo1:8,colTrevo2:9,note:'Análise inclui as 6 bolas principais (1–50) e os 2 Trevos (1–6).',hasExtras:true,extraType:'trevos'},
-  timemania:{name:'Timemania',csvFile:'./timemania.csv',numCount:7,numMax:80,minPick:7,maxPick:7,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8],colTime:9,note:'Análise inclui as 7 bolas numéricas (1–80) e o Time do Coração.',hasExtras:true,extraType:'time'}
+  // Timemania: apostador escolhe 10 dezenas de 1–80; sorteiam-se 7.
+  // numCount=7  → para leitura/análise do CSV (7 dezenas sorteadas)
+  // pickCount=10 → para o score e gerador (o jogo que o apostador monta tem 10)
+  timemania:{name:'Timemania',csvFile:'./timemania.csv',numCount:7,numMax:80,minPick:10,maxPick:10,pickCount:10,colConcurso:0,colData:1,colNums:[2,3,4,5,6,7,8],colTime:9,note:'Análise inclui as 7 bolas sorteadas (1–80) e o Time do Coração. O apostador escolhe 10 dezenas; 7 são sorteadas.',hasExtras:true,extraType:'time'}
 };
+
 var currentGame='lotofacil',allDraws=[],freq={},delay={},analyticalGame=[],selectedTrevos=[],selectedTeam=null,teamFreq={},trevoFreq={},allTeams=[];
 
 document.getElementById('themeBtn').addEventListener('click',function(){
@@ -573,8 +566,19 @@ function renderAll(){
   var noteEl=document.getElementById('gameNote');
   if(cfg.note){document.getElementById('gameNoteText').textContent=cfg.note;noteEl.style.display='flex'}else noteEl.style.display='none';
   renderSummary();renderRanking();renderScoreGrid();renderParity();renderDelay();renderRepeatStats();renderSumAnalysis();renderCycle();renderSpecialSection();renderPatterns();renderLastDraws();
-  var gn=document.getElementById('genNums');gn.min=cfg.minPick;gn.max=cfg.maxPick;gn.value=cfg.numCount;
-  document.getElementById('scoreDesc').textContent='Monte um jogo e veja como ele se posiciona estatisticamente. Selecione de '+cfg.minPick+' a '+cfg.maxPick+' dezenas.';
+
+  // Gerador: usa pickCount (dezenas que o apostador escolhe) como padrão
+  var gn=document.getElementById('genNums');
+  gn.min=cfg.minPick;
+  gn.max=cfg.maxPick;
+  gn.value=cfg.pickCount||cfg.numCount;
+
+  // Descrição do score adaptada ao jogo
+  var pickLabel=cfg.pickCount
+    ?('Escolha exatamente '+cfg.pickCount+' dezenas ('+cfg.numCount+' serão sorteadas).')
+    :('Selecione de '+cfg.minPick+' a '+cfg.maxPick+' dezenas.');
+  document.getElementById('scoreDesc').textContent='Monte um jogo e veja como ele se posiciona estatisticamente. '+pickLabel;
+
   // Limpa resultados anteriores do gerador ao trocar de jogo
   document.getElementById('genResults').innerHTML='';
   document.getElementById('genSummary').classList.remove('show');
@@ -668,6 +672,7 @@ function switchSpecialTab(btn,tabId){
   btn.classList.add('active');var el=document.getElementById(tabId);if(el)el.classList.add('active');
 }
 function renderParity(){
+  // Usa numCount (dezenas sorteadas) para análise histórica de paridade
   var cfg=GAMES[currentGame];var nc=cfg.numCount;
   var pairs=[];
   for(var e=Math.max(0,Math.floor(nc/2)-2);e<=Math.min(nc,Math.ceil(nc/2)+2);e++)pairs.push({label:e+'P / '+(nc-e)+'I',even:e});
@@ -675,7 +680,7 @@ function renderParity(){
   var counts={};pairs.forEach(function(p){counts[p.label]=0});
   for(var i=0;i<allDraws.length;i++){var evens=allDraws[i].dezenas.filter(function(n){return n%2===0}).length;var found=pairs.find(function(p){return p.even===evens});if(found)counts[found.label]++;else counts['Outros']++;}
   var avgEven=allDraws.reduce(function(s,d){return s+d.dezenas.filter(function(n){return n%2===0}).length},0)/allDraws.length;
-  document.getElementById('parityStats').innerHTML='Média histórica: <strong>'+avgEven.toFixed(1)+' pares</strong> e <strong>'+(nc-avgEven).toFixed(1)+' ímpares</strong> por concurso.';
+  document.getElementById('parityStats').innerHTML='Média histórica (dezenas <em>sorteadas</em>): <strong>'+avgEven.toFixed(1)+' pares</strong> e <strong>'+(nc-avgEven).toFixed(1)+' ímpares</strong> por concurso.';
   var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1]}).slice(0,5);var maxCnt=sorted[0][1];
   var barsEl=document.getElementById('parityBars');barsEl.innerHTML='';
   var colors=['var(--accent2)','var(--accent)','var(--accent4)','var(--accent3)','var(--text3)'];
@@ -753,53 +758,90 @@ function openTeamDropdown(){document.getElementById('teamDropdown').classList.ad
 function closeTeamDropdownOutside(e){var wrap=document.querySelector('.team-search-wrap');if(wrap&&!wrap.contains(e.target))document.getElementById('teamDropdown').classList.remove('open');}
 function selectTeam(name,count){selectedTeam=name;document.getElementById('teamSearchInput').value=name;document.getElementById('teamDropdown').classList.remove('open');document.getElementById('selectedTeamBadge').innerHTML='<div class="selected-team-badge">⚽ '+name+' <span style="font-size:10px;opacity:.7">('+count+'x)</span><button onclick="clearTeam()">×</button></div>';}
 function clearTeam(){selectedTeam=null;document.getElementById('teamSearchInput').value='';document.getElementById('selectedTeamBadge').innerHTML='';}
-function toggleScoreNumber(num,el){var cfg=GAMES[currentGame];var idx=analyticalGame.indexOf(num);if(idx>=0){analyticalGame.splice(idx,1);el.classList.remove('active');}else{if(analyticalGame.length>=cfg.maxPick)return;analyticalGame.push(num);el.classList.add('active');}updateScorePreview(analyticalGame);}
+function toggleScoreNumber(num,el){
+  var cfg=GAMES[currentGame];
+  // Usa pickCount como limite máximo de seleção (10 para Timemania, numCount para os demais)
+  var maxPick=cfg.pickCount||cfg.maxPick;
+  var idx=analyticalGame.indexOf(num);
+  if(idx>=0){analyticalGame.splice(idx,1);el.classList.remove('active');}
+  else{if(analyticalGame.length>=maxPick)return;analyticalGame.push(num);el.classList.add('active');}
+  updateScorePreview(analyticalGame);
+}
 function clearScoreGame(){analyticalGame=[];selectedTrevos=[];selectedTeam=null;document.querySelectorAll('.score-ball').forEach(function(el){el.classList.remove('active')});document.querySelectorAll('.trevo-sel-btn').forEach(function(b){b.classList.remove('active')});clearTeam();document.getElementById('scoreResults').innerHTML='';updateScorePreview([]);}
 function updateScorePreview(game){
   var side=document.getElementById('scoreSide');if(!side)return;
   var cfg=GAMES[currentGame];var extras='';
+  var maxPick=cfg.pickCount||cfg.maxPick;
   if(cfg.extraType==='trevos'&&selectedTrevos.length>0)extras='<div style="margin-top:8px;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px">Trevos: '+selectedTrevos.map(function(t){return trevoSVG(t,TREVO_COLORS[t-1],18)}).join('<span style="color:var(--text3)">+</span>')+'</div>';
   if(cfg.extraType==='time'&&selectedTeam)extras='<div style="margin-top:8px;font-size:12px;color:var(--text2)">Time: ⚽ <strong style="color:var(--text)">'+selectedTeam+'</strong></div>';
   if(game.length===0){side.innerHTML='<div class="label">Seu jogo</div><div style="font-size:13px;color:var(--text2);margin-top:8px">Selecione dezenas para montar seu jogo</div>';return;}
-  side.innerHTML='<div class="label" style="margin-bottom:9px">Seu jogo · '+game.length+' dezenas</div><div class="preview-balls">'+game.slice().sort(function(a,b){return a-b}).map(function(n){return'<div class="preview-ball">'+String(n).padStart(2,'0')+'</div>'}).join('')+'</div>'+extras;
+  side.innerHTML='<div class="label" style="margin-bottom:9px">Seu jogo · '+game.length+'/'+maxPick+' dezenas</div><div class="preview-balls">'+game.slice().sort(function(a,b){return a-b}).map(function(n){return'<div class="preview-ball">'+String(n).padStart(2,'0')+'</div>'}).join('')+'</div>'+extras;
 }
 
 /* =============================================
    SCORE ANALÍTICO — função pura reutilizável
+   ─────────────────────────────────────────────
+   Para a Timemania:
+   • game  → 10 dezenas escolhidas pelo apostador
+   • nc    → pickCount=10 (base para paridade, soma, consecutivos)
+   • As comparações históricas usam allDraws que têm 7 dezenas sorteadas,
+     então "hotCount" e "repeated" são naturalmente menores — isso é esperado
+     e tratado nos pesos do score.
    ============================================= */
 function calcScorePure(game){
-  var cfg=GAMES[currentGame];var nc=cfg.numCount;
+  var cfg=GAMES[currentGame];
+  // nc = dezenas do jogo do apostador (10 para Timemania, igual ao numCount para os demais)
+  var nc=cfg.pickCount||cfg.numCount;
   var sorted=game.slice().sort(function(a,b){return a-b});
-  // Paridade
+
+  // ── Paridade (baseada nas 10 dezenas escolhidas) ──────────────────────────
   var evens=sorted.filter(function(n){return n%2===0}).length;
   var halfNc=nc/2;
   var parityScore=(evens===Math.floor(halfNc)||evens===Math.ceil(halfNc))?100:Math.abs(evens-halfNc)<=2?75:40;
-  // Soma
+
+  // ── Soma (baseada nas 10 dezenas escolhidas) ──────────────────────────────
   var sum=sorted.reduce(function(a,b){return a+b},0);
-  var expSum=nc*((1+cfg.numMax)/2);var dev=Math.abs(sum-expSum)/expSum;
+  var expSum=nc*((1+cfg.numMax)/2);
+  var dev=Math.abs(sum-expSum)/expSum;
   var sumScore=dev<0.05?100:dev<0.12?75:dev<0.20?55:35;
-  // Consecutivos
+
+  // ── Consecutivos (nas 10 dezenas) ─────────────────────────────────────────
   var consecPairs=0;for(var i=0;i<sorted.length-1;i++)if(sorted[i+1]-sorted[i]===1)consecPairs++;
   var consecScore=consecPairs>=2&&consecPairs<=4?100:consecPairs<=5?70:40;
-  // Repetidas do último concurso
+
+  // ── Repetidas do último concurso ─────────────────────────────────────────
+  // Para Timemania: compara as 10 escolhidas contra as 7 sorteadas no último concurso.
+  // A proporção esperada é menor (7/80 por dezena), ajustamos os thresholds.
   var lastDraw=allDraws[allDraws.length-1];
   var repeated=sorted.filter(function(n){return lastDraw.dezenas.includes(n)}).length;
-  var repRatio=repeated/nc;
-  var repeatScore=repRatio>=0.4&&repRatio<=0.7?100:repRatio>=0.25?70:40;
-  // Dezenas quentes
+  var repeatScore;
+  if(cfg.pickCount){
+    // Timemania: com 10 dezenas contra universo de 80 e 7 sorteadas,
+    // espera-se em média ~0.875 coincidências. Thresholds ajustados.
+    repeatScore=repeated>=1&&repeated<=3?100:repeated===0?60:75;
+  } else {
+    var repRatio=repeated/nc;
+    repeatScore=repRatio>=0.4&&repRatio<=0.7?100:repRatio>=0.25?70:40;
+  }
+
+  // ── Dezenas quentes (frequência histórica) ────────────────────────────────
   var sf=Object.entries(freq).filter(function(x){return x[1]>0}).sort(function(a,b){return b[1]-a[1]});
   var hotList=sf.slice(0,Math.ceil(cfg.numMax*0.48)).map(function(x){return+x[0]});
   var hotCount=sorted.filter(function(n){return hotList.includes(n)}).length;
   var hotRatio=hotCount/sorted.length;
   var hotScore=hotRatio>=0.45&&hotRatio<=0.65?100:hotRatio>=0.3?70:40;
-  // Distribuição por quadrantes (bônus)
+
+  // ── Distribuição por quadrantes ────────────────────────────────────────────
   var qSize=Math.ceil(cfg.numMax/4);
   var q1=sorted.filter(function(n){return n<=qSize}).length;
   var q2=sorted.filter(function(n){return n>qSize&&n<=qSize*2}).length;
   var q3=sorted.filter(function(n){return n>qSize*2&&n<=qSize*3}).length;
   var q4=sorted.filter(function(n){return n>qSize*3}).length;
   var minQ=Math.min(q1,q2,q3,q4);
-  var spreadScore=minQ>=1?100:75;
+  // Para Timemania com 10 dezenas em 80 números (4 quadrantes de 20),
+  // exigir ao menos 1 por quadrante é razoável.
+  var spreadScore=minQ>=1?100:minQ===0&&(q1+q2+q3+q4)>=8?70:50;
+
   var weights=[parityScore,sumScore,consecScore,repeatScore,hotScore,spreadScore];
   var finalScore=Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length);
   return{
@@ -812,15 +854,23 @@ function calcScorePure(game){
 /* Score analítico — renderização completa (botão Analisar) */
 function runAnalyticalScore(){
   var cfg=GAMES[currentGame];
-  if(analyticalGame.length<cfg.minPick){alert('Selecione ao menos '+cfg.minPick+' dezenas.');return;}
+  var minRequired=cfg.pickCount||cfg.minPick;
+  var maxAllowed=cfg.pickCount||cfg.maxPick;
+  if(analyticalGame.length<minRequired||analyticalGame.length>maxAllowed){
+    alert(cfg.pickCount
+      ?('Selecione exatamente '+cfg.pickCount+' dezenas para o Timemania.')
+      :('Selecione entre '+cfg.minPick+' e '+cfg.maxPick+' dezenas.'));
+    return;
+  }
   if(cfg.extraType==='trevos'&&selectedTrevos.length!==2){alert('Selecione exatamente 2 Trevos.');return;}
-  var game=analyticalGame.slice().sort(function(a,b){return a-b});var nc=cfg.numCount;
+  var game=analyticalGame.slice().sort(function(a,b){return a-b});
+  var nc=cfg.pickCount||cfg.numCount;
   var res=calcScorePure(game);
   var finalScore=res.score;var evens=res.evens;var odds=res.odds;var sum=res.sum;var consecPairs=res.consecPairs;var repeated=res.repeated;var hotCount=res.hotCount;
   var weights=[res.dims.paridade,res.dims.soma,res.dims.consecutivos,res.dims.repetidas,res.dims.quentes,res.dims.distribuicao];
   var wLabels=['Paridade','Soma','Consecutivos','Repetidas','Quentes','Distribuição'];
   var wDetails=[evens+'P/'+odds+'I',String(sum),consecPairs+'par',repeated+'dez.',hotCount+'dez.',''];
-  // Trevos
+  // Trevos (Milionária)
   if(cfg.extraType==='trevos'&&selectedTrevos.length===2){
     var t1=selectedTrevos[0],t2=selectedTrevos[1];
     var tot2=allDraws.filter(function(d){return d.trevos&&d.trevos.length===2}).length;
@@ -833,6 +883,7 @@ function runAnalyticalScore(){
     weights.push(trevoScore);wLabels.push('Trevos');wDetails.push('T'+t1+'+T'+t2+' ('+pc+'x)');
     finalScore=Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length);
   }
+  // Time (Timemania)
   if(cfg.extraType==='time'&&selectedTeam){
     var tott=allDraws.filter(function(d){return d.time}).length;var tc=teamFreq[selectedTeam]||0;var tr=tc/tott;
     var tdv=allDraws.slice().reverse().findIndex(function(d){return d.time===selectedTeam});var atd=tott/allTeams.length;
@@ -844,13 +895,17 @@ function runAnalyticalScore(){
   var level=finalScore>=85?'Excelente':finalScore>=70?'Forte':finalScore>=55?'Médio':'Fraco';
   var lc=finalScore>=85?'var(--accent)':finalScore>=70?'var(--accent4)':'var(--hot)';
   var r=48,cx=55,cy=55,circ=2*Math.PI*r,dash=(finalScore/100)*circ;
-  var histPts=[];var base=nc-4;for(var p=base;p<=nc;p++)histPts.push(p);
-  var historical=calculateHistoricalHits(game,nc);
-  var itemsHTML=weights.map(function(sc,i){
-    return makeScoreItem(wLabels[i],wDetails[i]||'',sc);
-  }).join('');
+  // Incidência histórica: para Timemania, mostra quantas das 10 dezenas escolhidas
+  // aparecem nos sorteios históricos (máximo real é 7 por sorteio)
+  var historical=calculateHistoricalHits(game,cfg.numCount);
+  var histPts=[];
+  for(var p=Math.max(0,cfg.numCount-4);p<=cfg.numCount;p++)histPts.push(p);
+  var itemsHTML=weights.map(function(sc,i){return makeScoreItem(wLabels[i],wDetails[i]||'',sc);}).join('');
   var trevoRingHTML='';
   if(cfg.extraType==='trevos'&&selectedTrevos.length===2)trevoRingHTML='<div style="display:flex;gap:6px;margin-top:4px;justify-content:center">'+selectedTrevos.map(function(t){return trevoSVG(t,TREVO_COLORS[t-1],22)}).join('')+'</div>';
+  // Nota explicativa para Timemania
+  var timaNoteHTML='';
+  if(cfg.pickCount){timaNoteHTML='<div style="font-size:11px;color:var(--text2);margin-top:10px;padding:8px 10px;background:var(--bg3);border-radius:var(--r-sm);border:1px solid var(--border)">📋 Jogo com <strong style="color:var(--text)">'+game.length+' dezenas</strong> escolhidas · '+cfg.numCount+' serão sorteadas · A "Incidência Histórica" abaixo mostra quantas das suas '+game.length+' batearam com os '+cfg.numCount+' sorteados.</div>';}
   document.getElementById('scoreResults').innerHTML=
     '<div class="score-result">'
     +'<div class="score-result-top">'
@@ -862,6 +917,7 @@ function runAnalyticalScore(){
     +'</div>'
     +'<div class="score-items">'+itemsHTML+'</div>'
     +'</div>'
+    +timaNoteHTML
     +'<div class="historical-stats"><div class="label">Incidência histórica deste padrão</div><div class="hist-grid">'+histPts.map(function(p){return'<div class="hist-item"><div class="hist-pts">'+p+' pts</div><div class="hist-pct" style="color:'+(+historical[p]>5?'var(--accent)':+historical[p]>1?'var(--accent4)':'var(--text2)')+'">'+historical[p]+'%</div></div>';}).join('')+'</div></div>'
     +'</div>';
 }
@@ -869,20 +925,25 @@ function makeScoreItem(name,detail,score){
   var color=score>=85?'var(--accent)':score>=70?'var(--accent4)':'var(--hot)';
   return'<div class="score-item"><div class="score-item-name">'+name+'</div><div class="score-item-bar-wrap"><div class="score-item-bar" style="width:'+score+'%;background:'+color+'"></div></div><div class="score-item-detail">'+detail+'</div></div>';
 }
-function calculateHistoricalHits(game,nc){
-  var base=nc-4;var counts={};for(var p=base;p<=nc;p++)counts[p]=0;
-  for(var i=0;i<allDraws.length;i++){var hits=allDraws[i].dezenas.filter(function(n){return game.includes(n)}).length;for(var p=base;p<=nc;p++)if(hits>=p)counts[p]++;}
+function calculateHistoricalHits(game,numSorteados){
+  // Conta quantas vezes X ou mais dezenas do jogo coincidem com os sorteados históricos
+  var base=Math.max(0,numSorteados-4);
+  var counts={};for(var p=base;p<=numSorteados;p++)counts[p]=0;
+  for(var i=0;i<allDraws.length;i++){
+    var hits=allDraws[i].dezenas.filter(function(n){return game.includes(n)}).length;
+    for(var p=base;p<=numSorteados;p++)if(hits>=p)counts[p]++;
+  }
   var t=allDraws.length;var result={};
-  for(var p=base;p<=nc;p++)result[p]=(counts[p]/t*100).toFixed(p>=nc-1?4:p>=nc-2?3:2);
+  for(var p=base;p<=numSorteados;p++)result[p]=(counts[p]/t*100).toFixed(p>=numSorteados-1?4:p>=numSorteados-2?3:2);
   return result;
 }
 
 /* =============================================
    GERADOR INTELIGENTE POR SCORE
-   Estratégia: torneio com N_CANDIDATES candidatos
-   por jogo solicitado, retorna os de maior score.
+   Para Timemania: gera jogos de 10 dezenas (pickCount),
+   avalia via calcScorePure (que usa pickCount como base).
    ============================================= */
-var N_CANDIDATES_PER_GAME=200; // candidatos avaliados por jogo desejado
+var N_CANDIDATES_PER_GAME=200;
 
 function scoreLevelInfo(score){
   if(score>=85)return{cls:'excellent',label:'Excelente'};
@@ -894,12 +955,13 @@ function scoreLevelInfo(score){
 function generateGames(){
   var cfg=GAMES[currentGame];
   var qty=Math.min(20,Math.max(1,parseInt(document.getElementById('genQty').value)||5));
-  var nums=Math.min(cfg.maxPick,Math.max(cfg.minPick,parseInt(document.getElementById('genNums').value)||cfg.numCount));
+  // Para Timemania: sempre usa pickCount (10); para outros respeita input mas limita ao range
+  var defaultNums=cfg.pickCount||cfg.numCount;
+  var nums=cfg.pickCount?cfg.pickCount:Math.min(cfg.maxPick,Math.max(cfg.minPick,parseInt(document.getElementById('genNums').value)||defaultNums));
   var parity=document.getElementById('genParity').value;
   var ff=Array.from(document.querySelectorAll('#genFreq input:checked')).map(function(el){return el.value});
   var cf=document.getElementById('genConsec').value;
 
-  // Preparar pools de prioridade
   var sorted=Object.entries(freq).filter(function(x){return x[1]>0}).map(function(x){return{n:+x[0],c:x[1]}}).sort(function(a,b){return b.c-a.c});
   var hotList=sorted.slice(0,Math.ceil(cfg.numMax*0.48)).map(function(x){return x.n});
   var coldList=sorted.slice(Math.floor(cfg.numMax*0.52)).map(function(x){return x.n});
@@ -911,8 +973,6 @@ function generateGames(){
   var cm=[];for(var i=1;i<=cfg.numMax;i++)if(!csn.has(i))cm.push(i);
 
   var totalCandidates=qty*N_CANDIDATES_PER_GAME;
-
-  // UI: mostrar progresso, desabilitar botão
   var btn=document.getElementById('genBtn');
   btn.disabled=true;
   var prog=document.getElementById('genProgress');
@@ -924,7 +984,6 @@ function generateGames(){
   document.getElementById('genResults').innerHTML='';
   document.getElementById('genSummary').classList.remove('show');
 
-  // Gera candidatos em chunks assíncronos para não travar a UI
   var allCandidates=[];
   var attempts=0;
   var maxAttempts=totalCandidates*8;
@@ -934,34 +993,29 @@ function generateGames(){
     while(allCandidates.length<totalCandidates&&attempts<maxAttempts&&count<chunkSize){
       attempts++;count++;
       var pool=Array.from({length:cfg.numMax},function(_,i){return i+1});
-      // Pesos: repetir dezenas priorizadas para aumentar probabilidade de seleção
       if(ff.includes('hot'))pool=pool.concat(hotList,hotList);
       if(ff.includes('cold'))pool=pool.concat(coldList,coldList);
       if(ff.includes('delayed'))pool=pool.concat(dn,dn);
       if(ff.includes('cycle_missing')&&cm.length>0)pool=pool.concat(cm,cm,cm);
-      // Embaralhar
       for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;}
-      // Selecionar sem repetição
       var seen=new Set(),game=[];
       for(var k=0;k<pool.length;k++){if(!seen.has(pool[k])){seen.add(pool[k]);game.push(pool[k]);}if(game.length===nums)break;}
       if(game.length<nums)continue;
       game.sort(function(a,b){return a-b});
-      // Filtros do usuário
-      var ev=game.filter(function(n){return n%2===0}).length;var nc2=nums;
-      if(parity==='more_odd'&&ev>Math.floor(nc2/2)-1)continue;
-      if(parity==='more_even'&&ev<Math.ceil(nc2/2)+1)continue;
-      if(parity==='balanced'&&Math.abs(ev-nc2/2)>1)continue;
+      // Filtros de paridade e consecutivos
+      var ev=game.filter(function(n){return n%2===0}).length;
+      if(parity==='more_odd'&&ev>Math.floor(nums/2)-1)continue;
+      if(parity==='more_even'&&ev<Math.ceil(nums/2)+1)continue;
+      if(parity==='balanced'&&Math.abs(ev-nums/2)>1)continue;
       if(cf!=='any'){
         var cp=0;for(var i=0;i<game.length-1;i++)if(game[i+1]-game[i]===1)cp++;
         if(cf==='0'&&cp>0)continue;
         if(cf==='1'&&cp<1)continue;
         if(cf==='2'&&cp<2)continue;
       }
-      // Calcular score e guardar
       var res=calcScorePure(game);
       allCandidates.push({game:game,score:res.score,dims:res.dims,evens:res.evens,odds:res.odds,sum:res.sum,consecPairs:res.consecPairs});
     }
-    // Atualizar barra de progresso
     var pct=Math.min(100,Math.round(allCandidates.length/totalCandidates*100));
     progBar.style.width=pct+'%';
     progText.textContent='Avaliando… '+allCandidates.length+'/'+totalCandidates+' candidatos';
@@ -972,28 +1026,20 @@ function generateGames(){
   generateChunk(function(){
     prog.classList.remove('show');
     btn.disabled=false;
-
     if(allCandidates.length===0){
       document.getElementById('genResults').innerHTML='<div style="color:var(--text2);font-size:13px;padding:12px">Nenhum jogo encontrou os filtros. Tente relaxar os critérios.</div>';
       return;
     }
-
-    // Ordenar por score desc, pegar os melhores N únicos
     allCandidates.sort(function(a,b){return b.score-a.score});
-    // Deduplicar jogos idênticos
     var seen=new Set();var best=[];
     for(var i=0;i<allCandidates.length&&best.length<qty;i++){
       var key=allCandidates[i].game.join(',');
       if(!seen.has(key)){seen.add(key);best.push(allCandidates[i]);}
     }
-
-    // Estatísticas do resultado
     var avgScore=Math.round(best.reduce(function(a,b){return a+b.score},0)/best.length);
     var sumEl=document.getElementById('genSummary');
-    sumEl.innerHTML='⚡ <strong>'+best.length+' jogos gerados</strong> · Score médio: <strong>'+avgScore+'</strong> · Melhor: <strong>'+best[0].score+'</strong> · Avaliados: <strong>'+allCandidates.length+'</strong> candidatos';
+    sumEl.innerHTML='⚡ <strong>'+best.length+' jogos gerados</strong> · Score médio: <strong>'+avgScore+'</strong> · Melhor: <strong>'+best[0].score+'</strong> · Avaliados: <strong>'+allCandidates.length+'</strong> candidatos'+(cfg.pickCount?' · '+nums+' dezenas/jogo ('+cfg.numCount+' serão sorteadas)':'');
     sumEl.classList.add('show');
-
-    // Renderizar cards
     var el=document.getElementById('genResults');el.innerHTML='';
     best.forEach(function(item,i){
       var info=scoreLevelInfo(item.score);
@@ -1049,7 +1095,7 @@ function renderCycle(){
    ============================================= */
 function renderLastDraws(){
   var cfg=GAMES[currentGame];var head=document.getElementById('drawsHead');
-  var hh='<th>Concurso</th><th>Data</th><th>Dezenas</th><th>Pares</th><th>Ímpares</th>';
+  var hh='<th>Concurso</th><th>Data</th><th>Dezenas Sorteadas</th><th>Pares</th><th>Ímpares</th>';
   if(cfg.extraType==='trevos')hh+='<th>Trevos</th>';if(cfg.extraType==='time')hh+='<th>Time ❤️</th>';
   head.innerHTML=hh;var tbody=document.getElementById('drawsBody');tbody.innerHTML='';
   var last20=allDraws.slice(-20).slice().reverse();
